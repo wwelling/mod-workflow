@@ -36,7 +36,7 @@ public class OkapiDiscoveryService {
   private ObjectMapper objectMapper;
 
   public List<Action> getActionsByTenant(String tenant) throws Exception {
-    List<Action> actions = new ArrayList<Action>();
+    List<Action> actions = new ArrayList<>();
     JsonNode modulesNode = getModules(tenant);
     for (JsonNode moduleNode : modulesNode) {
       String id = moduleNode.get("id").asText();
@@ -47,7 +47,7 @@ public class OkapiDiscoveryService {
 
   public List<Action> getActionsByTenantAndModuleId(String tenant, String id) throws Exception {
     Map<String, List<Handler>> handlerMap = getHandlers(tenant, id);
-    List<Action> actions = new ArrayList<Action>();
+    List<Action> actions = new ArrayList<>();
     for (Map.Entry<String, List<Handler>> entry : handlerMap.entrySet()) {
       String interfaceName = entry.getKey();
       List<Handler> handlers = entry.getValue();
@@ -62,7 +62,7 @@ public class OkapiDiscoveryService {
     JsonNode moduleDescriptorNode = getModuleDescriptor(tenant, id);
     Map<String, List<Handler>> handlerMap = new HashMap<String, List<Handler>>();
     for (JsonNode interfaceNode : moduleDescriptorNode.get("provides")) {
-      List<Handler> handlers = new ArrayList<Handler>();
+      List<Handler> handlers = new ArrayList<>();
       String interfaceName = interfaceNode.get("id").asText();
       for (JsonNode handlersNode : interfaceNode.get("handlers")) {
         handlers.add(objectMapper.readValue(handlersNode.toString(), Handler.class));
