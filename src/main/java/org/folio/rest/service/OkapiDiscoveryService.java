@@ -1,5 +1,6 @@
 package org.folio.rest.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,21 +19,23 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class OkapiDiscoveryService {
 
-  private final static Logger log = LoggerFactory.getLogger(OkapiDiscoveryService.class);
+  private static final Logger log = LoggerFactory.getLogger(OkapiDiscoveryService.class);
 
-  private final static String PROVIDES = "provides";
-  private final static String ID = "id";
-  private final static String HANDLERS = "handlers";
+  private static final String PROVIDES = "provides";
+  private static final String ID = "id";
+  private static final String HANDLERS = "handlers";
 
-  private final static String PROXY_TENANT_BASE_PATH = "/_/proxy/tenants/";
-  private final static String PROXY_MODULE_BASE_PATH = "/_/proxy/modules/";
-  private final static String MODULES_SUB_PATH = "/modules";
+  private static final String PROXY_TENANT_BASE_PATH = "/_/proxy/tenants/";
+  private static final String PROXY_MODULE_BASE_PATH = "/_/proxy/modules/";
+  private static final String MODULES_SUB_PATH = "/modules";
 
   @Value("${tenant.headerName:X-Okapi-Tenant}")
   private String tenantHeaderName;
@@ -46,7 +49,7 @@ public class OkapiDiscoveryService {
   @Autowired
   private ObjectMapper objectMapper;
 
-  public List<Action> getActionsByTenant(String tenant) throws Exception {
+  public List<Action> getActionsByTenant(String tenant) throws JsonParseException, JsonMappingException, IOException {
     List<Action> actions = new ArrayList<>();
     JsonNode modulesNode = getModules(tenant);
     for (JsonNode moduleNode : modulesNode) {
@@ -56,7 +59,7 @@ public class OkapiDiscoveryService {
     return actions;
   }
 
-  public List<Action> getActionsByTenantAndModuleId(String tenant, String id) throws Exception {
+  public List<Action> getActionsByTenantAndModuleId(String tenant, String id) throws JsonParseException, JsonMappingException, IOException {
     Map<String, List<Handler>> handlerMap = getHandlers(tenant, id);
     List<Action> actions = new ArrayList<>();
     for (Map.Entry<String, List<Handler>> entry : handlerMap.entrySet()) {
@@ -69,7 +72,7 @@ public class OkapiDiscoveryService {
     return actions;
   }
 
-  public Map<String, List<Handler>> getHandlers(String tenant, String id) throws Exception {
+  public Map<String, List<Handler>> getHandlers(String tenant, String id) throws JsonParseException, JsonMappingException, IOException {
     JsonNode moduleDescriptorNode = getModuleDescriptor(tenant, id);
     Map<String, List<Handler>> handlerMap = new HashMap<String, List<Handler>>();
     for (JsonNode interfaceNode : moduleDescriptorNode.get(PROVIDES)) {
