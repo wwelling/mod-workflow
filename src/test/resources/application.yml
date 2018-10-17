@@ -46,3 +46,5 @@ tenant:
   initialize-default-tenant: true
   domain-packages:
   schema-scripts:
+
+okapi.location: http://localhost:9130

@@ -26,8 +26,19 @@ public class OkapiDiscoveryService {
 
   private final static Logger log = LoggerFactory.getLogger(OkapiDiscoveryService.class);
 
+  private final static String PROVIDES = "provides";
+  private final static String ID = "id";
+  private final static String HANDLERS = "handlers";
+
+  private final static String PROXY_TENANT_BASE_PATH = "/_/proxy/tenants/";
+  private final static String PROXY_MODULE_BASE_PATH = "/_/proxy/modules/";
+  private final static String MODULES_SUB_PATH = "/modules";
+
   @Value("${tenant.headerName:X-Okapi-Tenant}")
   private String tenantHeaderName;
+
+  @Value("${okapi.location}")
+  private String okapiLocation;
 
   @Autowired
   private HttpService httpService;
@@ -61,10 +72,10 @@ public class OkapiDiscoveryService {
   public Map<String, List<Handler>> getHandlers(String tenant, String id) throws Exception {
     JsonNode moduleDescriptorNode = getModuleDescriptor(tenant, id);
     Map<String, List<Handler>> handlerMap = new HashMap<String, List<Handler>>();
-    for (JsonNode interfaceNode : moduleDescriptorNode.get("provides")) {
+    for (JsonNode interfaceNode : moduleDescriptorNode.get(PROVIDES)) {
       List<Handler> handlers = new ArrayList<>();
-      String interfaceName = interfaceNode.get("id").asText();
-      for (JsonNode handlersNode : interfaceNode.get("handlers")) {
+      String interfaceName = interfaceNode.get(ID).asText();
+      for (JsonNode handlersNode : interfaceNode.get(HANDLERS)) {
         handlers.add(objectMapper.readValue(handlersNode.toString(), Handler.class));
       }
       handlerMap.put(interfaceName, handlers);
@@ -73,20 +84,20 @@ public class OkapiDiscoveryService {
   }
 
   public JsonNode getModules(String tenant) {
-    String url = "http://localhost:9130/_/proxy/tenants/" + tenant + "/modules";
-    log.info("Proxy request to " + url);
+    String url = okapiLocation + PROXY_TENANT_BASE_PATH + tenant + MODULES_SUB_PATH;
+    log.debug("Proxy request to {}", url);
     ResponseEntity<JsonNode> response = request(url, tenant);
-    log.info("Response status code " + response.getStatusCode().toString());
-    log.info("Response body " + response.getBody());
+    log.debug("Response status code " + response.getStatusCode().toString());
+    log.debug("Response body " + response.getBody());
     return response.getBody();
   }
 
   public JsonNode getModuleDescriptor(String tenant, String id) {
-    String url = "http://localhost:9130/_/proxy/modules/" + id;
-    log.info("Proxy request to " + url);
+    String url = okapiLocation + PROXY_MODULE_BASE_PATH + id;
+    log.debug("Proxy request to {}", url);
     ResponseEntity<JsonNode> response = request(url, tenant);
-    log.info("Response status code " + response.getStatusCode().toString());
-    log.info("Response body " + response.getBody());
+    log.debug("Response status code {}", response.getStatusCode().toString());
+    log.debug("Response body {}", response.getBody());
     return response.getBody();
   }
 
