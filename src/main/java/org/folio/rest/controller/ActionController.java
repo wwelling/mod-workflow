@@ -1,5 +1,6 @@
 package org.folio.rest.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.folio.rest.model.Action;
@@ -18,7 +19,7 @@ public class ActionController {
   private OkapiDiscoveryService okapiDiscoveryService;
 
   @GetMapping
-  public List<Action> getActions(@TenantHeader String tenant) throws Exception {
+  public List<Action> getActions(@TenantHeader String tenant) throws IOException {
     return okapiDiscoveryService.getActionsByTenant(tenant);
   }
 

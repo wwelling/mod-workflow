@@ -19,8 +19,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -49,7 +47,7 @@ public class OkapiDiscoveryService {
   @Autowired
   private ObjectMapper objectMapper;
 
-  public List<Action> getActionsByTenant(String tenant) throws JsonParseException, JsonMappingException, IOException {
+  public List<Action> getActionsByTenant(String tenant) throws IOException {
     List<Action> actions = new ArrayList<>();
     JsonNode modulesNode = getModules(tenant);
     for (JsonNode moduleNode : modulesNode) {
@@ -59,20 +57,20 @@ public class OkapiDiscoveryService {
     return actions;
   }
 
-  public List<Action> getActionsByTenantAndModuleId(String tenant, String id) throws JsonParseException, JsonMappingException, IOException {
+  public List<Action> getActionsByTenantAndModuleId(String tenant, String id) throws IOException {
     Map<String, List<Handler>> handlerMap = getHandlers(tenant, id);
     List<Action> actions = new ArrayList<>();
     for (Map.Entry<String, List<Handler>> entry : handlerMap.entrySet()) {
       String interfaceName = entry.getKey();
       List<Handler> handlers = entry.getValue();
-      handlers.forEach(handler ->  actions.addAll(handler.getActionByInterface(interfaceName)));
+      handlers.forEach(handler -> actions.addAll(handler.getActionByInterface(interfaceName)));
     }
     return actions;
   }
 
-  public Map<String, List<Handler>> getHandlers(String tenant, String id) throws JsonParseException, JsonMappingException, IOException {
+  public Map<String, List<Handler>> getHandlers(String tenant, String id) throws IOException {
     JsonNode moduleDescriptorNode = getModuleDescriptor(tenant, id);
-    Map<String, List<Handler>> handlerMap = new HashMap<String, List<Handler>>();
+    Map<String, List<Handler>> handlerMap = new HashMap<>();
     for (JsonNode interfaceNode : moduleDescriptorNode.get(PROVIDES)) {
       List<Handler> handlers = new ArrayList<>();
       String interfaceName = interfaceNode.get(ID).asText();
@@ -88,8 +86,8 @@ public class OkapiDiscoveryService {
     String url = okapiLocation + PROXY_TENANT_BASE_PATH + tenant + MODULES_SUB_PATH;
     log.debug("Proxy request to {}", url);
     ResponseEntity<JsonNode> response = request(url, tenant);
-    log.debug("Response status code " + response.getStatusCode().toString());
-    log.debug("Response body " + response.getBody());
+    log.debug("Response status code {}", response.getStatusCode().toString());
+    log.debug("Response body {}", response.getBody());
     return response.getBody();
   }
 
