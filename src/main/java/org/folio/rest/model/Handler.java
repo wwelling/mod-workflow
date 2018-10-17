@@ -53,9 +53,7 @@ public class Handler {
 
   public List<Action> getActionByInterface(String interfaceName) {
     List<Action> actions = new ArrayList<>();
-    methods.forEach(method -> {
-      actions.add(new Action(interfaceName, pathPattern, HttpMethod.valueOf(method)));
-    });
+    methods.forEach(method -> actions.add(new Action(interfaceName, pathPattern, HttpMethod.valueOf(method))));
     return actions;
   }
 
