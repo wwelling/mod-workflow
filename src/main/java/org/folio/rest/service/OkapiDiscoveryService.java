@@ -65,9 +65,7 @@ public class OkapiDiscoveryService {
     for (Map.Entry<String, List<Handler>> entry : handlerMap.entrySet()) {
       String interfaceName = entry.getKey();
       List<Handler> handlers = entry.getValue();
-      handlers.forEach(handler -> {
-        actions.addAll(handler.getActionByInterface(interfaceName));
-      });
+      handlers.forEach(handler ->  actions.addAll(handler.getActionByInterface(interfaceName)));
     }
     return actions;
   }
