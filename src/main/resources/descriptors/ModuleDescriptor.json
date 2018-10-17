@@ -3,6 +3,18 @@
   "name": "Workflow Module",
   "provides": [
     {
+      "id": "actions",
+      "version": "1.0",
+      "handlers": [
+        {
+          "methods": ["GET"],
+          "pathPattern": "/actions",
+          "permissionsRequired": ["action.collection.get"],
+          "permissionsDesired": ["action.domain.*", "action.domain.all"]
+        }
+      ]
+    },
+    {
       "id": "_tenant",
       "version": "1.0",
       "interfaceType" : "system",
@@ -14,7 +26,32 @@
       ]
     }
   ],
-  "permissionSets" : [],
+  "permissionSets" : [
+    {
+      "permissionName": "action.collection.get",
+      "displayName": "Action - get action collection",
+      "description": "Get action collection"
+    },
+    {
+      "permissionName": "action.allops",
+      "displayName": "Action module - all CRUD permissions",
+      "description": "Entire set of permissions needed to use the action modules, but no domain permissions",
+      "subPermissions": [
+        "action.collection.get"
+      ],
+      "visible": false
+    },
+    {
+      "permissionName": "action.all",
+      "displayName": "Action module - all permissions and all action domains",
+      "description": "Entire set of permissions needed to use the action modules on any action domain",
+      "subPermissions": [
+        "action.allops",
+        "action.domain.all"
+      ],
+      "visible": false
+    }
+  ],
   "launchDescriptor": {
     "dockerImage": "@project.artifactId@:@project.version@",
     "dockerArgs": {
