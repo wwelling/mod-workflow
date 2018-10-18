@@ -84,9 +84,6 @@ public class OkapiDiscoveryService {
 
   public JsonNode getModules(String tenant) {
     String url = okapiLocation + PROXY_TENANT_BASE_PATH + tenant + MODULES_SUB_PATH;
-    if (log.isDebugEnabled()) {
-      log.debug("Proxy request to {}", url);
-    }
     ResponseEntity<JsonNode> response = request(url, tenant);
     if (log.isDebugEnabled()) {
       log.debug("Response status code {}", response.getStatusCode());
@@ -97,9 +94,6 @@ public class OkapiDiscoveryService {
 
   public JsonNode getModuleDescriptor(String tenant, String id) {
     String url = okapiLocation + PROXY_MODULE_BASE_PATH + id;
-    if (log.isDebugEnabled()) {
-      log.debug("Proxy request to {}", url);
-    }
     ResponseEntity<JsonNode> response = request(url, tenant);
     if (log.isDebugEnabled()) {
       log.debug("Response status code {}", response.getStatusCode());
@@ -114,7 +108,10 @@ public class OkapiDiscoveryService {
     HttpEntity<?> request = new HttpEntity<>(headers);
     headers.setContentType(MediaType.APPLICATION_JSON);
     headers.add(tenantHeaderName, tenant);
-    return this.httpService.exchange(url, method, request, JsonNode.class, new Object[0]);
+    if (log.isDebugEnabled()) {
+      log.debug("Proxy request for {} to {}", tenant, url);
+    }
+    return this.httpService.exchange(url, method, request, JsonNode.class);
   }
 
 }
