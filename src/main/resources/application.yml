@@ -2,11 +2,9 @@ logging:
   file: logs/mod-workflow.log
   level:
     org:
-      folio.rest: INFO
+      folio: INFO
       hibernate: INFO
-      springframework:
-        security: INFO
-        web: INFO
+      springframework: INFO
   path:
 
 server:
@@ -54,3 +52,5 @@ tenant:
   schema-scripts:
 
 okapi.location: http://localhost:9130
+
+event.queue.name: event.queue
