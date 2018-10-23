@@ -39,10 +39,10 @@ public class EventController {
   ) throws JMSException, IOException {
   // @formatter:on
     String path = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
-    logger.info("Tenant: " + tenant);
-    logger.info("Request path: " + path);
-    logger.info("Request headers: " + headers);
-    logger.info("Request body: " + body);
+    logger.info("Tenant: {}", tenant);
+    logger.info("Request path: {}", path);
+    logger.info("Request headers: {}", headers);
+    logger.info("Request body: {}", body);
     eventProducer.send(new Event(tenant, path, body, headers));
     return body;
   }
