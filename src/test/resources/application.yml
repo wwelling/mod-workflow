@@ -47,3 +47,5 @@ tenant:
   schema-scripts:
 
 okapi.location: http://localhost:9130
+
+event.queue.name: event.queue
