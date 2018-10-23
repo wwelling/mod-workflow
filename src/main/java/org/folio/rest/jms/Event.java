@@ -1,21 +1,22 @@
 package org.folio.rest.jms;
 
-import java.io.Serializable;
-
 import org.springframework.http.HttpHeaders;
 
-public class Event implements Serializable {
+import com.fasterxml.jackson.databind.JsonNode;
 
-  private static final long serialVersionUID = 4215503126159461393L;
+public class Event {
 
   private final String tenant;
 
-  private final Object body;
+  private final String path;
+
+  private final JsonNode body;
 
   private final HttpHeaders headers;
 
-  public Event(String tenant, Object body, HttpHeaders headers) {
+  public Event(String tenant, String path, JsonNode body, HttpHeaders headers) {
     this.tenant = tenant;
+    this.path = path;
     this.body = body;
     this.headers = headers;
   }
@@ -24,7 +25,11 @@ public class Event implements Serializable {
     return tenant;
   }
 
-  public Object getBody() {
+  public String getPath() {
+    return path;
+  }
+
+  public JsonNode getBody() {
     return body;
   }
 

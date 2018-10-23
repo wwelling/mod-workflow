@@ -17,7 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 public class EventProducer {
 
-  private final static Logger logger = LoggerFactory.getLogger(EventConsumer.class);
+  private static final Logger logger = LoggerFactory.getLogger(EventConsumer.class);
 
   @Autowired
   private JmsMessagingTemplate jmsMessagingTemplate;
@@ -34,8 +34,9 @@ public class EventProducer {
   }
 
   public void send(Event event) throws JMSException, IOException {
-    logger.info("Send [" + this.queue.getQueueName() + "]: " + event.getTenant() + " - " + event.getBody());
-    this.jmsMessagingTemplate.convertAndSend(this.queue, mapper.writeValueAsString(event));
+    String message = mapper.writeValueAsString(event);
+    logger.info("Send [{}]: {}", this.queue.getQueueName(), message);
+    this.jmsMessagingTemplate.convertAndSend(this.queue, message);
   }
 
 }

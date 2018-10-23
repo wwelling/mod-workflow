@@ -9,14 +9,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class EventConsumer {
 
-  private final static Logger logger = LoggerFactory.getLogger(EventConsumer.class);
+  private static final Logger logger = LoggerFactory.getLogger(EventConsumer.class);
 
   @Value("${event.queue.name}")
   private String eventQueueName;
 
   @JmsListener(destination = "${event.queue.name}")
-  public void receive(String event) {
-    logger.info("Receive [" + eventQueueName + "]: " + event);
+  public void receive(String message) {
+    logger.info("Receive [{}]: {}", eventQueueName, message);
   }
 
 }
