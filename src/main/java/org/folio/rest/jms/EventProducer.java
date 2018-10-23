@@ -17,7 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 public class EventProducer {
 
-  private static final Logger logger = LoggerFactory.getLogger(EventConsumer.class);
+  private static final Logger logger = LoggerFactory.getLogger(EventProducer.class);
 
   @Autowired
   private JmsMessagingTemplate jmsMessagingTemplate;

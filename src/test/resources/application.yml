@@ -11,7 +11,7 @@ server:
   port: 9100
 
 spring:
-  activemq.broker-url: tcp://localhost:61616
+  application.name: mod-workflow
   data.rest:
     returnBodyOnCreate: true
     returnBodyOnUpdate: true
@@ -38,6 +38,8 @@ spring:
     mode: TEXT
     suffix: .sql
 
+event.queue.name: event.queue
+
 tenant:
   header-name: X-Okapi-Tenant
   force-tenant: false
@@ -47,5 +49,3 @@ tenant:
   schema-scripts:
 
 okapi.location: http://localhost:9130
-
-event.queue.name: event.queue
