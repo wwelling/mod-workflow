@@ -12,6 +12,7 @@ server:
 
 spring:
   activemq.broker-url: tcp://localhost:61616
+  application.name: mod-workflow
   data.rest:
     returnBodyOnCreate: true
     returnBodyOnUpdate: true
