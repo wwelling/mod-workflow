@@ -1,6 +1,17 @@
 {
   "id": "@project.artifactId@-@project.version@",
   "name": "Workflow Module",
+  "filters": [
+    {
+      "methods": [
+        "*"
+      ],
+      "pathPattern": "/*",
+      "modulePermissions": [ ],
+      "phase": "post",
+      "type": "request-response"
+    }
+  ],
   "provides": [
     {
       "id": "actions",

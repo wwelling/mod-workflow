@@ -2,17 +2,16 @@ logging:
   file: logs/mod-workflow.log
   level:
     org:
-      folio.rest: INFO
+      folio: INFO
       hibernate: INFO
-      springframework:
-        security: INFO
-        web: INFO
+      springframework: INFO
   path:
 
 server:
   port: 9000
 
 spring:
+  activemq.broker-url: tcp://localhost:61616
   data.rest:
     returnBodyOnCreate: true
     returnBodyOnUpdate: true
@@ -54,3 +53,5 @@ tenant:
   schema-scripts:
 
 okapi.location: http://localhost:9130
+
+event.queue.name: event.queue
