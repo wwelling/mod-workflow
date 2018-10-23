@@ -1,5 +1,7 @@
 package org.folio.rest.controller;
 
+import java.io.IOException;
+
 import javax.jms.JMSException;
 
 import org.folio.rest.jms.Event;
@@ -31,7 +33,7 @@ public class EventController {
     @TenantHeader String tenant,
     @RequestBody JsonNode body,
     @RequestHeader HttpHeaders headers
-  ) throws JMSException {
+  ) throws JMSException, IOException {
   // @formatter:on
     logger.info("Tenant: " + tenant);
     logger.info("Request headers: " + headers);
