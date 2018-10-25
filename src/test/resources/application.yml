@@ -8,7 +8,7 @@ logging:
   path:
 
 server:
-  port: 9100
+  port: 9101
 
 spring:
   application.name: mod-workflow
