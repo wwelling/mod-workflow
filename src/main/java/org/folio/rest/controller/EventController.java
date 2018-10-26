@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +31,7 @@ public class EventController {
   private EventProducer eventProducer;
 
   // @formatter:off
-  @RequestMapping("**")
+  @PostMapping("**")
   public JsonNode postHandleEvents(
     @TenantHeader String tenant,
     @RequestBody JsonNode body,
