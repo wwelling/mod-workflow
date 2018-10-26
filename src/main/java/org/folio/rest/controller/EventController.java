@@ -12,9 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.HandlerMapping;
 
@@ -29,20 +29,23 @@ public class EventController {
   private EventProducer eventProducer;
 
   // @formatter:off
-  @PostMapping("/events")
+  @RequestMapping("/events")
   public JsonNode postHandleEvents(
     @TenantHeader String tenant,
-    @RequestBody JsonNode body,
+    @RequestBody(required = false) JsonNode body,
     @RequestHeader HttpHeaders headers,
-    HttpServletRequest request
+    HttpServletRequest request,
+    HttpServletRequest response
   ) throws JMSException, IOException {
   // @formatter:on
     String path = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
     logger.info("Tenant: {}", tenant);
     logger.info("Request path: {}", path);
     logger.info("Request headers: {}", headers);
-    logger.info("Request body: {}", body);
-    eventProducer.send(new Event(tenant, path, body, headers));
+    if (body != null) {
+      logger.info("Request body: {}", body);
+      eventProducer.send(new Event(tenant, path, body, headers));
+    }
     return body;
   }
 
