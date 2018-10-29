@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.util.AntPathMatcher;
+import org.springframework.util.PathMatcher;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,11 +33,11 @@ public class EventController {
   @Autowired
   private EventProducer eventProducer;
 
-	@Autowired
-	private TriggerRepo triggerRepo;
+  @Autowired
+  private TriggerRepo triggerRepo;
 
-	@Autowired
-	private AntPathMatcher antPathMatcher;
+  @Autowired
+  private PathMatcher pathMatcher;
 
   // @formatter:off
   @RequestMapping("/**")
@@ -50,27 +50,27 @@ public class EventController {
   ) throws JMSException, IOException {
   // @formatter:on
     String path = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
-		HttpMethod method = HttpMethod.valueOf(request.getMethod());
+    HttpMethod method = HttpMethod.valueOf(request.getMethod());
     logger.info("Tenant: {}", tenant);
     logger.info("Request path: {}", path);
-		logger.info("Request method: {}", method);
+    logger.info("Request method: {}", method);
     logger.info("Request headers: {}", headers);
-		if (isTriggered(tenant, path, method)) {
+    if (isTriggered(tenant, path, method)) {
       logger.info("Request body: {}", body);
-			eventProducer.send(new Event(tenant, path, method, body, headers));
+      eventProducer.send(new Event(tenant, path, method, body, headers));
     }
     return body;
   }
 
-	private boolean isTriggered(String tenant, String path, HttpMethod method) {
-		boolean match = false;
-		for (Trigger trigger : triggerRepo.findByTenantAndMethod(tenant, method)) {
-			match = antPathMatcher.match(trigger.getPathPattern(), path);
-			if (match) {
-				break;
-			}
-		}
-		return match;
-	}
+  private boolean isTriggered(String tenant, String path, HttpMethod method) {
+    boolean match = false;
+    for (Trigger trigger : triggerRepo.findByTenantAndMethod(tenant, method)) {
+      match = pathMatcher.match(trigger.getPathPattern(), path);
+      if (match) {
+        break;
+      }
+    }
+    return match;
+  }
 
 }
