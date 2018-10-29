@@ -21,6 +21,7 @@ import org.springframework.web.servlet.HandlerMapping;
 import com.fasterxml.jackson.databind.JsonNode;
 
 @RestController
+@RequestMapping("/events")
 public class EventController {
 
   private static final Logger logger = LoggerFactory.getLogger(EventController.class);
@@ -29,7 +30,7 @@ public class EventController {
   private EventProducer eventProducer;
 
   // @formatter:off
-  @RequestMapping("/events")
+  @RequestMapping("/**")
   public JsonNode postHandleEvents(
     @TenantHeader String tenant,
     @RequestBody(required = false) JsonNode body,
