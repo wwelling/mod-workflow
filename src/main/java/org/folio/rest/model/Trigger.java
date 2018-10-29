@@ -13,61 +13,79 @@ import org.springframework.http.HttpMethod;
 @Entity
 public class Trigger extends AbstractBaseEntity {
 
-	@NotNull
-	@Size(min = 4, max = 64)
-	@Column(unique = true)
-	private String name;
+  @NotNull
+  @Size(min = 4, max = 64)
+  @Column(unique = true)
+  private String name;
 
-	@NotNull
-	@Column
-	private String tenant;
+  @NotNull
+  @Size(min = 4, max = 256)
+  @Column
+  private String description;
 
-	@NotNull
-	@Enumerated(EnumType.STRING)
-	private HttpMethod method;
+  @NotNull
+  @Column
+  private String tenant;
 
-	@Column
-	@NotNull
-	private String pathPattern;
+  @NotNull
+  @Enumerated(EnumType.STRING)
+  private HttpMethod method;
 
-	public Trigger() {
-		super();
-	}
+  @NotNull
+  @Column
+  private String pathPattern;
 
-	public Trigger(String name, String Tenant, HttpMethod method, String pathPattern) {
-		this();
-	}
+  public Trigger() {
+    super();
+  }
 
-	public String getName() {
-		return name;
-	}
+  public Trigger(String name, String description, String tenant, HttpMethod method, String pathPattern) {
+    this();
+    this.name = name;
+    this.description = description;
+    this.tenant = tenant;
+    this.method = method;
+    this.pathPattern = pathPattern;
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public String getTenant() {
-		return tenant;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	public void setTenant(String tenant) {
-		this.tenant = tenant;
-	}
+  public String getDescription() {
+    return description;
+  }
 
-	public HttpMethod getMethod() {
-		return method;
-	}
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-	public void setMethod(HttpMethod method) {
-		this.method = method;
-	}
+  public String getTenant() {
+    return tenant;
+  }
 
-	public String getPathPattern() {
-		return pathPattern;
-	}
+  public void setTenant(String tenant) {
+    this.tenant = tenant;
+  }
 
-	public void setPathPattern(String pathPattern) {
-		this.pathPattern = pathPattern;
-	}
+  public HttpMethod getMethod() {
+    return method;
+  }
+
+  public void setMethod(HttpMethod method) {
+    this.method = method;
+  }
+
+  public String getPathPattern() {
+    return pathPattern;
+  }
+
+  public void setPathPattern(String pathPattern) {
+    this.pathPattern = pathPattern;
+  }
 
 }

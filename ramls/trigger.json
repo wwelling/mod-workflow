@@ -12,6 +12,11 @@
       "minLength" : 4,
       "maxLength" : 64
     },
+    "description" : {
+      "type" : "string",
+      "minLength" : 4,
+      "maxLength" : 256
+    },
     "tenant" : {
       "type" : "string"
     },
@@ -23,5 +28,5 @@
       "type" : "string"
     }
   },
-  "required" : [ "name", "tenant", "method", "pathPattern" ]
+  "required" : [ "name", "description", "tenant", "method", "pathPattern" ]
 }

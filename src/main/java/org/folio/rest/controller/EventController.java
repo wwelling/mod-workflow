@@ -1,6 +1,7 @@
 package org.folio.rest.controller;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import javax.jms.JMSException;
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +31,8 @@ public class EventController {
 
   private static final Logger logger = LoggerFactory.getLogger(EventController.class);
 
+  private static final String FILTER_PATH_PATTERN_PREFIX = "/events";
+
   @Autowired
   private EventProducer eventProducer;
 
@@ -51,26 +54,31 @@ public class EventController {
   // @formatter:on
     String path = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
     HttpMethod method = HttpMethod.valueOf(request.getMethod());
-    logger.info("Tenant: {}", tenant);
-    logger.info("Request path: {}", path);
-    logger.info("Request method: {}", method);
-    logger.info("Request headers: {}", headers);
-    if (isTriggered(tenant, path, method)) {
-      logger.info("Request body: {}", body);
-      eventProducer.send(new Event(tenant, path, method, body, headers));
+    logger.debug("Tenant: {}", tenant);
+    logger.debug("Request path: {}", path);
+    logger.debug("Request method: {}", method);
+    logger.debug("Request headers: {}", headers);
+    logger.debug("Request body: {}", body);
+    Optional<Trigger> trigger = checkTrigger(tenant, path, method);
+    if (trigger.isPresent()) {
+      String triggerName = trigger.get().getName();
+      String triggerDescription = trigger.get().getDescription();
+      logger.debug("Publishing event: {}: {}", triggerName, triggerDescription);
+      eventProducer.send(new Event(triggerName, triggerDescription, tenant, path, method, body, headers));
     }
     return body;
   }
 
-  private boolean isTriggered(String tenant, String path, HttpMethod method) {
-    boolean match = false;
-    for (Trigger trigger : triggerRepo.findByTenantAndMethod(tenant, method)) {
-      match = pathMatcher.match(trigger.getPathPattern(), path);
-      if (match) {
+  private Optional<Trigger> checkTrigger(String tenant, String path, HttpMethod method) {
+    Optional<Trigger> trigger = Optional.empty();
+    for (Trigger currTrigger : triggerRepo.findByTenantAndMethod(tenant, method)) {
+      String pathPattern = FILTER_PATH_PATTERN_PREFIX + currTrigger.getPathPattern();
+      if (pathMatcher.match(pathPattern, path)) {
+        trigger = Optional.of(currTrigger);
         break;
       }
     }
-    return match;
+    return trigger;
   }
 
 }
