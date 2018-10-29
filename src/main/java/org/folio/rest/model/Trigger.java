@@ -24,10 +24,6 @@ public class Trigger extends AbstractBaseEntity {
   private String description;
 
   @NotNull
-  @Column
-  private String tenant;
-
-  @NotNull
   @Enumerated(EnumType.STRING)
   private HttpMethod method;
 
@@ -39,11 +35,10 @@ public class Trigger extends AbstractBaseEntity {
     super();
   }
 
-  public Trigger(String name, String description, String tenant, HttpMethod method, String pathPattern) {
+  public Trigger(String name, String description, HttpMethod method, String pathPattern) {
     this();
     this.name = name;
     this.description = description;
-    this.tenant = tenant;
     this.method = method;
     this.pathPattern = pathPattern;
   }
@@ -62,14 +57,6 @@ public class Trigger extends AbstractBaseEntity {
 
   public void setDescription(String description) {
     this.description = description;
-  }
-
-  public String getTenant() {
-    return tenant;
-  }
-
-  public void setTenant(String tenant) {
-    this.tenant = tenant;
   }
 
   public HttpMethod getMethod() {

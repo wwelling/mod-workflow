@@ -10,6 +10,6 @@ import org.springframework.http.HttpMethod;
 @RepositoryRestResource
 public interface TriggerRepo extends JpaRepository<Trigger, String> {
 
-  public List<Trigger> findByTenantAndMethod(String tenant, HttpMethod method);
+  public List<Trigger> findByMethod(HttpMethod method);
 
 }
