@@ -27,6 +27,42 @@
       ]
     },
     {
+      "id": "triggers",
+      "version": "1.0",
+      "handlers": [
+        {
+          "methods": ["GET"],
+          "pathPattern": "/triggers",
+          "permissionsRequired": ["trigger.collection.get"],
+          "permissionsDesired": ["trigger.domain.*", "trigger.domain.all"]
+        },
+        {
+          "methods": ["GET"],
+          "pathPattern": "/trigger/{id}",
+          "permissionsRequired": ["trigger.item.get"],
+          "permissionsDesired": ["trigger.domain.*", "trigger.domain.all"]
+        },
+        {
+          "methods": ["POST"],
+          "pathPattern": "/triggers",
+          "permissionsRequired": ["trigger.item.post"],
+          "permissionsDesired": ["trigger.domain.*", "trigger.domain.all"]
+        },
+        {
+          "methods": ["PUT"],
+          "pathPattern": "/triggers/{id}",
+          "permissionsRequired": ["trigger.item.put"],
+          "permissionsDesired": ["trigger.domain.*", "trigger.domain.all"]
+        },
+        {
+          "methods": ["DELETE"],
+          "pathPattern": "/triggers/{id}",
+          "permissionsRequired": ["trigger.item.delete"],
+          "permissionsDesired": ["trigger.domain.*", "trigger.domain.all"]
+        }
+      ]
+    },
+    {
       "id": "_schemas",
       "version": "1.0",
       "interfaceType" : "multiple",
@@ -75,6 +111,54 @@
       "subPermissions": [
         "action.allops",
         "action.domain.all"
+      ],
+      "visible": false
+    },
+    {
+      "permissionName": "trigger.collection.get",
+      "displayName": "Trigger - get trigger collection",
+      "description": "Get trigger collection"
+    },
+    {
+      "permissionName": "trigger.item.get",
+      "displayName": "Trigger - get trigger item",
+      "description": "Get trigger item"
+    },
+    {
+      "permissionName": "trigger.item.post",
+      "displayName": "Trigger - post trigger item",
+      "description": "Create trigger item"
+    },
+    {
+      "permissionName": "trigger.item.put",
+      "displayName": "Trigger - put trigger item",
+      "description": "Update trigger item"
+    },
+    {
+      "permissionName": "trigger.item.delete",
+      "displayName": "Trigger - delete trigger item",
+      "description": "Delete trigger item"
+    },
+    {
+      "permissionName": "trigger.allops",
+      "displayName": "Trigger module - all CRUD permissions",
+      "description": "Entire set of permissions needed to use the trigger modules, but no domain permissions",
+      "subPermissions": [
+        "trigger.collection.get",
+        "trigger.item.get",
+        "trigger.item.post",
+        "trigger.item.put",
+        "trigger.item.delete"
+      ],
+      "visible": false
+    },
+    {
+      "permissionName": "trigger.all",
+      "displayName": "Trigger module - all permissions and all trigger domains",
+      "description": "Entire set of permissions needed to use the trigger modules on any trigger domain",
+      "subPermissions": [
+        "trigger.allops",
+        "trigger.domain.all"
       ],
       "visible": false
     }
