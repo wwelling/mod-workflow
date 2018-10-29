@@ -2,6 +2,7 @@ package org.folio.rest.controller;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 import javax.jms.JMSException;
 import javax.servlet.http.HttpServletRequest;
@@ -50,22 +51,30 @@ public class EventController {
     @RequestHeader HttpHeaders headers,
     HttpServletRequest request,
     HttpServletRequest response
-  ) throws JMSException, IOException {
+  ) {
   // @formatter:on
-    String path = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
-    HttpMethod method = HttpMethod.valueOf(request.getMethod());
-    logger.debug("Tenant: {}", tenant);
-    logger.debug("Request path: {}", path);
-    logger.debug("Request method: {}", method);
-    logger.debug("Request headers: {}", headers);
-    logger.debug("Request body: {}", body);
-    Optional<Trigger> trigger = checkTrigger(method, path);
-    if (trigger.isPresent()) {
-      String triggerName = trigger.get().getName();
-      String triggerDescription = trigger.get().getDescription();
-      logger.debug("Publishing event: {}: {}", triggerName, triggerDescription);
-      eventProducer.send(new Event(triggerName, triggerDescription, tenant, path, method, body, headers));
-    }
+    CompletableFuture.runAsync(() -> {
+      String path = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
+      HttpMethod method = HttpMethod.valueOf(request.getMethod());
+      logger.debug("Tenant: {}", tenant);
+      logger.debug("Request path: {}", path);
+      logger.debug("Request method: {}", method);
+      logger.debug("Request headers: {}", headers);
+      logger.debug("Request body: {}", body);
+      Optional<Trigger> trigger = checkTrigger(method, path);
+      if (trigger.isPresent()) {
+        String triggerName = trigger.get().getName();
+        String triggerDescription = trigger.get().getDescription();
+        logger.debug("Publishing event: {}: {}", triggerName, triggerDescription);
+        try {
+          eventProducer.send(new Event(triggerName, triggerDescription, tenant, path, method, body, headers));
+        } catch (JMSException | IOException e) {
+          logger.debug("Failed to publish event to queue!", e);
+        }
+      }
+    }).thenRun(() -> {
+      logger.debug("Finished proccessing event");
+    });
     return body;
   }
 
