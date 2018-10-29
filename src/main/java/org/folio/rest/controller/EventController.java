@@ -1,17 +1,22 @@
 package org.folio.rest.controller;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import javax.jms.JMSException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.folio.rest.jms.Event;
 import org.folio.rest.jms.EventProducer;
+import org.folio.rest.model.Trigger;
+import org.folio.rest.model.repo.TriggerRepo;
 import org.folio.rest.tenant.annotation.TenantHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.util.PathMatcher;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,8 +31,16 @@ public class EventController {
 
   private static final Logger logger = LoggerFactory.getLogger(EventController.class);
 
+  private static final String FILTER_PATH_PATTERN_PREFIX = "/events";
+
   @Autowired
   private EventProducer eventProducer;
+
+  @Autowired
+  private TriggerRepo triggerRepo;
+
+  @Autowired
+  private PathMatcher pathMatcher;
 
   // @formatter:off
   @RequestMapping("/**")
@@ -40,14 +53,32 @@ public class EventController {
   ) throws JMSException, IOException {
   // @formatter:on
     String path = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
-    logger.info("Tenant: {}", tenant);
-    logger.info("Request path: {}", path);
-    logger.info("Request headers: {}", headers);
-    if (body != null) {
-      logger.info("Request body: {}", body);
-      eventProducer.send(new Event(tenant, path, body, headers));
+    HttpMethod method = HttpMethod.valueOf(request.getMethod());
+    logger.debug("Tenant: {}", tenant);
+    logger.debug("Request path: {}", path);
+    logger.debug("Request method: {}", method);
+    logger.debug("Request headers: {}", headers);
+    logger.debug("Request body: {}", body);
+    Optional<Trigger> trigger = checkTrigger(tenant, path, method);
+    if (trigger.isPresent()) {
+      String triggerName = trigger.get().getName();
+      String triggerDescription = trigger.get().getDescription();
+      logger.debug("Publishing event: {}: {}", triggerName, triggerDescription);
+      eventProducer.send(new Event(triggerName, triggerDescription, tenant, path, method, body, headers));
     }
     return body;
+  }
+
+  private Optional<Trigger> checkTrigger(String tenant, String path, HttpMethod method) {
+    Optional<Trigger> trigger = Optional.empty();
+    for (Trigger currTrigger : triggerRepo.findByTenantAndMethod(tenant, method)) {
+      String pathPattern = FILTER_PATH_PATTERN_PREFIX + currTrigger.getPathPattern();
+      if (pathMatcher.match(pathPattern, path)) {
+        trigger = Optional.of(currTrigger);
+        break;
+      }
+    }
+    return trigger;
   }
 
 }
