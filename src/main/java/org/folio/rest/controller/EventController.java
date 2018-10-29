@@ -59,7 +59,7 @@ public class EventController {
     logger.debug("Request method: {}", method);
     logger.debug("Request headers: {}", headers);
     logger.debug("Request body: {}", body);
-    Optional<Trigger> trigger = checkTrigger(tenant, path, method);
+    Optional<Trigger> trigger = checkTrigger(method, path);
     if (trigger.isPresent()) {
       String triggerName = trigger.get().getName();
       String triggerDescription = trigger.get().getDescription();
@@ -69,12 +69,12 @@ public class EventController {
     return body;
   }
 
-  private Optional<Trigger> checkTrigger(String tenant, String path, HttpMethod method) {
+  private Optional<Trigger> checkTrigger(HttpMethod method, String path) {
     Optional<Trigger> trigger = Optional.empty();
-    for (Trigger currTrigger : triggerRepo.findByTenantAndMethod(tenant, method)) {
-      String pathPattern = FILTER_PATH_PATTERN_PREFIX + currTrigger.getPathPattern();
+    for (Trigger currentTrigger : triggerRepo.findByMethod(method)) {
+      String pathPattern = FILTER_PATH_PATTERN_PREFIX + currentTrigger.getPathPattern();
       if (pathMatcher.match(pathPattern, path)) {
-        trigger = Optional.of(currTrigger);
+        trigger = Optional.of(currentTrigger);
         break;
       }
     }
