@@ -11,7 +11,10 @@
       "type" : "string",
       "minLength" : 4,
       "maxLength" : 64
+    },
+    "deployed" : {
+      "type" : "boolean"
     }
   },
-  "required" : [ "name" ]
+  "required" : [ "name", "deployed" ]
 }
