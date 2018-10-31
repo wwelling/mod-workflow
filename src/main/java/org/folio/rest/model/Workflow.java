@@ -15,13 +15,12 @@ public class Workflow extends AbstractBaseEntity {
   @Column(unique = true)
   private String name;
 
-	@NotNull
 	@Column
-	private boolean deployed;
+	private boolean active;
 
   public Workflow() {
     super();
-		deployed = false;
+		active = false;
   }
 
   public Workflow(String name) {
@@ -37,12 +36,12 @@ public class Workflow extends AbstractBaseEntity {
     this.name = name;
   }
 
-	public boolean isDeployed() {
-		return deployed;
+	public boolean isActive() {
+		return active;
 	}
 
-	public void setDeployed(boolean deployed) {
-		this.deployed = deployed;
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 }

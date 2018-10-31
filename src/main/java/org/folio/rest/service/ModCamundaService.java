@@ -1,5 +1,8 @@
 package org.folio.rest.service;
 
+import java.io.File;
+import java.io.IOException;
+
 import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.camunda.bpm.model.bpmn.instance.Definitions;
@@ -13,9 +16,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -43,19 +48,44 @@ public class ModCamundaService {
 	@Autowired
 	private HttpService httpService;
 
-	public Workflow deployWorkflow(String tenant, Workflow workflow) throws CamundaServiceException {
+	public Workflow deployWorkflow(String tenant, Workflow workflow) throws CamundaServiceException, IOException {
 		BpmnModelInstance modelInstance = makeBPMNFromWorkflow(workflow);
-		request(HttpMethod.POST, MediaType.MULTIPART_FORM_DATA, tenant, CAMUNDA_DEPLOY_URI,
-				Bpmn.convertToString(modelInstance));
-		workflow.setDeployed(true);
-		return workflowRepo.save(workflow);
+		
+		File tempFile = File.createTempFile(workflow.getName(), ".bpmn");
+		tempFile.deleteOnExit();
+		
+		Bpmn.writeModelToFile(tempFile, modelInstance);
+		
+		LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+		map.add("tenant-id", tenant);
+		map.add("deployment-name", workflow.getName());
+		map.add("deployment-source", "process application");
+		map.add("data", tempFile);
+
+		ResponseEntity<JsonNode> res = request(HttpMethod.POST, MediaType.MULTIPART_FORM_DATA, tenant, CAMUNDA_DEPLOY_URI,
+				map);
+
+		if (res.getStatusCode() == HttpStatus.OK) {
+			workflow.setActive(true);
+			return workflowRepo.save(workflow);
+		}
+
+		throw new CamundaServiceException(res.getStatusCodeValue());
+
 	}
 
 	public Workflow unDeployWorkflow(String tenant, Workflow workflow) throws CamundaServiceException {
-		request(HttpMethod.DELETE, MediaType.TEXT_PLAIN, tenant,
+
+		ResponseEntity<JsonNode> res = request(HttpMethod.DELETE, MediaType.TEXT_PLAIN, tenant,
 				String.format(CAMUNDA_UNDEPLOY_URI_TEMPLATE, workflow.getName()));
-		workflow.setDeployed(false);
-		return workflowRepo.save(workflow);
+
+		if (res.getStatusCode() == HttpStatus.OK) {
+			workflow.setActive(false);
+			return workflowRepo.save(workflow);
+		}
+
+		throw new CamundaServiceException(res.getStatusCodeValue());
+
 	}
 
 	private BpmnModelInstance makeBPMNFromWorkflow(Workflow workflow) {
@@ -94,6 +124,7 @@ public class ModCamundaService {
 
 		headers.setContentType(mediaType);
 		headers.add(tenantHeaderName, tenant);
+
 		if (log.isDebugEnabled()) {
 			log.debug("Proxy request for {} to {}", tenant, url);
 		}
