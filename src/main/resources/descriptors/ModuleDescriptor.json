@@ -95,6 +95,18 @@
           "pathPattern": "/workflows/{id}",
           "permissionsRequired": ["workflow.item.delete"],
           "permissionsDesired": ["workflow.domain.*", "workflow.domain.all"]
+        },
+        {
+          "methods": ["PUT"],
+          "pathPattern": "/workflows/{id}/activate",
+          "permissionsRequired": ["workflow.item.activate"],
+          "permissionsDesired": ["workflow.domain.*", "workflow.domain.all"]
+        },
+        {
+          "methods": ["PUT"],
+          "pathPattern": "/workflows/{id}/deactivate",
+          "permissionsRequired": ["workflow.item.deactivate"],
+          "permissionsDesired": ["workflow.domain.*", "workflow.domain.all"]
         }
       ]
     },
