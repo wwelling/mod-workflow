@@ -139,7 +139,7 @@ public class ModCamundaService {
     if (log.isDebugEnabled()) {
       log.debug("Proxy request for {} to {}", tenant, url);
     }
-    log.debug("Headers {}", request.getHeaders());
+    log.info("Headers {}", request.getHeaders());
     return this.httpService.exchange(url, method, request, JsonNode.class);
   }
 
