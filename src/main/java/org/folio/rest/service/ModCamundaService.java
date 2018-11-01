@@ -127,7 +127,6 @@ public class ModCamundaService {
     log.info(url);
 
     HttpHeaders headers = new HttpHeaders();
-    HttpEntity<?> request = body != null ? new HttpEntity<Object>(body, headers) : new HttpEntity<>(headers);
 
     if (additionalHeaders != null) {
       headers.addAll(additionalHeaders);
@@ -135,6 +134,8 @@ public class ModCamundaService {
 
     headers.setContentType(mediaType);
     headers.add(tenantHeaderName, tenant);
+
+    HttpEntity<?> request = body != null ? new HttpEntity<Object>(body, headers) : new HttpEntity<>(headers);
 
     if (log.isDebugEnabled()) {
       log.debug("Proxy request for {} to {}", tenant, url);

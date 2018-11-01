@@ -105,9 +105,9 @@ public class OkapiDiscoveryService {
   private ResponseEntity<JsonNode> request(String url, String tenant) {
     HttpMethod method = HttpMethod.GET;
     HttpHeaders headers = new HttpHeaders();
-    HttpEntity<?> request = new HttpEntity<>(headers);
     headers.setContentType(MediaType.APPLICATION_JSON);
     headers.add(tenantHeaderName, tenant);
+    HttpEntity<?> request = new HttpEntity<>(headers);
     if (log.isDebugEnabled()) {
       log.debug("Proxy request for {} to {}", tenant, url);
     }
