@@ -29,7 +29,7 @@ public class WorkflowController {
 	@PutMapping("/{id}/activate")
 	public Workflow activateWorkflow(
 		@TenantHeader String tenant,
-		@RequestHeader(value = "X-Okapi-Tenant", required = true) String token,
+		@RequestHeader(value = "X-Okapi-Token", required = true) String token,
 		@PathVariable String id
 	) throws WorkflowNotFoundException, CamundaServiceException, IOException {
 
@@ -46,7 +46,7 @@ public class WorkflowController {
 	@PutMapping("/{id}/deactivate")
 	public Workflow deactivateWorkflow(
 		@TenantHeader String tenant,
-		@RequestHeader(value = "X-Okapi-Tenant", required = true) String token,
+		@RequestHeader(value = "X-Okapi-Token", required = true) String token,
 		@PathVariable String id
 	) throws WorkflowNotFoundException, CamundaServiceException {
 

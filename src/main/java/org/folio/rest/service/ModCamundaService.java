@@ -63,7 +63,7 @@ public class ModCamundaService {
 		map.add("data", tempFile);
 
 		MultiValueMap<String, String> additionalHeaders = new LinkedMultiValueMap<>();
-		additionalHeaders.add(tenantHeaderName, token);
+		additionalHeaders.add("X-Okapi-Token", token);
 
 		ResponseEntity<JsonNode> res = request(HttpMethod.POST, MediaType.MULTIPART_FORM_DATA, tenant, String.format(CAMUNDA_DEPLOY_URI_TEMPLATE, okapiLocation), map, additionalHeaders);
 
@@ -79,7 +79,7 @@ public class ModCamundaService {
 	public Workflow undeployWorkflow(String tenant, String token, Workflow workflow) throws CamundaServiceException {
 
 		MultiValueMap<String, String> additionalHeaders = new LinkedMultiValueMap<>();
-		additionalHeaders.add(tenantHeaderName, token);
+		additionalHeaders.add("X-Okapi-Token", token);
 
 		ResponseEntity<JsonNode> res = request(HttpMethod.DELETE, MediaType.TEXT_PLAIN, tenant, String.format(CAMUNDA_UNDEPLOY_URI_TEMPLATE, okapiLocation, workflow.getId()), additionalHeaders);
 
