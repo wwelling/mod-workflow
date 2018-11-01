@@ -1,11 +1,17 @@
-# http://editorconfig.org/
+
+# EditorConfig: http://editorconfig.org/
 
 root = true
 
+# default to 2 space indentation
 [*]
-charset = utf-8
-end_of_line = lf
-indent_size = 2
-indent_style = space
-insert_final_newline = true
 trim_trailing_whitespace = true
+insert_final_newline = true
+max_line_length = 80
+indent_style = space
+indent_size = 2
+
+# 4 space indentation
+[*.py]
+indent_style = space
+indent_size = 4
