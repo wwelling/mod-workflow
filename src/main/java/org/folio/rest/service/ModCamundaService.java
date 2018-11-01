@@ -112,6 +112,11 @@ public class ModCamundaService {
 
 	private ResponseEntity<JsonNode> request(HttpMethod method, MediaType mediaType, String tenant, String url,
 			Object body, MultiValueMap<String, String> additionalHeaders) {
+
+    log.info("\n\n\n*********");
+    log.info(url);
+    log.info("*********\n\n\n");
+
 		HttpHeaders headers = new HttpHeaders();
 		HttpEntity<?> request = body != null ? new HttpEntity<Object>(body, headers) : new HttpEntity<>(headers);
 
