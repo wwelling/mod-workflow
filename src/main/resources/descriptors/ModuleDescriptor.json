@@ -38,7 +38,7 @@
         },
         {
           "methods": ["GET"],
-          "pathPattern": "/trigger/{id}",
+          "pathPattern": "/triggers/{id}",
           "permissionsRequired": ["trigger.item.get"],
           "permissionsDesired": ["trigger.domain.*", "trigger.domain.all"]
         },
@@ -74,7 +74,7 @@
         },
         {
           "methods": ["GET"],
-          "pathPattern": "/workflow/{id}",
+          "pathPattern": "/workflows/{id}",
           "permissionsRequired": ["workflow.item.get"],
           "permissionsDesired": ["workflow.domain.*", "workflow.domain.all"]
         },
