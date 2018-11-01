@@ -30,9 +30,9 @@ public class ModCamundaService {
 
 	private static final Logger log = LoggerFactory.getLogger(ModCamundaService.class);
 
-	private static final String CAMUNDA_DEPLOY_URI = "/camunda/deployment/create";
+	private static final String CAMUNDA_DEPLOY_URI_TEMPLATE = "{}/camunda/deployment/create";
 
-	private static final String CAMUNDA_UNDEPLOY_URI_TEMPLATE = "/camunda/deployment/{}";
+	private static final String CAMUNDA_UNDEPLOY_URI_TEMPLATE = "{}/camunda/deployment/{}";
 
 	private static final String TARGET_NAMESPACE = "http://bpmn.io/schema/bpmn";
 
@@ -51,19 +51,18 @@ public class ModCamundaService {
 	public Workflow deployWorkflow(String tenant, Workflow workflow) throws CamundaServiceException, IOException {
 		BpmnModelInstance modelInstance = makeBPMNFromWorkflow(workflow);
 
-		File tempFile = File.createTempFile(workflow.getName(), ".bpmn");
+		File tempFile = File.createTempFile("workflow", ".bpmn");
 		tempFile.deleteOnExit();
 		
 		Bpmn.writeModelToFile(tempFile, modelInstance);
 		
 		LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
 		map.add("tenant-id", tenant);
-		map.add("deployment-name", workflow.getName());
+		map.add("deployment-name", workflow.getId());
 		map.add("deployment-source", "process application");
 		map.add("data", tempFile);
 
-		ResponseEntity<JsonNode> res = request(HttpMethod.POST, MediaType.MULTIPART_FORM_DATA, tenant, CAMUNDA_DEPLOY_URI,
-				map);
+		ResponseEntity<JsonNode> res = request(HttpMethod.POST, MediaType.MULTIPART_FORM_DATA, tenant, String.format(CAMUNDA_DEPLOY_URI_TEMPLATE, okapiLocation), map);
 
 		if (res.getStatusCode() == HttpStatus.OK) {
 			workflow.setActive(true);
@@ -76,8 +75,7 @@ public class ModCamundaService {
 
 	public Workflow unDeployWorkflow(String tenant, Workflow workflow) throws CamundaServiceException {
 
-		ResponseEntity<JsonNode> res = request(HttpMethod.DELETE, MediaType.TEXT_PLAIN, tenant,
-				String.format(CAMUNDA_UNDEPLOY_URI_TEMPLATE, workflow.getName()));
+		ResponseEntity<JsonNode> res = request(HttpMethod.DELETE, MediaType.TEXT_PLAIN, tenant, String.format(CAMUNDA_UNDEPLOY_URI_TEMPLATE, okapiLocation, workflow.getId()));
 
 		if (res.getStatusCode() == HttpStatus.OK) {
 			workflow.setActive(false);
