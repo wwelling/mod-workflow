@@ -69,6 +69,9 @@ public class ModCamundaService {
     MultiValueMap<String, String> additionalHeaders = new LinkedMultiValueMap<>();
     additionalHeaders.add(tokenHeaderName, token);
 
+    log.info("Tenant: {}", tenant);
+    log.info("Token: {}", token);
+
     ResponseEntity<JsonNode> res = request(HttpMethod.POST, MediaType.MULTIPART_FORM_DATA, tenant,
         String.format(CAMUNDA_DEPLOY_URI_TEMPLATE, okapiLocation), map, additionalHeaders);
 
@@ -76,9 +79,7 @@ public class ModCamundaService {
       workflow.setActive(true);
       return workflowRepo.save(workflow);
     }
-
     throw new CamundaServiceException(res.getStatusCodeValue());
-
   }
 
   public Workflow undeployWorkflow(String tenant, String token, Workflow workflow) throws CamundaServiceException {
@@ -93,9 +94,7 @@ public class ModCamundaService {
       workflow.setActive(false);
       return workflowRepo.save(workflow);
     }
-
     throw new CamundaServiceException(res.getStatusCodeValue());
-
   }
 
   private BpmnModelInstance makeBPMNFromWorkflow(Workflow workflow) {
@@ -140,6 +139,7 @@ public class ModCamundaService {
     if (log.isDebugEnabled()) {
       log.debug("Proxy request for {} to {}", tenant, url);
     }
+    log.debug("Headers {}", request.getHeaders());
     return this.httpService.exchange(url, method, request, JsonNode.class);
   }
 
