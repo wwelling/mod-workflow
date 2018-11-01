@@ -271,6 +271,7 @@
       "visible": false
     }
   ],
+  "requires": [ ],
   "launchDescriptor": {
     "dockerImage": "@project.artifactId@:@project.version@",
     "dockerArgs": {
