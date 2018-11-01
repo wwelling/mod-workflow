@@ -91,7 +91,6 @@ public class ModCamundaService {
 
 		Definitions definitions = modelInstance.newInstance(Definitions.class);
 		definitions.setTargetNamespace(TARGET_NAMESPACE);
-		definitions.setId(workflow.getId());
 		modelInstance.setDefinitions(definitions);
 
 		return modelInstance;
