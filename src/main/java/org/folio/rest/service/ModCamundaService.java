@@ -58,13 +58,29 @@ public class ModCamundaService {
 
     String modelXml = Bpmn.convertToString(modelInstance);
 
-    MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>();
-    parts.add("tenant-id", tenant);
-    parts.add("deployment-name", workflow.getId());
-    parts.add("deployment-source", "process application");
+    HttpHeaders tenantHeader = new HttpHeaders();
+    tenantHeader.setContentType(MediaType.TEXT_PLAIN);
+    HttpEntity<String> tenantHttpEntity = new HttpEntity<>(tenant, tenantHeader);
 
-    parts.add("file", new ByteArrayResource(modelXml.getBytes()));
-    parts.add("filename", "workflow.bpmn");
+    HttpHeaders deploymentNameHeader = new HttpHeaders();
+    deploymentNameHeader.setContentType(MediaType.TEXT_PLAIN);
+    HttpEntity<String> deploymentNameHttpEntity = new HttpEntity<>(workflow.getId(), deploymentNameHeader);
+
+    HttpHeaders deploymentSourceHeader = new HttpHeaders();
+    deploymentSourceHeader.setContentType(MediaType.TEXT_PLAIN);
+    HttpEntity<String> deploymentSourceHttpEntity = new HttpEntity<>("process application", deploymentSourceHeader);
+
+    HttpHeaders modelFileHeader = new HttpHeaders();
+    modelFileHeader.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+    HttpEntity<ByteArrayResource> modelFileHttpEntity = new HttpEntity<>(new ByteArrayResource(modelXml.getBytes()),
+        modelFileHeader);
+
+    MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>();
+    parts.add("tenant-id", tenantHttpEntity);
+    parts.add("deployment-name", deploymentNameHttpEntity);
+    parts.add("deployment-source", deploymentSourceHttpEntity);
+
+    parts.add("data", modelFileHttpEntity);
 
     MultiValueMap<String, String> additionalHeaders = new LinkedMultiValueMap<>();
     additionalHeaders.add(tokenHeaderName, token);
