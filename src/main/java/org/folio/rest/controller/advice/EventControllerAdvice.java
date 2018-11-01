@@ -1,7 +1,5 @@
 package org.folio.rest.controller.advice;
 
-import java.io.IOException;
-
 import javax.jms.JMSException;
 
 import org.slf4j.Logger;
@@ -20,13 +18,6 @@ public class EventControllerAdvice {
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   @ExceptionHandler(JMSException.class)
   public String handleJMSException(JmsException exception) {
-    logger.debug(exception.getMessage(), exception);
-    return exception.getMessage();
-  }
-
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
-  @ExceptionHandler(IOException.class)
-  public String handleIOException(IOException exception) {
     logger.debug(exception.getMessage(), exception);
     return exception.getMessage();
   }

@@ -15,12 +15,12 @@ public class Workflow extends AbstractBaseEntity {
   @Column(unique = true)
   private String name;
 
-	@Column
-	private boolean active;
+  @Column
+  private boolean active;
 
   public Workflow() {
     super();
-		active = false;
+    active = false;
   }
 
   public Workflow(String name) {
@@ -36,12 +36,12 @@ public class Workflow extends AbstractBaseEntity {
     this.name = name;
   }
 
-	public boolean isActive() {
-		return active;
-	}
+  public boolean isActive() {
+    return active;
+  }
 
-	public void setActive(boolean active) {
-		this.active = active;
-	}
+  public void setActive(boolean active) {
+    this.active = active;
+  }
 
 }
