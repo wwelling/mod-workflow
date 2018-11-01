@@ -158,7 +158,7 @@
     <dependency>
       <groupId>org.camunda.bpm.model</groupId>
       <artifactId>camunda-bpmn-model</artifactId>
-      <version>7.10.0-alpha5</version>
+      <version>7.9.0</version>
     </dependency>
 
   </dependencies>
