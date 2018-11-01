@@ -88,7 +88,7 @@ public class ModCamundaService {
     parts.add("deployment-name", deploymentNameHttpEntity);
     parts.add("deployment-source", deploymentSourceHttpEntity);
 
-    parts.add("data", modelFileHttpEntity);
+    parts.add("file", modelFileHttpEntity);
 
     MultiValueMap<String, String> additionalHeaders = new LinkedMultiValueMap<>();
     additionalHeaders.add(tokenHeaderName, token);
