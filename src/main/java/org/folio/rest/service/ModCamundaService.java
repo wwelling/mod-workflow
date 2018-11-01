@@ -50,7 +50,7 @@ public class ModCamundaService {
 
 	public Workflow deployWorkflow(String tenant, Workflow workflow) throws CamundaServiceException, IOException {
 		BpmnModelInstance modelInstance = makeBPMNFromWorkflow(workflow);
-		
+
 		File tempFile = File.createTempFile(workflow.getName(), ".bpmn");
 		tempFile.deleteOnExit();
 		
@@ -93,7 +93,7 @@ public class ModCamundaService {
 
 		Definitions definitions = modelInstance.newInstance(Definitions.class);
 		definitions.setTargetNamespace(TARGET_NAMESPACE);
-		definitions.setId(workflow.getName());
+		definitions.setId(workflow.getId());
 		modelInstance.setDefinitions(definitions);
 
 		return modelInstance;
