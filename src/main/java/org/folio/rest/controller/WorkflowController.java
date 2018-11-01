@@ -12,6 +12,7 @@ import org.folio.rest.tenant.annotation.TenantHeader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,20 +20,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/workflows")
 public class WorkflowController {
 
-  @Autowired
+	@Autowired
 	private WorkflowRepo workflowRepo;
 
 	@Autowired
 	private ModCamundaService modCamundaService;
 
 	@PutMapping("/{id}/activate")
-	public Workflow activateWorkflow(@TenantHeader String tenant, @PathVariable String id)
-			throws WorkflowNotFoundException, CamundaServiceException, IOException {
+	public Workflow activateWorkflow(
+		@TenantHeader String tenant,
+		@RequestHeader(value = "X-Okapi-Tenant", required = true) String token,
+		@PathVariable String id
+	) throws WorkflowNotFoundException, CamundaServiceException, IOException {
 
 		Optional<Workflow> workflow = workflowRepo.findById(id);
 
 		if (workflow.isPresent()) {
-			return modCamundaService.deployWorkflow(tenant, workflow.get());
+			return modCamundaService.deployWorkflow(tenant, token, workflow.get());
 		}
 
 		throw new WorkflowNotFoundException(id);
@@ -40,13 +44,16 @@ public class WorkflowController {
 	}
 
 	@PutMapping("/{id}/deactivate")
-	public Workflow deactivateWorkflow(@TenantHeader String tenant, @PathVariable String id)
-			throws WorkflowNotFoundException, CamundaServiceException {
-		
+	public Workflow deactivateWorkflow(
+		@TenantHeader String tenant,
+		@RequestHeader(value = "X-Okapi-Tenant", required = true) String token,
+		@PathVariable String id
+	) throws WorkflowNotFoundException, CamundaServiceException {
+
 		Optional<Workflow> workflow = workflowRepo.findById(id);
 
 		if (workflow.isPresent()) {
-			return modCamundaService.unDeployWorkflow(tenant, workflow.get());
+			return modCamundaService.undeployWorkflow(tenant, token, workflow.get());
 		}
 
 		throw new WorkflowNotFoundException(id);

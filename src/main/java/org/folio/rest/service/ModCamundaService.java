@@ -48,7 +48,7 @@ public class ModCamundaService {
 	@Autowired
 	private HttpService httpService;
 
-	public Workflow deployWorkflow(String tenant, Workflow workflow) throws CamundaServiceException, IOException {
+	public Workflow deployWorkflow(String tenant, String token, Workflow workflow) throws CamundaServiceException, IOException {
 		BpmnModelInstance modelInstance = makeBPMNFromWorkflow(workflow);
 
 		File tempFile = File.createTempFile("workflow", ".bpmn");
@@ -56,13 +56,16 @@ public class ModCamundaService {
 		
 		Bpmn.writeModelToFile(tempFile, modelInstance);
 		
-		LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
 		map.add("tenant-id", tenant);
 		map.add("deployment-name", workflow.getId());
 		map.add("deployment-source", "process application");
 		map.add("data", tempFile);
 
-		ResponseEntity<JsonNode> res = request(HttpMethod.POST, MediaType.MULTIPART_FORM_DATA, tenant, String.format(CAMUNDA_DEPLOY_URI_TEMPLATE, okapiLocation), map);
+		MultiValueMap<String, String> additionalHeaders = new LinkedMultiValueMap<>();
+		additionalHeaders.add(tenantHeaderName, token);
+
+		ResponseEntity<JsonNode> res = request(HttpMethod.POST, MediaType.MULTIPART_FORM_DATA, tenant, String.format(CAMUNDA_DEPLOY_URI_TEMPLATE, okapiLocation), map, additionalHeaders);
 
 		if (res.getStatusCode() == HttpStatus.OK) {
 			workflow.setActive(true);
@@ -73,9 +76,12 @@ public class ModCamundaService {
 
 	}
 
-	public Workflow unDeployWorkflow(String tenant, Workflow workflow) throws CamundaServiceException {
+	public Workflow undeployWorkflow(String tenant, String token, Workflow workflow) throws CamundaServiceException {
 
-		ResponseEntity<JsonNode> res = request(HttpMethod.DELETE, MediaType.TEXT_PLAIN, tenant, String.format(CAMUNDA_UNDEPLOY_URI_TEMPLATE, okapiLocation, workflow.getId()));
+		MultiValueMap<String, String> additionalHeaders = new LinkedMultiValueMap<>();
+		additionalHeaders.add(tenantHeaderName, token);
+
+		ResponseEntity<JsonNode> res = request(HttpMethod.DELETE, MediaType.TEXT_PLAIN, tenant, String.format(CAMUNDA_UNDEPLOY_URI_TEMPLATE, okapiLocation, workflow.getId()), additionalHeaders);
 
 		if (res.getStatusCode() == HttpStatus.OK) {
 			workflow.setActive(false);
@@ -105,13 +111,11 @@ public class ModCamundaService {
 		return request(method, mediaType, tenant, url, null, additionalHeaders);
 	}
 
-	private ResponseEntity<JsonNode> request(HttpMethod method, MediaType mediaType, String tenant, String url,
-			Object body) {
+	private ResponseEntity<JsonNode> request(HttpMethod method, MediaType mediaType, String tenant, String url, Object body) {
 		return request(method, mediaType, tenant, url, body, null);
 	}
 
-	private ResponseEntity<JsonNode> request(HttpMethod method, MediaType mediaType, String tenant, String url,
-			Object body, MultiValueMap<String, String> additionalHeaders) {
+	private ResponseEntity<JsonNode> request(HttpMethod method, MediaType mediaType, String tenant, String url, Object body, MultiValueMap<String, String> additionalHeaders) {
 
 		log.info(url);
 
