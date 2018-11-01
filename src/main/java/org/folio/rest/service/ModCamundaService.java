@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -55,16 +56,15 @@ public class ModCamundaService {
       throws CamundaServiceException, IOException {
     BpmnModelInstance modelInstance = makeBPMNFromWorkflow(workflow);
 
-    File tempFile = File.createTempFile("workflow", ".bpmn");
-    tempFile.deleteOnExit();
+    String modelXml = Bpmn.convertToString(modelInstance);
 
-    Bpmn.writeModelToFile(tempFile, modelInstance);
+    MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>();
+    parts.add("tenant-id", tenant);
+    parts.add("deployment-name", workflow.getId());
+    parts.add("deployment-source", "process application");
 
-    MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
-    map.add("tenant-id", tenant);
-    map.add("deployment-name", workflow.getId());
-    map.add("deployment-source", "process application");
-    map.add("data", tempFile);
+    parts.add("file", new ByteArrayResource(modelXml.getBytes()));
+    parts.add("filename", "workflow.bpmn");
 
     MultiValueMap<String, String> additionalHeaders = new LinkedMultiValueMap<>();
     additionalHeaders.add(tokenHeaderName, token);
@@ -73,7 +73,7 @@ public class ModCamundaService {
     log.info("Token: {}", token);
 
     ResponseEntity<JsonNode> res = request(HttpMethod.POST, MediaType.MULTIPART_FORM_DATA, tenant,
-        String.format(CAMUNDA_DEPLOY_URI_TEMPLATE, okapiLocation), map, additionalHeaders);
+        String.format(CAMUNDA_DEPLOY_URI_TEMPLATE, okapiLocation), parts, additionalHeaders);
 
     if (res.getStatusCode() == HttpStatus.OK) {
       workflow.setActive(true);
