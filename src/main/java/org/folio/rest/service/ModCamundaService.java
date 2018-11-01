@@ -28,111 +28,119 @@ import com.fasterxml.jackson.databind.JsonNode;
 @Service
 public class ModCamundaService {
 
-	private static final Logger log = LoggerFactory.getLogger(ModCamundaService.class);
+  private static final Logger log = LoggerFactory.getLogger(ModCamundaService.class);
 
-	private static final String CAMUNDA_DEPLOY_URI_TEMPLATE = "%s/camunda/deployment/create";
+  private static final String CAMUNDA_DEPLOY_URI_TEMPLATE = "%s/camunda/deployment/create";
 
-	private static final String CAMUNDA_UNDEPLOY_URI_TEMPLATE = "%s/camunda/deployment/%s";
+  private static final String CAMUNDA_UNDEPLOY_URI_TEMPLATE = "%s/camunda/deployment/%s";
 
-	private static final String TARGET_NAMESPACE = "http://bpmn.io/schema/bpmn";
+  private static final String TARGET_NAMESPACE = "http://bpmn.io/schema/bpmn";
 
-	@Value("${tenant.headerName:X-Okapi-Tenant}")
-	private String tenantHeaderName;
+  @Value("${tenant.headerName:X-Okapi-Tenant}")
+  private String tenantHeaderName;
 
-	@Value("${okapi.location}")
-	private String okapiLocation;
+  @Value("${okapi.auth.tokenHeaderName:X-Okapi-Token}")
+  private String tokenHeaderName;
 
-	@Autowired
-	private WorkflowRepo workflowRepo;
+  @Value("${okapi.location}")
+  private String okapiLocation;
 
-	@Autowired
-	private HttpService httpService;
+  @Autowired
+  private WorkflowRepo workflowRepo;
 
-	public Workflow deployWorkflow(String tenant, String token, Workflow workflow) throws CamundaServiceException, IOException {
-		BpmnModelInstance modelInstance = makeBPMNFromWorkflow(workflow);
+  @Autowired
+  private HttpService httpService;
 
-		File tempFile = File.createTempFile("workflow", ".bpmn");
-		tempFile.deleteOnExit();
-		
-		Bpmn.writeModelToFile(tempFile, modelInstance);
-		
-		MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
-		map.add("tenant-id", tenant);
-		map.add("deployment-name", workflow.getId());
-		map.add("deployment-source", "process application");
-		map.add("data", tempFile);
+  public Workflow deployWorkflow(String tenant, String token, Workflow workflow)
+      throws CamundaServiceException, IOException {
+    BpmnModelInstance modelInstance = makeBPMNFromWorkflow(workflow);
 
-		MultiValueMap<String, String> additionalHeaders = new LinkedMultiValueMap<>();
-		additionalHeaders.add("X-Okapi-Token", token);
+    File tempFile = File.createTempFile("workflow", ".bpmn");
+    tempFile.deleteOnExit();
 
-		ResponseEntity<JsonNode> res = request(HttpMethod.POST, MediaType.MULTIPART_FORM_DATA, tenant, String.format(CAMUNDA_DEPLOY_URI_TEMPLATE, okapiLocation), map, additionalHeaders);
+    Bpmn.writeModelToFile(tempFile, modelInstance);
 
-		if (res.getStatusCode() == HttpStatus.OK) {
-			workflow.setActive(true);
-			return workflowRepo.save(workflow);
-		}
+    MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+    map.add("tenant-id", tenant);
+    map.add("deployment-name", workflow.getId());
+    map.add("deployment-source", "process application");
+    map.add("data", tempFile);
 
-		throw new CamundaServiceException(res.getStatusCodeValue());
+    MultiValueMap<String, String> additionalHeaders = new LinkedMultiValueMap<>();
+    additionalHeaders.add(tokenHeaderName, token);
 
-	}
+    ResponseEntity<JsonNode> res = request(HttpMethod.POST, MediaType.MULTIPART_FORM_DATA, tenant,
+        String.format(CAMUNDA_DEPLOY_URI_TEMPLATE, okapiLocation), map, additionalHeaders);
 
-	public Workflow undeployWorkflow(String tenant, String token, Workflow workflow) throws CamundaServiceException {
+    if (res.getStatusCode() == HttpStatus.OK) {
+      workflow.setActive(true);
+      return workflowRepo.save(workflow);
+    }
 
-		MultiValueMap<String, String> additionalHeaders = new LinkedMultiValueMap<>();
-		additionalHeaders.add("X-Okapi-Token", token);
+    throw new CamundaServiceException(res.getStatusCodeValue());
 
-		ResponseEntity<JsonNode> res = request(HttpMethod.DELETE, MediaType.TEXT_PLAIN, tenant, String.format(CAMUNDA_UNDEPLOY_URI_TEMPLATE, okapiLocation, workflow.getId()), additionalHeaders);
+  }
 
-		if (res.getStatusCode() == HttpStatus.OK) {
-			workflow.setActive(false);
-			return workflowRepo.save(workflow);
-		}
+  public Workflow undeployWorkflow(String tenant, String token, Workflow workflow) throws CamundaServiceException {
 
-		throw new CamundaServiceException(res.getStatusCodeValue());
+    MultiValueMap<String, String> additionalHeaders = new LinkedMultiValueMap<>();
+    additionalHeaders.add(tokenHeaderName, token);
 
-	}
+    ResponseEntity<JsonNode> res = request(HttpMethod.DELETE, MediaType.TEXT_PLAIN, tenant,
+        String.format(CAMUNDA_UNDEPLOY_URI_TEMPLATE, okapiLocation, workflow.getId()), additionalHeaders);
 
-	private BpmnModelInstance makeBPMNFromWorkflow(Workflow workflow) {
-		BpmnModelInstance modelInstance = Bpmn.createEmptyModel();
+    if (res.getStatusCode() == HttpStatus.OK) {
+      workflow.setActive(false);
+      return workflowRepo.save(workflow);
+    }
 
-		Definitions definitions = modelInstance.newInstance(Definitions.class);
-		definitions.setTargetNamespace(TARGET_NAMESPACE);
-		modelInstance.setDefinitions(definitions);
+    throw new CamundaServiceException(res.getStatusCodeValue());
 
-		return modelInstance;
-	}
+  }
 
-	private ResponseEntity<JsonNode> request(HttpMethod method, MediaType mediaType, String tenant, String url) {
-		return request(method, mediaType, tenant, url, null, null);
-	}
+  private BpmnModelInstance makeBPMNFromWorkflow(Workflow workflow) {
+    BpmnModelInstance modelInstance = Bpmn.createEmptyModel();
 
-	private ResponseEntity<JsonNode> request(HttpMethod method, MediaType mediaType, String tenant, String url,
-			MultiValueMap<String, String> additionalHeaders) {
-		return request(method, mediaType, tenant, url, null, additionalHeaders);
-	}
+    Definitions definitions = modelInstance.newInstance(Definitions.class);
+    definitions.setTargetNamespace(TARGET_NAMESPACE);
+    modelInstance.setDefinitions(definitions);
 
-	private ResponseEntity<JsonNode> request(HttpMethod method, MediaType mediaType, String tenant, String url, Object body) {
-		return request(method, mediaType, tenant, url, body, null);
-	}
+    return modelInstance;
+  }
 
-	private ResponseEntity<JsonNode> request(HttpMethod method, MediaType mediaType, String tenant, String url, Object body, MultiValueMap<String, String> additionalHeaders) {
+  private ResponseEntity<JsonNode> request(HttpMethod method, MediaType mediaType, String tenant, String url) {
+    return request(method, mediaType, tenant, url, null, null);
+  }
 
-		log.info(url);
+  private ResponseEntity<JsonNode> request(HttpMethod method, MediaType mediaType, String tenant, String url,
+      MultiValueMap<String, String> additionalHeaders) {
+    return request(method, mediaType, tenant, url, null, additionalHeaders);
+  }
 
-		HttpHeaders headers = new HttpHeaders();
-		HttpEntity<?> request = body != null ? new HttpEntity<Object>(body, headers) : new HttpEntity<>(headers);
+  private ResponseEntity<JsonNode> request(HttpMethod method, MediaType mediaType, String tenant, String url,
+      Object body) {
+    return request(method, mediaType, tenant, url, body, null);
+  }
 
-		if (additionalHeaders != null) {
-			headers.addAll(additionalHeaders);
-		}
+  private ResponseEntity<JsonNode> request(HttpMethod method, MediaType mediaType, String tenant, String url,
+      Object body, MultiValueMap<String, String> additionalHeaders) {
 
-		headers.setContentType(mediaType);
-		headers.add(tenantHeaderName, tenant);
+    log.info(url);
 
-		if (log.isDebugEnabled()) {
-			log.debug("Proxy request for {} to {}", tenant, url);
-		}
-		return this.httpService.exchange(url, method, request, JsonNode.class);
-	}
+    HttpHeaders headers = new HttpHeaders();
+    HttpEntity<?> request = body != null ? new HttpEntity<Object>(body, headers) : new HttpEntity<>(headers);
+
+    if (additionalHeaders != null) {
+      headers.addAll(additionalHeaders);
+    }
+
+    headers.setContentType(mediaType);
+    headers.add(tenantHeaderName, tenant);
+
+    if (log.isDebugEnabled()) {
+      log.debug("Proxy request for {} to {}", tenant, url);
+    }
+    return this.httpService.exchange(url, method, request, JsonNode.class);
+  }
 
 }
