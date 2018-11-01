@@ -30,9 +30,9 @@ public class ModCamundaService {
 
 	private static final Logger log = LoggerFactory.getLogger(ModCamundaService.class);
 
-	private static final String CAMUNDA_DEPLOY_URI_TEMPLATE = "{}/camunda/deployment/create";
+	private static final String CAMUNDA_DEPLOY_URI_TEMPLATE = "%s/camunda/deployment/create";
 
-	private static final String CAMUNDA_UNDEPLOY_URI_TEMPLATE = "{}/camunda/deployment/{}";
+	private static final String CAMUNDA_UNDEPLOY_URI_TEMPLATE = "%s/camunda/deployment/%s";
 
 	private static final String TARGET_NAMESPACE = "http://bpmn.io/schema/bpmn";
 
@@ -113,9 +113,7 @@ public class ModCamundaService {
 	private ResponseEntity<JsonNode> request(HttpMethod method, MediaType mediaType, String tenant, String url,
 			Object body, MultiValueMap<String, String> additionalHeaders) {
 
-    log.info("\n\n\n*********");
-    log.info(url);
-    log.info("*********\n\n\n");
+		log.info(url);
 
 		HttpHeaders headers = new HttpHeaders();
 		HttpEntity<?> request = body != null ? new HttpEntity<Object>(body, headers) : new HttpEntity<>(headers);
