@@ -6,6 +6,7 @@ import java.util.Optional;
 import javax.jms.JMSException;
 import javax.servlet.http.HttpServletRequest;
 
+import org.folio.rest.exception.EventPublishException;
 import org.folio.rest.jms.Event;
 import org.folio.rest.jms.EventProducer;
 import org.folio.rest.model.Trigger;
@@ -50,7 +51,7 @@ public class EventController {
     @RequestHeader HttpHeaders headers,
     HttpServletRequest request,
     HttpServletRequest response
-  ) {
+  ) throws EventPublishException {
   // @formatter:on
     String path = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
     HttpMethod method = HttpMethod.valueOf(request.getMethod());
@@ -67,7 +68,7 @@ public class EventController {
       try {
         eventProducer.send(new Event(triggerName, triggerDescription, tenant, path, method, body, headers));
       } catch (JMSException | IOException e) {
-        logger.debug("Failed to publish event to queue!", e);
+        throw new EventPublishException("Unable to publish event!", e);
       }
     }
     return body;

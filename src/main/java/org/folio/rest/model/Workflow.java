@@ -15,8 +15,15 @@ public class Workflow extends AbstractBaseEntity {
   @Column(unique = true)
   private String name;
 
+  @Column(unique = true)
+  private String deploymentId;
+
+  @Column
+  private boolean active;
+
   public Workflow() {
     super();
+    active = false;
   }
 
   public Workflow(String name) {
@@ -30,6 +37,22 @@ public class Workflow extends AbstractBaseEntity {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public String getDeploymentId() {
+    return deploymentId;
+  }
+
+  public void setDeploymentId(String deploymentId) {
+    this.deploymentId = deploymentId;
+  }
+
+  public boolean isActive() {
+    return active;
+  }
+
+  public void setActive(boolean active) {
+    this.active = active;
   }
 
 }
