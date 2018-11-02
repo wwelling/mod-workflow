@@ -27,31 +27,21 @@ public class WorkflowController {
   private ModCamundaService modCamundaService;
 
   @PutMapping("/{id}/activate")
-  public Workflow activateWorkflow(@TenantHeader String tenant, @TokenHeader String token, @PathVariable String id)
-      throws WorkflowNotFoundException, CamundaServiceException, IOException {
-
+  public Workflow activateWorkflow(@TenantHeader String tenant, @TokenHeader String token, @PathVariable String id) throws WorkflowNotFoundException, CamundaServiceException, IOException {
     Optional<Workflow> workflow = workflowRepo.findById(id);
-
     if (workflow.isPresent()) {
       return modCamundaService.deployWorkflow(tenant, token, workflow.get());
     }
-
     throw new WorkflowNotFoundException(id);
-
   }
 
   @PutMapping("/{id}/deactivate")
-  public Workflow deactivateWorkflow(@TenantHeader String tenant, @TokenHeader String token, @PathVariable String id)
-      throws WorkflowNotFoundException, CamundaServiceException {
-
+  public Workflow deactivateWorkflow(@TenantHeader String tenant, @TokenHeader String token, @PathVariable String id) throws WorkflowNotFoundException, CamundaServiceException {
     Optional<Workflow> workflow = workflowRepo.findById(id);
-
     if (workflow.isPresent()) {
       return modCamundaService.undeployWorkflow(tenant, token, workflow.get());
     }
-
     throw new WorkflowNotFoundException(id);
-
   }
 
 }
