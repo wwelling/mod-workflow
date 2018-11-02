@@ -1,5 +1,6 @@
 package org.folio.rest.service;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.camunda.bpm.model.bpmn.Bpmn;
@@ -19,7 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -58,13 +59,17 @@ public class ModCamundaService {
   @Autowired
   private HttpService httpService;
 
-  private BpmnModelInstance modelInstance = Bpmn.createEmptyModel();
-
-  public Workflow deployWorkflow(String tenant, String token, Workflow workflow)
-      throws CamundaServiceException, IOException {
+  public Workflow deployWorkflow(String tenant, String token, Workflow workflow) throws CamundaServiceException, IOException {
     BpmnModelInstance modelInstance = makeBPMNFromWorkflow(workflow);
 
-    String modelXml = Bpmn.convertToString(modelInstance);
+    Bpmn.validateModel(modelInstance);
+
+    File modelXmlFile = File.createTempFile("workflow-model", ".bpmn");
+    modelXmlFile.deleteOnExit();
+
+    Bpmn.writeModelToFile(modelXmlFile, modelInstance);
+
+    FileSystemResource modelXml = new FileSystemResource(modelXmlFile);
 
     HttpHeaders tenantHeader = new HttpHeaders();
     tenantHeader.setContentType(MediaType.TEXT_PLAIN);
@@ -80,8 +85,7 @@ public class ModCamundaService {
 
     HttpHeaders modelFileHeader = new HttpHeaders();
     modelFileHeader.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-    HttpEntity<ByteArrayResource> modelFileHttpEntity = new HttpEntity<>(new ByteArrayResource(modelXml.getBytes()),
-        modelFileHeader);
+    HttpEntity<FileSystemResource> modelFileHttpEntity = new HttpEntity<>(modelXml, modelFileHeader);
 
     MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>();
     parts.add("tenant-id", tenantHttpEntity);
@@ -90,106 +94,77 @@ public class ModCamundaService {
 
     parts.add("file", modelFileHttpEntity);
 
-    MultiValueMap<String, String> additionalHeaders = new LinkedMultiValueMap<>();
-    additionalHeaders.add(tokenHeaderName, token);
+    HttpHeaders headers = new HttpHeaders();
 
-    log.info("Tenant: {}", tenant);
-    log.info("Token: {}", token);
+    headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+    headers.add(tenantHeaderName, tenant);
+    headers.add(tokenHeaderName, token);
 
-    ResponseEntity<JsonNode> res = request(HttpMethod.POST, MediaType.MULTIPART_FORM_DATA, tenant,
-        String.format(CAMUNDA_DEPLOY_URI_TEMPLATE, okapiLocation), parts, additionalHeaders);
+    HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(parts, headers);
 
-    if (res.getStatusCode() == HttpStatus.OK) {
+    ResponseEntity<JsonNode> response = this.httpService.exchange(String.format(CAMUNDA_DEPLOY_URI_TEMPLATE, okapiLocation), HttpMethod.POST, request, JsonNode.class);
+
+    if (response.getStatusCode().equals(HttpStatus.OK)) {
+      workflow.setDeploymentId(response.getBody().get("id").asText());
       workflow.setActive(true);
       return workflowRepo.save(workflow);
     }
-    throw new CamundaServiceException(res.getStatusCodeValue());
+    throw new CamundaServiceException(response.getStatusCodeValue());
   }
 
   public Workflow undeployWorkflow(String tenant, String token, Workflow workflow) throws CamundaServiceException {
 
-    MultiValueMap<String, String> additionalHeaders = new LinkedMultiValueMap<>();
-    additionalHeaders.add(tokenHeaderName, token);
+    HttpHeaders headers = new HttpHeaders();
 
-    ResponseEntity<JsonNode> res = request(HttpMethod.DELETE, MediaType.TEXT_PLAIN, tenant,
-        String.format(CAMUNDA_UNDEPLOY_URI_TEMPLATE, okapiLocation, workflow.getId()), additionalHeaders);
+    headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+    headers.add(tenantHeaderName, tenant);
+    headers.add(tokenHeaderName, token);
 
-    if (res.getStatusCode() == HttpStatus.OK) {
+    HttpEntity<String> request = new HttpEntity<>(headers);
+
+    ResponseEntity<JsonNode> response = this.httpService.exchange(String.format(CAMUNDA_UNDEPLOY_URI_TEMPLATE, okapiLocation, workflow.getDeploymentId()), HttpMethod.DELETE, request, JsonNode.class);
+
+    if (response.getStatusCode().equals(HttpStatus.NO_CONTENT)) {
       workflow.setActive(false);
+      workflow.setDeploymentId(null);
       return workflowRepo.save(workflow);
     }
-    throw new CamundaServiceException(res.getStatusCodeValue());
+    throw new CamundaServiceException(response.getStatusCodeValue());
   }
 
   private BpmnModelInstance makeBPMNFromWorkflow(Workflow workflow) {
+    BpmnModelInstance modelInstance = Bpmn.createEmptyModel();
+
     Definitions definitions = modelInstance.newInstance(Definitions.class);
     definitions.setTargetNamespace(TARGET_NAMESPACE);
     modelInstance.setDefinitions(definitions);
 
     // create the process
-    Process process = createElement(definitions, "process-with-one-task", Process.class);
+    Process process = createElement(modelInstance, definitions, "example-process", Process.class);
 
     // create start event, user task and end event
-    StartEvent startEvent = createElement(process, "start", StartEvent.class);
-    UserTask task1 = createElement(process, "task1", UserTask.class);
-    task1.setName("User Task");
-    EndEvent endEvent = createElement(process, "end", EndEvent.class);
+    StartEvent startEvent = createElement(modelInstance, process, "start", StartEvent.class);
+    UserTask userTask = createElement(modelInstance, process, "task", UserTask.class);
+    userTask.setName("User Task");
+    EndEvent endEvent = createElement(modelInstance, process, "end", EndEvent.class);
 
     // create the connections between the elements
-    createSequenceFlow(process, startEvent, task1);
-    createSequenceFlow(process, task1, endEvent);
+    createSequenceFlow(modelInstance, process, startEvent, userTask);
+    createSequenceFlow(modelInstance, process, userTask, endEvent);
 
     return modelInstance;
   }
 
-  private ResponseEntity<JsonNode> request(HttpMethod method, MediaType mediaType, String tenant, String url) {
-    return request(method, mediaType, tenant, url, null, null);
-  }
-
-  private ResponseEntity<JsonNode> request(HttpMethod method, MediaType mediaType, String tenant, String url,
-      MultiValueMap<String, String> additionalHeaders) {
-    return request(method, mediaType, tenant, url, null, additionalHeaders);
-  }
-
-  private ResponseEntity<JsonNode> request(HttpMethod method, MediaType mediaType, String tenant, String url,
-      Object body) {
-    return request(method, mediaType, tenant, url, body, null);
-  }
-
-  private ResponseEntity<JsonNode> request(HttpMethod method, MediaType mediaType, String tenant, String url,
-      Object body, MultiValueMap<String, String> additionalHeaders) {
-
-    log.info(url);
-
-    HttpHeaders headers = new HttpHeaders();
-
-    if (additionalHeaders != null) {
-      headers.addAll(additionalHeaders);
-    }
-
-    headers.setContentType(mediaType);
-    headers.add(tenantHeaderName, tenant);
-
-    HttpEntity<?> request = body != null ? new HttpEntity<Object>(body, headers) : new HttpEntity<>(headers);
-
-    if (log.isDebugEnabled()) {
-      log.debug("Proxy request for {} to {}", tenant, url);
-    }
-    log.info("Headers {}", request.getHeaders());
-    return this.httpService.exchange(url, method, request, JsonNode.class);
-  }
-
-  protected <T extends BpmnModelElementInstance> T createElement(BpmnModelElementInstance parentElement, String id,
-      Class<T> elementClass) {
+  protected <T extends BpmnModelElementInstance> T createElement(BpmnModelInstance modelInstance, BpmnModelElementInstance parentElement, String id, Class<T> elementClass) {
     T element = modelInstance.newInstance(elementClass);
     element.setAttributeValue("id", id, true);
     parentElement.addChildElement(element);
     return element;
   }
 
-  public SequenceFlow createSequenceFlow(Process process, FlowNode from, FlowNode to) {
+  public SequenceFlow createSequenceFlow(BpmnModelInstance modelInstance, Process process, FlowNode from, FlowNode to) {
     String identifier = from.getId() + "-" + to.getId();
-    SequenceFlow sequenceFlow = createElement(process, identifier, SequenceFlow.class);
+    SequenceFlow sequenceFlow = createElement(modelInstance, process, identifier, SequenceFlow.class);
     process.addChildElement(sequenceFlow);
     sequenceFlow.setSource(from);
     from.getOutgoing().add(sequenceFlow);
