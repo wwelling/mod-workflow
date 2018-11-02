@@ -1,5 +1,8 @@
 package org.folio.rest.jms;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.folio.rest.model.Trigger;
 import org.springframework.http.HttpHeaders;
 
@@ -17,6 +20,8 @@ public class Event {
 
   private final HttpHeaders headers;
 
+  private final List<String> processDefinitionIds;
+
   // @formatter:off
   public Event(
       Trigger trigger,
@@ -31,6 +36,7 @@ public class Event {
     this.path = path;
     this.body = body;
     this.headers = headers;
+    this.processDefinitionIds = new ArrayList<String>();
   }
 
   public Trigger getTrigger() {
@@ -55,6 +61,16 @@ public class Event {
 
   public HttpHeaders getHeaders() {
     return headers;
+  }
+
+  public List<String> getProcessDefinitionIds() {
+    return processDefinitionIds;
+  }
+
+  public void addProcessDefinitionId(String processDefinitionId) {
+    if (processDefinitionIds.contains(processDefinitionId)) {
+      processDefinitionIds.add(processDefinitionId);
+    }
   }
 
 }

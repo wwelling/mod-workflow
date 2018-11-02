@@ -120,18 +120,18 @@ public class ModCamundaService {
     if (response.getStatusCode() == HttpStatus.OK) {
       logger.debug("Response body: {}", response.getBody());
       workflow.setDeploymentId(response.getBody().get("id").asText());
-      JsonNode deployedProcessDefinitionsNode = response.getBody().get("deployedProcessDefinitions");
 
-      Iterator<String> dpdni = deployedProcessDefinitionsNode.fieldNames();
-
-      if (dpdni.hasNext()) {
+      try {
+        JsonNode deployedProcessDefinitionsNode = response.getBody().get("deployedProcessDefinitions");
+        Iterator<String> dpdni = deployedProcessDefinitionsNode.fieldNames();
         String dpdnid = dpdni.next();
         workflow.setProcessDefinitionId(dpdnid);
         workflow.setActive(true);
         logger.info("Deployed workflow {} with deployment id {}", workflow.getName(), workflow.getDeploymentId());
         return workflowRepo.save(workflow);
+      } catch (Exception e) {
+        throw new CamundaServiceException("Unable to get deployed process definition id!");
       }
-
     }
     throw new CamundaServiceException(response.getStatusCodeValue());
   }

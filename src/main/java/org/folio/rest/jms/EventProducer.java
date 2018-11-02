@@ -6,6 +6,7 @@ import javax.annotation.PostConstruct;
 import javax.jms.JMSException;
 import javax.jms.Queue;
 
+import org.folio.rest.model.repo.WorkflowRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class EventProducer {
   private JmsMessagingTemplate jmsMessagingTemplate;
 
   @Autowired
+  private WorkflowRepo workflowRepo;
+
+  @Autowired
   private ObjectMapper mapper;
 
   @Autowired
@@ -34,6 +38,11 @@ public class EventProducer {
   }
 
   public void send(Event event) throws JMSException, IOException {
+
+    workflowRepo.findByProcessDefinitionIdNotNullAndStartTriggerId(event.getTrigger().getId()).forEach(workflow -> {
+      event.addProcessDefinitionId(workflow.getProcessDefinitionId());
+    });
+
     String message = mapper.writeValueAsString(event);
     logger.info("Send [{}]: {}", this.queue.getQueueName(), message);
     this.jmsMessagingTemplate.convertAndSend(this.queue, message);
