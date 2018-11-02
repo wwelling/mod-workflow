@@ -16,8 +16,6 @@ import org.camunda.bpm.model.bpmn.instance.UserTask;
 import org.folio.rest.exception.CamundaServiceException;
 import org.folio.rest.model.Workflow;
 import org.folio.rest.model.repo.WorkflowRepo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
@@ -35,8 +33,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 @Service
 public class ModCamundaService {
-
-  private static final Logger log = LoggerFactory.getLogger(ModCamundaService.class);
 
   private static final String CAMUNDA_DEPLOY_URI_TEMPLATE = "%s/camunda/deployment/create";
 
@@ -92,10 +88,9 @@ public class ModCamundaService {
     parts.add("deployment-name", deploymentNameHttpEntity);
     parts.add("deployment-source", deploymentSourceHttpEntity);
 
-    parts.add("file", modelFileHttpEntity);
+    parts.add("data", modelFileHttpEntity);
 
     HttpHeaders headers = new HttpHeaders();
-
     headers.setContentType(MediaType.MULTIPART_FORM_DATA);
     headers.add(tenantHeaderName, tenant);
     headers.add(tokenHeaderName, token);
@@ -115,8 +110,6 @@ public class ModCamundaService {
   public Workflow undeployWorkflow(String tenant, String token, Workflow workflow) throws CamundaServiceException {
 
     HttpHeaders headers = new HttpHeaders();
-
-    headers.setContentType(MediaType.MULTIPART_FORM_DATA);
     headers.add(tenantHeaderName, tenant);
     headers.add(tokenHeaderName, token);
 
@@ -155,7 +148,8 @@ public class ModCamundaService {
     return modelInstance;
   }
 
-  protected <T extends BpmnModelElementInstance> T createElement(BpmnModelInstance modelInstance, BpmnModelElementInstance parentElement, String id, Class<T> elementClass) {
+  protected <T extends BpmnModelElementInstance> T createElement(BpmnModelInstance modelInstance,
+      BpmnModelElementInstance parentElement, String id, Class<T> elementClass) {
     T element = modelInstance.newInstance(elementClass);
     element.setAttributeValue("id", id, true);
     parentElement.addChildElement(element);
