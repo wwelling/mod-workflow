@@ -2,6 +2,7 @@ package org.folio.rest.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 
 import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
@@ -119,9 +120,18 @@ public class ModCamundaService {
     if (response.getStatusCode() == HttpStatus.OK) {
       logger.debug("Response body: {}", response.getBody());
       workflow.setDeploymentId(response.getBody().get("id").asText());
-      workflow.setActive(true);
-      logger.info("Deployed workflow {} with deployment id {}", workflow.getName(), workflow.getDeploymentId());
-      return workflowRepo.save(workflow);
+
+      try {
+        JsonNode deployedProcessDefinitionsNode = response.getBody().get("deployedProcessDefinitions");
+        Iterator<String> dpdni = deployedProcessDefinitionsNode.fieldNames();
+        String dpdnid = dpdni.next();
+        workflow.setProcessDefinitionId(dpdnid);
+        workflow.setActive(true);
+        logger.info("Deployed workflow {} with deployment id {}", workflow.getName(), workflow.getDeploymentId());
+        return workflowRepo.save(workflow);
+      } catch (Exception e) {
+        throw new CamundaServiceException("Unable to get deployed process definition id!");
+      }
     }
     throw new CamundaServiceException(response.getStatusCodeValue());
   }
@@ -146,6 +156,7 @@ public class ModCamundaService {
     if (response.getStatusCode() == HttpStatus.NO_CONTENT) {
       workflow.setActive(false);
       workflow.setDeploymentId(null);
+      workflow.setProcessDefinitionId(null);
       return workflowRepo.save(workflow);
     }
     throw new CamundaServiceException(response.getStatusCodeValue());

@@ -2,6 +2,8 @@ package org.folio.rest.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -18,8 +20,14 @@ public class Workflow extends AbstractBaseEntity {
   @Column(unique = true)
   private String deploymentId;
 
+  @Column(unique = true)
+  private String processDefinitionId;
+
   @Column
   private boolean active;
+
+  @ManyToOne(fetch = FetchType.EAGER, optional = true)
+  private Trigger startTrigger;
 
   public Workflow() {
     super();
@@ -47,12 +55,28 @@ public class Workflow extends AbstractBaseEntity {
     this.deploymentId = deploymentId;
   }
 
+  public String getProcessDefinitionId() {
+    return processDefinitionId;
+  }
+
+  public void setProcessDefinitionId(String processDefinitionId) {
+    this.processDefinitionId = processDefinitionId;
+  }
+
   public boolean isActive() {
     return active;
   }
 
   public void setActive(boolean active) {
     this.active = active;
+  }
+
+  public Trigger getStartTrigger() {
+    return startTrigger;
+  }
+
+  public void setStartTrigger(Trigger startTrigger) {
+    this.startTrigger = startTrigger;
   }
 
 }

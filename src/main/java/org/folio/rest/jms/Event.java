@@ -1,43 +1,46 @@
 package org.folio.rest.jms;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.folio.rest.model.Trigger;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class Event {
 
-  private final String name;
-
-  private final String description;
+  private final Trigger trigger;
 
   private final String tenant;
 
   private final String path;
 
-  private final HttpMethod method;
-
   private JsonNode body;
 
   private final HttpHeaders headers;
 
-  public Event(String name, String description, String tenant, String path, HttpMethod method, JsonNode body,
-      HttpHeaders headers) {
-    this.name = name;
-    this.description = description;
+  private final List<String> processDefinitionIds;
+
+  // @formatter:off
+  public Event(
+      Trigger trigger,
+      String tenant,
+      String path,
+      JsonNode body,
+      HttpHeaders headers
+  ) {
+  // @formatter:on
+    this.trigger = trigger;
     this.tenant = tenant;
     this.path = path;
-    this.method = method;
     this.body = body;
     this.headers = headers;
+    this.processDefinitionIds = new ArrayList<String>();
   }
 
-  public String getName() {
-    return name;
-  }
-
-  public String getDescription() {
-    return description;
+  public Trigger getTrigger() {
+    return trigger;
   }
 
   public String getTenant() {
@@ -46,10 +49,6 @@ public class Event {
 
   public String getPath() {
     return path;
-  }
-
-  public HttpMethod getMethod() {
-    return method;
   }
 
   public void setBody(JsonNode body) {
@@ -62,6 +61,16 @@ public class Event {
 
   public HttpHeaders getHeaders() {
     return headers;
+  }
+
+  public List<String> getProcessDefinitionIds() {
+    return processDefinitionIds;
+  }
+
+  public void addProcessDefinitionId(String processDefinitionId) {
+    if (processDefinitionIds.contains(processDefinitionId)) {
+      processDefinitionIds.add(processDefinitionId);
+    }
   }
 
 }
