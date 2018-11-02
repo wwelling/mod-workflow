@@ -25,7 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 public class OkapiDiscoveryService {
 
-  private static final Logger log = LoggerFactory.getLogger(OkapiDiscoveryService.class);
+  private static final Logger logger = LoggerFactory.getLogger(OkapiDiscoveryService.class);
 
   private static final String PROVIDES = "provides";
   private static final String ID = "id";
@@ -85,9 +85,9 @@ public class OkapiDiscoveryService {
   public JsonNode getModules(String tenant) {
     String url = okapiLocation + PROXY_TENANT_BASE_PATH + tenant + MODULES_SUB_PATH;
     ResponseEntity<JsonNode> response = request(url, tenant);
-    if (log.isDebugEnabled()) {
-      log.debug("Response status code {}", response.getStatusCode());
-      log.debug("Response body {}", response.getBody());
+    if (logger.isDebugEnabled()) {
+      logger.debug("Response status code {}", response.getStatusCode());
+      logger.debug("Response body {}", response.getBody());
     }
     return response.getBody();
   }
@@ -95,9 +95,9 @@ public class OkapiDiscoveryService {
   public JsonNode getModuleDescriptor(String tenant, String id) {
     String url = okapiLocation + PROXY_MODULE_BASE_PATH + id;
     ResponseEntity<JsonNode> response = request(url, tenant);
-    if (log.isDebugEnabled()) {
-      log.debug("Response status code {}", response.getStatusCode());
-      log.debug("Response body {}", response.getBody());
+    if (logger.isDebugEnabled()) {
+      logger.debug("Response status code {}", response.getStatusCode());
+      logger.debug("Response body {}", response.getBody());
     }
     return response.getBody();
   }
@@ -108,8 +108,8 @@ public class OkapiDiscoveryService {
     headers.setContentType(MediaType.APPLICATION_JSON);
     headers.add(tenantHeaderName, tenant);
     HttpEntity<?> request = new HttpEntity<>(headers);
-    if (log.isDebugEnabled()) {
-      log.debug("Proxy request for {} to {}", tenant, url);
+    if (logger.isDebugEnabled()) {
+      logger.debug("Proxy request for {} to {}", tenant, url);
     }
     return this.httpService.exchange(url, method, request, JsonNode.class);
   }

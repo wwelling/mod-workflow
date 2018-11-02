@@ -16,6 +16,8 @@ import org.camunda.bpm.model.bpmn.instance.UserTask;
 import org.folio.rest.exception.CamundaServiceException;
 import org.folio.rest.model.Workflow;
 import org.folio.rest.model.repo.WorkflowRepo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
@@ -33,6 +35,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 @Service
 public class ModCamundaService {
+
+  private static final Logger logger = LoggerFactory.getLogger(ModCamundaService.class);
 
   private static final String CAMUNDA_DEPLOY_URI_TEMPLATE = "%s/camunda/deployment/create";
 
@@ -55,7 +59,13 @@ public class ModCamundaService {
   @Autowired
   private HttpService httpService;
 
-  public Workflow deployWorkflow(String tenant, String token, Workflow workflow) throws CamundaServiceException, IOException {
+  // @formatter:off
+  public Workflow deployWorkflow(
+    String tenant,
+    String token,
+    Workflow workflow
+  ) throws CamundaServiceException, IOException {
+  // @formatter:on
     BpmnModelInstance modelInstance = makeBPMNFromWorkflow(workflow);
 
     Bpmn.validateModel(modelInstance);
@@ -73,7 +83,7 @@ public class ModCamundaService {
 
     HttpHeaders deploymentNameHeader = new HttpHeaders();
     deploymentNameHeader.setContentType(MediaType.TEXT_PLAIN);
-    HttpEntity<String> deploymentNameHttpEntity = new HttpEntity<>(workflow.getId(), deploymentNameHeader);
+    HttpEntity<String> deploymentNameHttpEntity = new HttpEntity<>(workflow.getName(), deploymentNameHeader);
 
     HttpHeaders deploymentSourceHeader = new HttpHeaders();
     deploymentSourceHeader.setContentType(MediaType.TEXT_PLAIN);
@@ -97,11 +107,20 @@ public class ModCamundaService {
 
     HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(parts, headers);
 
-    ResponseEntity<JsonNode> response = this.httpService.exchange(String.format(CAMUNDA_DEPLOY_URI_TEMPLATE, okapiLocation), HttpMethod.POST, request, JsonNode.class);
+    // @formatter:off
+    ResponseEntity<JsonNode> response = this.httpService.exchange(
+      String.format(CAMUNDA_DEPLOY_URI_TEMPLATE, okapiLocation),
+      HttpMethod.POST,
+      request,
+      JsonNode.class
+    );
+    // @formatter:on
 
-    if (response.getStatusCode().equals(HttpStatus.OK)) {
-      workflow.setDeploymentId(response.getBody().get("id").asText());
+    if (response.getStatusCode() == HttpStatus.OK) {
+      logger.info("{}", response.getBody());
+      // workflow.setDeploymentId(response.getBody().get("id").asText());
       workflow.setActive(true);
+      logger.info("Deployed workflow {} with deployment id {}", workflow.getName(), workflow.getDeploymentId());
       return workflowRepo.save(workflow);
     }
     throw new CamundaServiceException(response.getStatusCodeValue());
@@ -115,9 +134,16 @@ public class ModCamundaService {
 
     HttpEntity<String> request = new HttpEntity<>(headers);
 
-    ResponseEntity<JsonNode> response = this.httpService.exchange(String.format(CAMUNDA_UNDEPLOY_URI_TEMPLATE, okapiLocation, workflow.getDeploymentId()), HttpMethod.DELETE, request, JsonNode.class);
+    // @formatter:off
+    ResponseEntity<JsonNode> response = this.httpService.exchange(
+      String.format(CAMUNDA_UNDEPLOY_URI_TEMPLATE,okapiLocation, workflow.getDeploymentId()),
+      HttpMethod.DELETE,
+      request,
+      JsonNode.class
+    );
+    // @formatter:on
 
-    if (response.getStatusCode().equals(HttpStatus.NO_CONTENT)) {
+    if (response.getStatusCode() == HttpStatus.NO_CONTENT) {
       workflow.setActive(false);
       workflow.setDeploymentId(null);
       return workflowRepo.save(workflow);
@@ -148,8 +174,14 @@ public class ModCamundaService {
     return modelInstance;
   }
 
-  protected <T extends BpmnModelElementInstance> T createElement(BpmnModelInstance modelInstance,
-      BpmnModelElementInstance parentElement, String id, Class<T> elementClass) {
+  // @formatter:off
+  protected <T extends BpmnModelElementInstance> T createElement(
+    BpmnModelInstance modelInstance,
+    BpmnModelElementInstance parentElement,
+    String id,
+    Class<T> elementClass
+  ) {
+  // @formatter:on
     T element = modelInstance.newInstance(elementClass);
     element.setAttributeValue("id", id, true);
     parentElement.addChildElement(element);
