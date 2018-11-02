@@ -62,11 +62,9 @@ public class EventController {
     logger.debug("Request body: {}", body);
     Optional<Trigger> trigger = checkTrigger(method, path);
     if (trigger.isPresent()) {
-      String triggerName = trigger.get().getName();
-      String triggerDescription = trigger.get().getDescription();
-      logger.debug("Publishing event: {}: {}", triggerName, triggerDescription);
+      logger.debug("Publishing event: {}: {}", trigger.get().getName(), trigger.get().getDescription());
       try {
-        eventProducer.send(new Event(triggerName, triggerDescription, tenant, path, method, body, headers));
+        eventProducer.send(new Event(trigger.get(), tenant, path, body, headers));
       } catch (JMSException | IOException e) {
         throw new EventPublishException("Unable to publish event!", e);
       }

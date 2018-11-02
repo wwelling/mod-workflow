@@ -1,43 +1,40 @@
 package org.folio.rest.jms;
 
+import org.folio.rest.model.Trigger;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class Event {
 
-  private final String name;
-
-  private final String description;
+  private final Trigger trigger;
 
   private final String tenant;
 
   private final String path;
 
-  private final HttpMethod method;
-
   private JsonNode body;
 
   private final HttpHeaders headers;
 
-  public Event(String name, String description, String tenant, String path, HttpMethod method, JsonNode body,
-      HttpHeaders headers) {
-    this.name = name;
-    this.description = description;
+  // @formatter:off
+  public Event(
+      Trigger trigger,
+      String tenant,
+      String path,
+      JsonNode body,
+      HttpHeaders headers
+  ) {
+  // @formatter:on
+    this.trigger = trigger;
     this.tenant = tenant;
     this.path = path;
-    this.method = method;
     this.body = body;
     this.headers = headers;
   }
 
-  public String getName() {
-    return name;
-  }
-
-  public String getDescription() {
-    return description;
+  public Trigger getTrigger() {
+    return trigger;
   }
 
   public String getTenant() {
@@ -46,10 +43,6 @@ public class Event {
 
   public String getPath() {
     return path;
-  }
-
-  public HttpMethod getMethod() {
-    return method;
   }
 
   public void setBody(JsonNode body) {
