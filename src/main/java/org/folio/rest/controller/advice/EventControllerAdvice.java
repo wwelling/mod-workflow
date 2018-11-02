@@ -1,6 +1,8 @@
 package org.folio.rest.controller.advice;
 
 import org.folio.rest.exception.EventPublishException;
+import org.folio.rest.model.response.Errors;
+import org.folio.rest.utility.ErrorUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -15,9 +17,9 @@ public class EventControllerAdvice {
 
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   @ExceptionHandler(EventPublishException.class)
-  public String handleEventPublishException(EventPublishException exception) {
+  public Errors handleEventPublishException(EventPublishException exception) {
     logger.debug(exception.getMessage(), exception);
-    return exception.getMessage();
+    return ErrorUtility.craftErrors(exception, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
 }

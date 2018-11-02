@@ -3,6 +3,8 @@ package org.folio.rest.controller.advice;
 import org.folio.rest.exception.CamundaServiceException;
 import org.folio.rest.exception.WorkflowDeploymentException;
 import org.folio.rest.exception.WorkflowNotFoundException;
+import org.folio.rest.model.response.Errors;
+import org.folio.rest.utility.ErrorUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -17,23 +19,23 @@ public class WorkflowControllerAdvice {
 
   @ResponseStatus(HttpStatus.NOT_FOUND)
   @ExceptionHandler(WorkflowNotFoundException.class)
-  public String handleWorkflowNotFoundException(WorkflowNotFoundException exception) {
+  public Errors handleWorkflowNotFoundException(WorkflowNotFoundException exception) {
     logger.debug(exception.getMessage(), exception);
-    return exception.getMessage();
+    return ErrorUtility.craftErrors(exception, HttpStatus.NOT_FOUND);
   }
 
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   @ExceptionHandler(WorkflowDeploymentException.class)
-  public String handleWorkflowDeploymentException(WorkflowDeploymentException exception) {
+  public Errors handleWorkflowDeploymentException(WorkflowDeploymentException exception) {
     logger.debug(exception.getMessage(), exception);
-    return exception.getMessage();
+    return ErrorUtility.craftErrors(exception, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   @ExceptionHandler(CamundaServiceException.class)
-  public String handleCamundaServiceException(CamundaServiceException exception) {
+  public Errors handleCamundaServiceException(CamundaServiceException exception) {
     logger.debug(exception.getMessage(), exception);
-    return exception.getMessage();
+    return ErrorUtility.craftErrors(exception, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
 }
