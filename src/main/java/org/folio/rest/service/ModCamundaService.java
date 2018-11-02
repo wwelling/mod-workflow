@@ -117,8 +117,8 @@ public class ModCamundaService {
     // @formatter:on
 
     if (response.getStatusCode() == HttpStatus.OK) {
-      logger.info("{}", response.getBody());
-      // workflow.setDeploymentId(response.getBody().get("id").asText());
+      logger.debug("Response body: {}", response.getBody());
+      workflow.setDeploymentId(response.getBody().get("id").asText());
       workflow.setActive(true);
       logger.info("Deployed workflow {} with deployment id {}", workflow.getName(), workflow.getDeploymentId());
       return workflowRepo.save(workflow);
