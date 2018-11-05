@@ -20,17 +20,17 @@ public class Event {
 
   private final HttpHeaders headers;
 
-  private final List<String> processDefinitionIds;
+  private List<String> processDefinitionIds;
 
   // @formatter:off
   public Event(
-      Trigger trigger,
-      String tenant,
-      String path,
-      JsonNode body,
-      HttpHeaders headers
+    Trigger trigger,
+    String tenant,
+    String path,
+    JsonNode body,
+    HttpHeaders headers
   ) {
-  // @formatter:on
+    // @formatter:on
     this.trigger = trigger;
     this.tenant = tenant;
     this.path = path;
@@ -67,10 +67,8 @@ public class Event {
     return processDefinitionIds;
   }
 
-  public void addProcessDefinitionId(String processDefinitionId) {
-    if (processDefinitionIds.contains(processDefinitionId)) {
-      processDefinitionIds.add(processDefinitionId);
-    }
+  public void setProcessDefinitionIds(List<String> processDefinitionIds) {
+    this.processDefinitionIds = processDefinitionIds;
   }
 
 }

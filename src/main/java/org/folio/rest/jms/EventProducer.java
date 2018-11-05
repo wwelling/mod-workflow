@@ -1,6 +1,7 @@
 package org.folio.rest.jms;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.annotation.PostConstruct;
 import javax.jms.JMSException;
@@ -38,13 +39,9 @@ public class EventProducer {
   }
 
   public void send(Event event) throws JMSException, IOException {
-
     workflowRepo.findByStartTriggerId(event.getTrigger().getId()).forEach(workflow -> {
-      workflow.getProcessDefinitionIds().forEach(processDefinitionId -> {
-        event.addProcessDefinitionId(processDefinitionId);
-      });
+      event.setProcessDefinitionIds(new ArrayList<String>(workflow.getProcessDefinitionIds()));
     });
-
     String message = mapper.writeValueAsString(event);
     logger.info("Send [{}]: {}", this.queue.getQueueName(), message);
     this.jmsMessagingTemplate.convertAndSend(this.queue, message);
