@@ -1,6 +1,10 @@
 package org.folio.rest.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
@@ -20,8 +24,8 @@ public class Workflow extends AbstractBaseEntity {
   @Column(unique = true)
   private String deploymentId;
 
-  @Column(unique = true)
-  private String processDefinitionId;
+  @ElementCollection(fetch = FetchType.EAGER)
+  private Set<String> processDefinitionIds = new HashSet<String>();
 
   @Column
   private boolean active;
@@ -55,12 +59,22 @@ public class Workflow extends AbstractBaseEntity {
     this.deploymentId = deploymentId;
   }
 
-  public String getProcessDefinitionId() {
-    return processDefinitionId;
+  public Set<String> getProcessDefinitionIds() {
+    return processDefinitionIds;
   }
 
-  public void setProcessDefinitionId(String processDefinitionId) {
-    this.processDefinitionId = processDefinitionId;
+  public void setProcessDefinitionIds(Set<String> processDefinitionIds) {
+    this.processDefinitionIds = processDefinitionIds;
+  }
+
+  public void addProcessDefinitionId(String processDefinitionId) {
+    if (!processDefinitionIds.contains(processDefinitionId)) {
+      processDefinitionIds.add(processDefinitionId);
+    }
+  }
+
+  public void clearProcessDefinitionIds() {
+    processDefinitionIds.clear();
   }
 
   public boolean isActive() {

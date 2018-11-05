@@ -40,7 +40,9 @@ public class EventProducer {
   public void send(Event event) throws JMSException, IOException {
 
     workflowRepo.findByProcessDefinitionIdNotNullAndStartTriggerId(event.getTrigger().getId()).forEach(workflow -> {
-      event.addProcessDefinitionId(workflow.getProcessDefinitionId());
+      workflow.getProcessDefinitionIds().forEach(processDefinitionId -> {
+        event.addProcessDefinitionId(processDefinitionId);
+      });
     });
 
     String message = mapper.writeValueAsString(event);
