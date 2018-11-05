@@ -97,6 +97,12 @@
           "permissionsDesired": ["workflow.domain.*", "workflow.domain.all"]
         },
         {
+          "methods": ["GET"],
+          "pathPattern": "/workflows/{id}/startTrigger",
+          "permissionsRequired": ["workflow.item.startTrigger"],
+          "permissionsDesired": ["workflow.domain.*", "workflow.domain.all"]
+        },
+        {
           "methods": ["PUT"],
           "pathPattern": "/workflows/{id}/startTrigger",
           "permissionsRequired": ["workflow.item.startTrigger"],
