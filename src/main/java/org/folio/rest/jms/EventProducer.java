@@ -39,7 +39,7 @@ public class EventProducer {
 
   public void send(Event event) throws JMSException, IOException {
 
-    workflowRepo.findByProcessDefinitionIdNotNullAndStartTriggerId(event.getTrigger().getId()).forEach(workflow -> {
+    workflowRepo.findByStartTriggerId(event.getTrigger().getId()).forEach(workflow -> {
       workflow.getProcessDefinitionIds().forEach(processDefinitionId -> {
         event.addProcessDefinitionId(processDefinitionId);
       });

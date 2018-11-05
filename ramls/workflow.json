@@ -15,8 +15,11 @@
     "deploymentId" : {
       "type" : "string"
     },
-    "processDefinitionId" : {
-      "type" : "string"
+    "processDefinitionIds" : {
+      "type" : "array",
+      "items" : {
+        "type" : "string"
+      }
     },
     "active" : {
       "type" : "boolean"
