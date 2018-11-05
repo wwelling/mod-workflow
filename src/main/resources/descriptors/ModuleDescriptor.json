@@ -98,6 +98,18 @@
         },
         {
           "methods": ["PUT"],
+          "pathPattern": "/workflows/{id}/startTrigger",
+          "permissionsRequired": ["workflow.item.startTrigger"],
+          "permissionsDesired": ["workflow.domain.*", "workflow.domain.all"]
+        },
+        {
+          "methods": ["DELETE"],
+          "pathPattern": "/workflows/{id}/startTrigger",
+          "permissionsRequired": ["workflow.item.startTrigger"],
+          "permissionsDesired": ["workflow.domain.*", "workflow.domain.all"]
+        },
+        {
+          "methods": ["PUT"],
           "pathPattern": "/workflows/{id}/activate",
           "permissionsRequired": ["workflow.item.activate"],
           "permissionsDesired": ["workflow.domain.*", "workflow.domain.all"]
@@ -236,6 +248,11 @@
       "description": "Delete workflow item"
     },
     {
+      "permissionName": "workflow.item.startTrigger",
+      "displayName": "Workflow - add/remove start trigger on workflow item",
+      "description": "Add/remove start trigger on workflow item"
+    },
+    {
       "permissionName": "workflow.item.activate",
       "displayName": "Workflow - activate workflow item",
       "description": "Activate workflow item"
@@ -255,6 +272,7 @@
         "workflow.item.post",
         "workflow.item.put",
         "workflow.item.delete",
+        "workflow.item.startTrigger",
         "workflow.item.activate",
         "workflow.item.deactivate"
       ],

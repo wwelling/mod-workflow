@@ -172,6 +172,8 @@ public class ModCamundaService {
 
     // create the process
     Process process = createElement(modelInstance, definitions, "example-process", Process.class);
+    
+    process.setExecutable(true);
 
     // create start event, user task and end event
     StartEvent startEvent = createElement(modelInstance, process, "start", StartEvent.class);
