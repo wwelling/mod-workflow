@@ -9,6 +9,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 @RepositoryRestResource
 public interface WorkflowRepo extends JpaRepository<Workflow, String> {
 
-  public List<Workflow> findByProcessDefinitionIdNotNullAndStartTriggerId(String id);
+  public List<Workflow> findByStartTriggerId(String id);
 
 }
