@@ -124,8 +124,9 @@ public class ModCamundaService {
       try {
         JsonNode deployedProcessDefinitionsNode = response.getBody().get("deployedProcessDefinitions");
         Iterator<String> dpdni = deployedProcessDefinitionsNode.fieldNames();
-        String dpdnid = dpdni.next();
-        workflow.setProcessDefinitionId(dpdnid);
+        while (dpdni.hasNext()) {
+          workflow.addProcessDefinitionId(dpdni.next());
+        }
         workflow.setActive(true);
         logger.info("Deployed workflow {} with deployment id {}", workflow.getName(), workflow.getDeploymentId());
         return workflowRepo.save(workflow);
@@ -156,7 +157,7 @@ public class ModCamundaService {
     if (response.getStatusCode() == HttpStatus.NO_CONTENT) {
       workflow.setActive(false);
       workflow.setDeploymentId(null);
-      workflow.setProcessDefinitionId(null);
+      workflow.clearProcessDefinitionIds();
       return workflowRepo.save(workflow);
     }
     throw new CamundaServiceException(response.getStatusCodeValue());
