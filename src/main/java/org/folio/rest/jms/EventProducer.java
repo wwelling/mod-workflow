@@ -32,8 +32,8 @@ public class EventProducer {
     workflowRepo.findByStartTriggerId(event.getTriggerId()).forEach(workflow -> {
       event.setProcessDefinitionIds(new ArrayList<String>(workflow.getProcessDefinitionIds()));
     });
-    logger.info("Send [{}]: {}, {}, {}", event.getMethod(), event.getPath(), event.getPayload());
-    this.jmsMessagingTemplate.convertAndSend(this.queue, event);
+    logger.info("Send [{}]: {}, {}, {}", queue.getQueueName(), event.getMethod(), event.getPath(), event.getPayload());
+    this.jmsMessagingTemplate.convertAndSend(queue, event);
   }
 
 }
