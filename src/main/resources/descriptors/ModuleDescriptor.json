@@ -4,7 +4,7 @@
   "filters": [
     {
       "methods": [
-        "*"
+        "POST", "PUT", "DELETE"
       ],
       "pathPattern": "/*",
       "rewritePath": "/events",
