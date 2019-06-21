@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.folio.rest.annotation.TokenHeader;
 import org.folio.rest.exception.CamundaServiceException;
+import org.folio.rest.exception.WorkflowAlreadyActiveException;
 import org.folio.rest.exception.WorkflowNotFoundException;
 import org.folio.rest.model.Workflow;
 import org.folio.rest.model.repo.WorkflowRepo;
@@ -27,7 +28,8 @@ public class WorkflowController {
   private ModCamundaService modCamundaService;
 
   @PutMapping("/{id}/activate")
-  public Workflow activateWorkflow(@TenantHeader String tenant, @TokenHeader String token, @PathVariable String id) throws WorkflowNotFoundException, CamundaServiceException, IOException {
+  public Workflow activateWorkflow(@TenantHeader String tenant, @TokenHeader String token, @PathVariable String id)
+      throws WorkflowNotFoundException, CamundaServiceException, IOException, WorkflowAlreadyActiveException {
     Optional<Workflow> workflow = workflowRepo.findById(id);
     if (workflow.isPresent()) {
       return modCamundaService.deployWorkflow(tenant, token, workflow.get());

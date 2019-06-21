@@ -2,7 +2,7 @@ logging:
   file: logs/mod-workflow.log
   level:
     org:
-      folio: INFO
+      folio: DEBUG
       hibernate: INFO
       springframework: INFO
   path:

@@ -70,15 +70,20 @@ public class OkapiDiscoveryService {
 
   public Map<String, List<Handler>> getHandlers(String tenant, String id) throws IOException {
     JsonNode moduleDescriptorNode = getModuleDescriptor(tenant, id);
+
     Map<String, List<Handler>> handlerMap = new HashMap<>();
-    for (JsonNode interfaceNode : moduleDescriptorNode.get(PROVIDES)) {
-      List<Handler> handlers = new ArrayList<>();
-      String interfaceName = interfaceNode.get(ID).asText();
-      for (JsonNode handlersNode : interfaceNode.get(HANDLERS)) {
-        handlers.add(objectMapper.readValue(handlersNode.toString(), Handler.class));
+    
+    if(moduleDescriptorNode.get(PROVIDES) != null) {
+      for (JsonNode interfaceNode : moduleDescriptorNode.get(PROVIDES)) {
+        List<Handler> handlers = new ArrayList<>();
+        String interfaceName = interfaceNode.get(ID).asText();
+        for (JsonNode handlersNode : interfaceNode.get(HANDLERS)) {
+          handlers.add(objectMapper.readValue(handlersNode.toString(), Handler.class));
+        }
+        handlerMap.put(interfaceName, handlers);
       }
-      handlerMap.put(interfaceName, handlers);
     }
+    
     return handlerMap;
   }
 

@@ -1,7 +1,6 @@
 package org.folio.rest.model;
 
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -16,10 +15,6 @@ public class Task extends AbstractBaseEntity {
   @Column(unique = true)
   private String name;
 
-  @NotNull
-  @Embedded
-  private Action action;
-
   public Task() {
     super();
   }
@@ -27,7 +22,6 @@ public class Task extends AbstractBaseEntity {
   public Task(String name, Action action) {
     this();
     this.name = name;
-    this.action = action;
   }
 
   public String getName() {
@@ -36,14 +30,6 @@ public class Task extends AbstractBaseEntity {
 
   public void setName(String name) {
     this.name = name;
-  }
-
-  public Action getAction() {
-    return action;
-  }
-
-  public void setAction(Action action) {
-    this.action = action;
   }
 
 }

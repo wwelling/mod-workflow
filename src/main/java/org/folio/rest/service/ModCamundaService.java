@@ -7,6 +7,7 @@ import java.util.Iterator;
 import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.folio.rest.exception.CamundaServiceException;
+import org.folio.rest.exception.WorkflowAlreadyActiveException;
 import org.folio.rest.model.Workflow;
 import org.folio.rest.model.repo.WorkflowRepo;
 import org.slf4j.Logger;
@@ -58,13 +59,18 @@ public class ModCamundaService {
     String tenant,
     String token,
     Workflow workflow
-  ) throws CamundaServiceException, IOException {
+  ) throws CamundaServiceException, IOException, WorkflowAlreadyActiveException {
   // @formatter:on
+
+    if (workflow.isActive()) {
+      throw new WorkflowAlreadyActiveException(workflow.getId());
+    }
+
     BpmnModelInstance modelInstance = bpmnModelFactory.makeBPMNFromWorkflow(workflow);
 
     Bpmn.validateModel(modelInstance);
 
-    File modelXmlFile = File.createTempFile("workflow-model", ".bpmn");
+    File modelXmlFile = File.createTempFile(workflow.getName(), ".bpmn");
     modelXmlFile.deleteOnExit();
 
     Bpmn.writeModelToFile(modelXmlFile, modelInstance);
