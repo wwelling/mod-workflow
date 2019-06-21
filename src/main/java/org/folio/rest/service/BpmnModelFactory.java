@@ -1,5 +1,9 @@
 package org.folio.rest.service;
 
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+
 import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.camunda.bpm.model.bpmn.instance.BoundaryEvent;
@@ -26,8 +30,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class BpmnModelFactory {
 
+  private static final String END_EVENT_ID = "ee_0";
+  private static final String START_EVENT_ID = "se_0";
   private static final String TARGET_NAMESPACE = "http://bpmn.io/schema/bpmn";
-
 
   public BpmnModelInstance makeBPMNFromWorkflow(Workflow workflow) {
 
@@ -37,32 +42,55 @@ public class BpmnModelFactory {
     Definitions definitions = modelInstance.newInstance(Definitions.class);
     definitions.setTargetNamespace(TARGET_NAMESPACE);
     modelInstance.setDefinitions(definitions);
-    
+
     // Setup Process
     Process process = createElement(modelInstance, definitions, workflow.getName().replaceAll(" ", "_").toLowerCase(),
-    Process.class);
+        Process.class);
     process.setExecutable(true);
     process.setName(workflow.getName());
 
     // Setup Nodes
-    StartEvent processStartEvent = createElement(modelInstance, process, "_1", StartEvent.class);
+
+    StartEvent processStartEvent = createElement(modelInstance, process, START_EVENT_ID, StartEvent.class);
     processStartEvent.setName("StartProcess");
 
-    ServiceTask serviceTask = createElement(modelInstance, process, "_2", ServiceTask.class);
-    serviceTask.setName("ServiceTask");
-    serviceTask.setCamundaDelegateExpression("${loggingDelagate}");
+    AtomicInteger taskIndex = new AtomicInteger();
+    List<ServiceTask> serviceTasks = workflow.getTasks().stream().map(task -> {
+      int index = taskIndex.getAndIncrement();
+      ServiceTask serviceTask = createElement(modelInstance, process, String.format("t_%s", index), ServiceTask.class);
+      String delegate = index == 0 ? "${testStreamDelegate}" : index < workflow.getTasks().size() - 1 ? "${testProcessDelegate}" : "${testAccumulatorDelegate}";
+      return enhanceServiceTask(serviceTask, task, delegate);
+    }).collect(Collectors.toList());
 
-    EndEvent endEvent = createElement(modelInstance, process, "_3", EndEvent.class);
-    endEvent.setName("EndProcess");
-    createElement(modelInstance, endEvent, null, TerminateEventDefinition.class);
+    EndEvent processEndEvent = createElement(modelInstance, process, END_EVENT_ID, EndEvent.class);
+    processEndEvent.setName("EndProcess");
+    createElement(modelInstance, processEndEvent, null, TerminateEventDefinition.class);
+    
+
+    // ServiceTask serviceTask = createElement(modelInstance, process, "_2", ServiceTask.class);
+    // serviceTask.setName("ServiceTask");
+    // serviceTask.setCamundaDelegateExpression("${loggingDelagate}");
+
+    
+
+    SequenceFlow firstSf = createElement(modelInstance, process, String.format("%s-%s", START_EVENT_ID, "t_1"), SequenceFlow.class);
+    firstSf.setSource(processStartEvent);
+    firstSf.setTarget(serviceTasks.get(0));
 
     // Setup Connections
-    SequenceFlow oneToTwoSequenceFlow = createElement(modelInstance, process, "_1-_2", SequenceFlow.class);
-    oneToTwoSequenceFlow.setSource(processStartEvent);
-    oneToTwoSequenceFlow.setTarget(serviceTask);
-    SequenceFlow twoToThreeSequenceFlow = createElement(modelInstance, process, "_2-_3", SequenceFlow.class);
-    twoToThreeSequenceFlow.setSource(serviceTask);
-    twoToThreeSequenceFlow.setTarget(endEvent);
+    AtomicInteger sfIndex = new AtomicInteger();
+    serviceTasks.forEach(st->{
+      int currentIndex = sfIndex.getAndIncrement();
+      if(currentIndex != serviceTasks.size()-1) {
+        SequenceFlow currentSf = createElement(modelInstance, process, String.format("t_%s-t_%s", currentIndex, currentIndex+1), SequenceFlow.class);
+        currentSf.setTarget(serviceTasks.get(currentIndex+1));
+        currentSf.setSource(st);
+      }
+    });
+
+    SequenceFlow lastSf = createElement(modelInstance, process, String.format("t_%s-%s", serviceTasks.size(), END_EVENT_ID), SequenceFlow.class);
+    lastSf.setSource(serviceTasks.get(serviceTasks.size()-1));
+    lastSf.setTarget(processEndEvent);
 
     Message processStartMessage = createElement(modelInstance, definitions, "process-start-message", Message.class);
     processStartMessage.setName(workflow.getStartTrigger().getPathPattern());
@@ -199,7 +227,6 @@ public class BpmnModelFactory {
     return message;
   }
 
-
   // <bpmn:boundaryEvent id="BoundaryEvent_1tu52i2" attachedToRef="SubProcess_0vakfj9">
   //     <bpmn:outgoing>SequenceFlow_1ngs0ny</bpmn:outgoing>
   //     <bpmn:messageEventDefinition messageRef="Message_1460phb" />
@@ -221,9 +248,9 @@ public class BpmnModelFactory {
     return sequenceFlow;
   }
 
-  private ServiceTask enhanchServiceTask(ServiceTask serviceTask, Task task) {
+  private ServiceTask enhanceServiceTask(ServiceTask serviceTask, Task task, String delegate) {
     serviceTask.setName(task.getName());
-    serviceTask.setCamundaDelegateExpression("${loggingDelagate}");
+    serviceTask.setCamundaDelegateExpression(delegate);
     return serviceTask;
   }
 
