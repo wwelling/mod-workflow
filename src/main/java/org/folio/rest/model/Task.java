@@ -15,6 +15,10 @@ public class Task extends AbstractBaseEntity {
   @Column(unique = true)
   private String name;
 
+  @NotNull
+  @Size(min = 4, max = 64)
+  private String delegate;
+
   public Task() {
     super();
   }
@@ -30,6 +34,14 @@ public class Task extends AbstractBaseEntity {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public String getDelegate() {
+    return delegate;
+  }
+
+  public void setDelegate(String delegate) {
+    this.delegate = delegate;
   }
 
 }

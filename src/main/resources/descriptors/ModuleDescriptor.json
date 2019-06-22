@@ -27,6 +27,18 @@
       ]
     },
     {
+      "id": "events",
+      "version": "1.0",
+      "handlers": [
+        {
+          "methods": ["GET"],
+          "pathPattern": "/events/*",
+          "permissionsRequired": ["event.collection.get"],
+          "permissionsDesired": ["event.domain.*", "event.domain.all"]
+        }
+      ]
+    },
+    {
       "id": "triggers",
       "version": "1.0",
       "handlers": [
@@ -127,6 +139,12 @@
           "permissionsDesired": ["workflow.domain.*", "workflow.domain.all"]
         },
         {
+          "methods": ["PATCH"],
+          "pathPattern": "/workflows/{id}",
+          "permissionsRequired": ["workflow.item.patch"],
+          "permissionsDesired": ["workflow.domain.*", "workflow.domain.all"]
+        },
+        {
           "methods": ["DELETE"],
           "pathPattern": "/workflows/{id}",
           "permissionsRequired": ["workflow.item.delete"],
@@ -160,6 +178,12 @@
           "methods": ["PUT"],
           "pathPattern": "/workflows/{id}/deactivate",
           "permissionsRequired": ["workflow.item.deactivate"],
+          "permissionsDesired": ["workflow.domain.*", "workflow.domain.all"]
+        },
+        {
+          "methods": ["GET"],
+          "pathPattern": "/workflows/{id}/tasks",
+          "permissionsRequired": ["workflow.item.tasks"],
           "permissionsDesired": ["workflow.domain.*", "workflow.domain.all"]
         }
       ]
@@ -220,6 +244,30 @@
       "subPermissions": [
         "action.allops",
         "action.domain.all"
+      ],
+      "visible": false
+    },
+    {
+      "permissionName": "event.collection.get",
+      "displayName": "Event - emit event",
+      "description": "Emit event"
+    },
+    {
+      "permissionName": "event.allops",
+      "displayName": "Event module - all CRUD permissions",
+      "description": "Entire set of permissions needed to use the event modules, but no domain permissions",
+      "subPermissions": [
+        "event.collection.get"
+      ],
+      "visible": false
+    },
+    {
+      "permissionName": "event.all",
+      "displayName": "Event module - all permissions and all event domains",
+      "description": "Entire set of permissions needed to use the event modules on any event domain",
+      "subPermissions": [
+        "event.allops",
+        "event.domain.all"
       ],
       "visible": false
     },
@@ -340,6 +388,11 @@
       "description": "Update workflow item"
     },
     {
+      "permissionName": "workflow.item.patch",
+      "displayName": "Workflow - patch workflow item",
+      "description": "Patch workflow item"
+    },
+    {
       "permissionName": "workflow.item.delete",
       "displayName": "Workflow - delete workflow item",
       "description": "Delete workflow item"
@@ -360,6 +413,11 @@
       "description": "Dactivate workflow item"
     },
     {
+      "permissionName": "workflow.item.tasks",
+      "displayName": "Workflow - workflow item tasks",
+      "description": "Get workflow item tasks"
+    },
+    {
       "permissionName": "workflow.allops",
       "displayName": "Workflow module - all CRUD permissions",
       "description": "Entire set of permissions needed to use the workflow modules, but no domain permissions",
@@ -368,10 +426,12 @@
         "workflow.item.get",
         "workflow.item.post",
         "workflow.item.put",
+        "workflow.item.patch",
         "workflow.item.delete",
         "workflow.item.startTrigger",
         "workflow.item.activate",
-        "workflow.item.deactivate"
+        "workflow.item.deactivate",
+        "workflow.item.tasks"
       ],
       "visible": false
     },
@@ -388,7 +448,7 @@
   ],
   "requires": [ ],
   "launchDescriptor": {
-    "dockerImage": "@project.artifactId@:@project.version@",
+    "dockerImage": "mod-workflow:1.0.0-SNAPSHOT",
     "dockerArgs": {
       "HostConfig": { "PortBindings": { "8081/tcp":  [{ "HostPort": "%p" }] } }
     },
