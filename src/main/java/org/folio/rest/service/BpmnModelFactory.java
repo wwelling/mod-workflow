@@ -6,14 +6,19 @@ import java.util.stream.Collectors;
 
 import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
+import org.camunda.bpm.model.bpmn.impl.instance.camunda.CamundaScriptImpl;
 import org.camunda.bpm.model.bpmn.instance.BoundaryEvent;
 import org.camunda.bpm.model.bpmn.instance.BpmnModelElementInstance;
 import org.camunda.bpm.model.bpmn.instance.Definitions;
+import org.camunda.bpm.model.bpmn.instance.Documentation;
 import org.camunda.bpm.model.bpmn.instance.EndEvent;
+import org.camunda.bpm.model.bpmn.instance.ExtensionElements;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
 import org.camunda.bpm.model.bpmn.instance.Message;
 import org.camunda.bpm.model.bpmn.instance.MessageEventDefinition;
 import org.camunda.bpm.model.bpmn.instance.Process;
+import org.camunda.bpm.model.bpmn.instance.Script;
+import org.camunda.bpm.model.bpmn.instance.ScriptTask;
 import org.camunda.bpm.model.bpmn.instance.SequenceFlow;
 import org.camunda.bpm.model.bpmn.instance.ServiceTask;
 import org.camunda.bpm.model.bpmn.instance.StartEvent;
@@ -21,9 +26,13 @@ import org.camunda.bpm.model.bpmn.instance.SubProcess;
 import org.camunda.bpm.model.bpmn.instance.TerminateEventDefinition;
 import org.camunda.bpm.model.bpmn.instance.bpmndi.BpmnDiagram;
 import org.camunda.bpm.model.bpmn.instance.bpmndi.BpmnPlane;
+import org.camunda.bpm.model.bpmn.instance.camunda.CamundaField;
+import org.camunda.bpm.model.bpmn.instance.camunda.CamundaString;
 import org.folio.rest.model.Task;
+import org.folio.rest.model.TaskScriptType;
 import org.folio.rest.model.Workflow;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 @Service
 public class BpmnModelFactory {
@@ -55,7 +64,16 @@ public class BpmnModelFactory {
     List<ServiceTask> serviceTasks = workflow.getTasks().stream().map(task -> {
       int index = taskIndex.getAndIncrement();
       ServiceTask serviceTask = createElement(modelInstance, process, String.format("t_%s", index), ServiceTask.class);
-      // String delegate = index == 0 ? "${testStreamDelegate}" : index < workflow.getTasks().size() - 1 ? "${testProcessDelegate}" : "${testAccumulatorDelegate}";
+      if(!StringUtils.isEmpty(task.getScript())) {
+        ExtensionElements extensionElements = createElement(modelInstance, serviceTask, null, ExtensionElements.class);
+        CamundaField scriptTypeField = createElement(modelInstance, extensionElements, String.format("t_%s-script-type", index), CamundaField.class);
+        scriptTypeField.setCamundaName("scriptType");
+        scriptTypeField.setCamundaStringValue(task.getScriptType().toString());
+        CamundaField scriptField = createElement(modelInstance, extensionElements, String.format("t_%s-script", index), CamundaField.class);
+        scriptField.setCamundaName("script");
+        CamundaString script = createElement(modelInstance, scriptField, null, CamundaString.class);
+        script.setTextContent(task.getScript());
+      }
       return enhanceServiceTask(serviceTask, task);
     }).collect(Collectors.toList());
 
@@ -135,7 +153,7 @@ public class BpmnModelFactory {
 
   private ServiceTask enhanceServiceTask(ServiceTask serviceTask, Task task) {
     serviceTask.setName(task.getName());
-    serviceTask.setCamundaDelegateExpression(task.getDelegate());
+    serviceTask.setCamundaDelegateExpression(String.format("${%s}",task.getDelegate()));
     return serviceTask;
   }
 

@@ -16,6 +16,13 @@
       "type" : "string",
       "minLength" : 4,
       "maxLength" : 64
+    },
+    "script" : {
+      "type" : "string"
+    },
+    "scriptType" : {
+      "type" : "string",
+      "enum" : [ "JS" ]
     }
   },
   "required" : [ "name", "delegate" ]

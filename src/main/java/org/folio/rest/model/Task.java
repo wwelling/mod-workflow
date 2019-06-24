@@ -19,6 +19,10 @@ public class Task extends AbstractBaseEntity {
   @Size(min = 4, max = 64)
   private String delegate;
 
+  private String script;
+
+  private TaskScriptType scriptType;
+
   public Task() {
     super();
   }
@@ -42,6 +46,22 @@ public class Task extends AbstractBaseEntity {
 
   public void setDelegate(String delegate) {
     this.delegate = delegate;
+  }
+
+  public String getScript() {
+    return script;
+  }
+
+  public void setScript(String script) {
+    this.script = script;
+  }
+
+  public TaskScriptType getScriptType() {
+    return scriptType;
+  }
+
+  public void setScriptType(TaskScriptType scriptType) {
+    this.scriptType = scriptType;
   }
 
 }
