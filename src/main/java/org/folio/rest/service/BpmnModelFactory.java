@@ -68,7 +68,7 @@ public class BpmnModelFactory {
         ExtensionElements extensionElements = createElement(modelInstance, serviceTask, null, ExtensionElements.class);
         CamundaField scriptTypeField = createElement(modelInstance, extensionElements, String.format("t_%s-script-type", index), CamundaField.class);
         scriptTypeField.setCamundaName("scriptType");
-        scriptTypeField.setCamundaStringValue(task.getScriptType().toString());
+        scriptTypeField.setCamundaStringValue(task.getScriptType().engineName);
         CamundaField scriptField = createElement(modelInstance, extensionElements, String.format("t_%s-script", index), CamundaField.class);
         scriptField.setCamundaName("script");
         CamundaString script = createElement(modelInstance, scriptField, null, CamundaString.class);

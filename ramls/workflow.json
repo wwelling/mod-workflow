@@ -58,7 +58,7 @@
         },
         "scriptType" : {
           "type" : "string",
-          "enum" : [ "JS" ]
+          "enum" : [ "NONE", "GROOVY", "JAVA", "JS", "PYTHON", "RUBY", "XSLT" ]
         }
       },
       "required" : [ "name", "delegate" ]
