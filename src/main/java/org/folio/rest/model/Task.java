@@ -19,6 +19,7 @@ public class Task extends AbstractBaseEntity {
   @Size(min = 4, max = 64)
   private String delegate;
 
+  @Column(length=1000)
   private String script;
 
   private TaskScriptType scriptType;
