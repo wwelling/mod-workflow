@@ -2,35 +2,44 @@ package org.folio.rest.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Inheritance;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import org.folio.rest.domain.model.AbstractBaseEntity;
 
-@Entity
-public class Task extends AbstractBaseEntity {
+@Entity(name="tasks")
+@Inheritance
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type" )
+@JsonSubTypes({
+    @JsonSubTypes.Type(value = ProcessorTask.class, name = "ProcessorTask"),
+
+    @JsonSubTypes.Type(value = ExtractorTask.class, name = "ExtractorTask"), 
+
+    @JsonSubTypes.Type(value = AccumulatorTask.class, name = "AccumulatorTask"),
+
+    @JsonSubTypes.Type(value = CreateForEachTask.class, name = "CreateForEachTask")
+  }
+)
+public abstract class Task extends AbstractBaseEntity {
 
   @NotNull
   @Size(min = 4, max = 64)
   @Column(unique = true)
   private String name;
 
-  @NotNull
-  @Size(min = 4, max = 64)
+  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   private String delegate;
 
-  @Column(length=1000)
-  private String script;
-
-  private TaskScriptType scriptType;
+  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+  private String type = this.getClass().getSimpleName();
 
   public Task() {
     super();
-  }
-
-  public Task(String name, Action action) {
-    this();
-    this.name = name;
   }
 
   public String getName() {
@@ -49,20 +58,12 @@ public class Task extends AbstractBaseEntity {
     this.delegate = delegate;
   }
 
-  public String getScript() {
-    return script;
+  public String getType() {
+    return type;
   }
 
-  public void setScript(String script) {
-    this.script = script;
-  }
-
-  public TaskScriptType getScriptType() {
-    return scriptType;
-  }
-
-  public void setScriptType(TaskScriptType scriptType) {
-    this.scriptType = scriptType;
+  public void setType(String type) {
+    this.type = type;
   }
 
 }

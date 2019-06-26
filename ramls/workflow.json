@@ -27,7 +27,15 @@
     "tasks" : {
       "type" : "array",
       "items" : {
-        "$ref" : "#/definitions/Task"
+        "oneOf" : [ {
+          "$ref" : "#/definitions/ProcessorTask"
+        }, {
+          "$ref" : "#/definitions/ExtractorTask"
+        }, {
+          "$ref" : "#/definitions/AccumulatorTask"
+        }, {
+          "$ref" : "#/definitions/CreateForEachTask"
+        } ]
       }
     },
     "startTrigger" : {
@@ -36,10 +44,15 @@
   },
   "required" : [ "name", "active" ],
   "definitions" : {
-    "Task" : {
+    "ProcessorTask" : {
       "type" : "object",
       "additionalProperties" : false,
       "properties" : {
+        "type" : {
+          "type" : "string",
+          "enum" : [ "ProcessorTask" ],
+          "default" : "ProcessorTask"
+        },
         "id" : {
           "type" : "string"
         },
@@ -49,9 +62,7 @@
           "maxLength" : 64
         },
         "delegate" : {
-          "type" : "string",
-          "minLength" : 4,
-          "maxLength" : 64
+          "type" : "string"
         },
         "script" : {
           "type" : "string"
@@ -61,7 +72,89 @@
           "enum" : [ "NONE", "GROOVY", "JAVA", "JS", "PYTHON", "RUBY", "XSLT" ]
         }
       },
-      "required" : [ "name", "delegate" ]
+      "title" : "ProcessorTask",
+      "required" : [ "type", "name" ]
+    },
+    "ExtractorTask" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "type" : {
+          "type" : "string",
+          "enum" : [ "ExtractorTask" ],
+          "default" : "ExtractorTask"
+        },
+        "id" : {
+          "type" : "string"
+        },
+        "name" : {
+          "type" : "string",
+          "minLength" : 4,
+          "maxLength" : 64
+        },
+        "delegate" : {
+          "type" : "string"
+        }
+      },
+      "title" : "ExtractorTask",
+      "required" : [ "type", "name" ]
+    },
+    "AccumulatorTask" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "type" : {
+          "type" : "string",
+          "enum" : [ "AccumulatorTask" ],
+          "default" : "AccumulatorTask"
+        },
+        "id" : {
+          "type" : "string"
+        },
+        "name" : {
+          "type" : "string",
+          "minLength" : 4,
+          "maxLength" : 64
+        },
+        "delegate" : {
+          "type" : "string"
+        }
+      },
+      "title" : "AccumulatorTask",
+      "required" : [ "type", "name" ]
+    },
+    "CreateForEachTask" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "type" : {
+          "type" : "string",
+          "enum" : [ "CreateForEachTask" ],
+          "default" : "CreateForEachTask"
+        },
+        "id" : {
+          "type" : "string"
+        },
+        "name" : {
+          "type" : "string",
+          "minLength" : 4,
+          "maxLength" : 64
+        },
+        "delegate" : {
+          "type" : "string"
+        },
+        "endpoint" : {
+          "type" : "string"
+        },
+        "target" : {
+          "type" : "string"
+        },
+        "source" : {
+          "type" : "string"
+        }
+      },
+      "title" : "CreateForEachTask",
+      "required" : [ "type", "name" ]
     },
     "Trigger" : {
       "type" : "object",
