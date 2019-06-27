@@ -151,6 +151,9 @@
         },
         "source" : {
           "type" : "string"
+        },
+        "uniqueBy" : {
+          "type" : "string"
         }
       },
       "title" : "CreateForEachTask",

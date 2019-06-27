@@ -24,11 +24,13 @@ import org.camunda.bpm.model.bpmn.instance.bpmndi.BpmnDiagram;
 import org.camunda.bpm.model.bpmn.instance.bpmndi.BpmnPlane;
 import org.camunda.bpm.model.bpmn.instance.camunda.CamundaField;
 import org.camunda.bpm.model.bpmn.instance.camunda.CamundaString;
+import org.camunda.bpm.model.xml.impl.util.StringUtil;
 import org.folio.rest.model.CreateForEachTask;
 import org.folio.rest.model.ProcessorTask;
 import org.folio.rest.model.Task;
 import org.folio.rest.model.Workflow;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 @Service
 public class BpmnModelFactory {
@@ -83,6 +85,9 @@ public class BpmnModelFactory {
         CamundaField source = createElement(modelInstance, extensionElements, String.format("t_%s-source", index), CamundaField.class);
         source.setCamundaName("source");
         source.setCamundaStringValue(cTask.getSource());
+        CamundaField uniqueBy = createElement(modelInstance, extensionElements, String.format("t_%s-uniqueBy", index), CamundaField.class);
+        uniqueBy.setCamundaName("uniqueBy");
+        uniqueBy.setCamundaStringValue(StringUtils.isEmpty(cTask.getUniqueBy()) ? "NO_VALUE" : cTask.getUniqueBy());
       }
       return enhanceServiceTask(serviceTask, task);
     }).collect(Collectors.toList());

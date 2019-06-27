@@ -11,6 +11,8 @@ public class CreateForEachTask extends Task {
 
   String source;
 
+  String uniqueBy;
+
   public CreateForEachTask() {
     super();
     setDelegate("testCreateForEachDelegate");
@@ -38,6 +40,14 @@ public class CreateForEachTask extends Task {
 
   public void setSource(String source) {
     this.source = source;
+  }
+
+  public String getUniqueBy() {
+    return uniqueBy;
+  }
+
+  public void setUniqueBy(String uniqueBy) {
+    this.uniqueBy = uniqueBy;
   }
 
 }
