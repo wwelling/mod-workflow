@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 @Entity
 public class AccumulatorTask extends Task {
 
-  Long acumulateTo;
+  Long accumulateTo;
 
   Long delayDuration;
 
@@ -19,12 +19,12 @@ public class AccumulatorTask extends Task {
     setName(name);
   }
 
-  public Long getAcumulateTo() {
-    return acumulateTo;
+  public Long getAccumulateTo() {
+    return accumulateTo;
   }
 
-  public void setAcumulateTo(Long acumulateTo) {
-    this.acumulateTo = acumulateTo;
+  public void setAccumulateTo(Long accumulateTo) {
+    this.accumulateTo = accumulateTo;
   }
 
   public Long getDelayDuration() {
