@@ -19,6 +19,12 @@
     },
     "delegate" : {
       "type" : "string"
+    },
+    "acumulateTo" : {
+      "type" : "integer"
+    },
+    "delayDuration" : {
+      "type" : "integer"
     }
   },
   "required" : [ "type", "name" ]

@@ -95,7 +95,7 @@ public class BpmnModelFactory {
         CamundaField acumulateToField = createElement(modelInstance, extensionElements, String.format("t_%s-accumulate-to", index), CamundaField.class);
         acumulateToField.setCamundaName("acumulateTo");
         acumulateToField.setCamundaStringValue(Long.toString(aTask.getAcumulateTo()));
-        CamundaField delayDuration = createElement(modelInstance, extensionElements, String.format("t_%s-de;ay-duration", index), CamundaField.class);
+        CamundaField delayDuration = createElement(modelInstance, extensionElements, String.format("t_%s-delay-duration", index), CamundaField.class);
         delayDuration.setCamundaName("delayDuration");
         delayDuration.setCamundaStringValue(Long.toString(aTask.getDelayDuration()));
       }
