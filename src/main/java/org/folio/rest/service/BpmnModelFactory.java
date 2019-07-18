@@ -24,7 +24,7 @@ import org.camunda.bpm.model.bpmn.instance.bpmndi.BpmnDiagram;
 import org.camunda.bpm.model.bpmn.instance.bpmndi.BpmnPlane;
 import org.camunda.bpm.model.bpmn.instance.camunda.CamundaField;
 import org.camunda.bpm.model.bpmn.instance.camunda.CamundaString;
-import org.camunda.bpm.model.xml.impl.util.StringUtil;
+import org.folio.rest.model.AccumulatorTask;
 import org.folio.rest.model.CreateForEachTask;
 import org.folio.rest.model.ProcessorTask;
 import org.folio.rest.model.Task;
@@ -88,6 +88,16 @@ public class BpmnModelFactory {
         CamundaField uniqueBy = createElement(modelInstance, extensionElements, String.format("t_%s-uniqueBy", index), CamundaField.class);
         uniqueBy.setCamundaName("uniqueBy");
         uniqueBy.setCamundaStringValue(StringUtils.isEmpty(cTask.getUniqueBy()) ? "NO_VALUE" : cTask.getUniqueBy());
+      }
+      if(task instanceof AccumulatorTask) {
+        AccumulatorTask aTask = (AccumulatorTask) task;
+        ExtensionElements extensionElements = createElement(modelInstance, serviceTask, null, ExtensionElements.class);
+        CamundaField acumulateToField = createElement(modelInstance, extensionElements, String.format("t_%s-accumulate-to", index), CamundaField.class);
+        acumulateToField.setCamundaName("acumulateTo");
+        acumulateToField.setCamundaStringValue(Long.toString(aTask.getAcumulateTo()));
+        CamundaField delayDuration = createElement(modelInstance, extensionElements, String.format("t_%s-de;ay-duration", index), CamundaField.class);
+        delayDuration.setCamundaName("delayDuration");
+        delayDuration.setCamundaStringValue(Long.toString(aTask.getDelayDuration()));
       }
       return enhanceServiceTask(serviceTask, task);
     }).collect(Collectors.toList());
