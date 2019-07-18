@@ -92,9 +92,9 @@ public class BpmnModelFactory {
       if(task instanceof AccumulatorTask) {
         AccumulatorTask aTask = (AccumulatorTask) task;
         ExtensionElements extensionElements = createElement(modelInstance, serviceTask, null, ExtensionElements.class);
-        CamundaField acumulateToField = createElement(modelInstance, extensionElements, String.format("t_%s-accumulate-to", index), CamundaField.class);
-        acumulateToField.setCamundaName("acumulateTo");
-        acumulateToField.setCamundaStringValue(Long.toString(aTask.getAcumulateTo()));
+        CamundaField accumulateToField = createElement(modelInstance, extensionElements, String.format("t_%s-accumulate-to", index), CamundaField.class);
+        accumulateToField.setCamundaName("acumulateTo");
+        accumulateToField.setCamundaStringValue(Long.toString(aTask.getAcumulateTo()));
         CamundaField delayDuration = createElement(modelInstance, extensionElements, String.format("t_%s-delay-duration", index), CamundaField.class);
         delayDuration.setCamundaName("delayDuration");
         delayDuration.setCamundaStringValue(Long.toString(aTask.getDelayDuration()));
