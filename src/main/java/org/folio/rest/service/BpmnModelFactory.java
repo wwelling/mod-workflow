@@ -26,6 +26,7 @@ import org.camunda.bpm.model.bpmn.instance.camunda.CamundaField;
 import org.camunda.bpm.model.bpmn.instance.camunda.CamundaString;
 import org.folio.rest.model.AccumulatorTask;
 import org.folio.rest.model.CreateForEachTask;
+import org.folio.rest.model.ExtractorTask;
 import org.folio.rest.model.ProcessorTask;
 import org.folio.rest.model.Task;
 import org.folio.rest.model.Workflow;
@@ -62,7 +63,13 @@ public class BpmnModelFactory {
     List<ServiceTask> serviceTasks = workflow.getTasks().stream().map(task -> {
       int index = taskIndex.getAndIncrement();
       ServiceTask serviceTask = createElement(modelInstance, process, String.format("t_%s", index), ServiceTask.class);
-      if(task instanceof ProcessorTask) {
+      if(task instanceof ExtractorTask) {
+        ExtractorTask eTask = (ExtractorTask) task;
+        ExtensionElements extensionElements = createElement(modelInstance, serviceTask, null, ExtensionElements.class);
+        CamundaField streamSource = createElement(modelInstance, extensionElements, String.format("t_%s-stream-source", index), CamundaField.class);
+        streamSource.setCamundaName("streamSource");
+        streamSource.setCamundaStringValue(eTask.getStreamSource());
+      } else if(task instanceof ProcessorTask) {
         ProcessorTask pTask = (ProcessorTask) task;
         ExtensionElements extensionElements = createElement(modelInstance, serviceTask, null, ExtensionElements.class);
         CamundaField scriptTypeField = createElement(modelInstance, extensionElements, String.format("t_%s-script-type", index), CamundaField.class);
@@ -72,8 +79,7 @@ public class BpmnModelFactory {
         scriptField.setCamundaName("script");
         CamundaString script = createElement(modelInstance, scriptField, null, CamundaString.class);
         script.setTextContent(pTask.getScript());
-      }
-      if(task instanceof CreateForEachTask) {
+      } else if(task instanceof CreateForEachTask) {
         CreateForEachTask cTask = (CreateForEachTask) task;
         ExtensionElements extensionElements = createElement(modelInstance, serviceTask, null, ExtensionElements.class);
         CamundaField endpoint = createElement(modelInstance, extensionElements, String.format("t_%s-endpoint", index), CamundaField.class);
@@ -88,8 +94,7 @@ public class BpmnModelFactory {
         CamundaField uniqueBy = createElement(modelInstance, extensionElements, String.format("t_%s-uniqueBy", index), CamundaField.class);
         uniqueBy.setCamundaName("uniqueBy");
         uniqueBy.setCamundaStringValue(StringUtils.isEmpty(cTask.getUniqueBy()) ? "NO_VALUE" : cTask.getUniqueBy());
-      }
-      if(task instanceof AccumulatorTask) {
+      } else if(task instanceof AccumulatorTask) {
         AccumulatorTask aTask = (AccumulatorTask) task;
         ExtensionElements extensionElements = createElement(modelInstance, serviceTask, null, ExtensionElements.class);
         CamundaField accumulateToField = createElement(modelInstance, extensionElements, String.format("t_%s-accumulate-to", index), CamundaField.class);
@@ -98,6 +103,9 @@ public class BpmnModelFactory {
         CamundaField delayDuration = createElement(modelInstance, extensionElements, String.format("t_%s-delay-duration", index), CamundaField.class);
         delayDuration.setCamundaName("delayDuration");
         delayDuration.setCamundaStringValue(Long.toString(aTask.getDelayDuration()));
+        CamundaField storageDestination = createElement(modelInstance, extensionElements, String.format("t_%s-storage-destination", index), CamundaField.class);
+        storageDestination.setCamundaName("storageDestination");
+        storageDestination.setCamundaStringValue(aTask.getStorageDestination());
       }
       return enhanceServiceTask(serviceTask, task);
     }).collect(Collectors.toList());
