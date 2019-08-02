@@ -1,8 +1,8 @@
 package org.folio.rest.controller.advice;
 
-import org.folio.rest.exception.CamundaServiceException;
 import org.folio.rest.exception.WorkflowAlreadyActiveException;
 import org.folio.rest.exception.WorkflowDeploymentException;
+import org.folio.rest.exception.WorkflowEngineServiceException;
 import org.folio.rest.exception.WorkflowNotFoundException;
 import org.folio.rest.model.response.Errors;
 import org.folio.rest.utility.ErrorUtility;
@@ -38,10 +38,10 @@ public class WorkflowControllerAdvice {
     logger.debug(exception.getMessage(), exception);
     return ErrorUtility.buildError(exception, HttpStatus.INTERNAL_SERVER_ERROR);
   }
-
+  
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-  @ExceptionHandler(CamundaServiceException.class)
-  public Errors handleCamundaServiceException(CamundaServiceException exception) {
+  @ExceptionHandler(WorkflowDeploymentException.class)
+  public Errors handleWorkflowEngineServiceException(WorkflowEngineServiceException exception) {
     logger.debug(exception.getMessage(), exception);
     return ErrorUtility.buildError(exception, HttpStatus.INTERNAL_SERVER_ERROR);
   }

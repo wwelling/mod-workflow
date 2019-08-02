@@ -2,11 +2,13 @@ package org.folio.rest.controller;
 
 import java.io.IOException;
 
-import org.folio.rest.exception.CamundaServiceException;
+import org.folio.rest.annotation.TokenHeader;
 import org.folio.rest.exception.WorkflowAlreadyActiveException;
 import org.folio.rest.exception.WorkflowNotFoundException;
 import org.folio.rest.model.Workflow;
 import org.folio.rest.model.repo.WorkflowRepo;
+import org.folio.rest.service.WorkflowEngineService;
+import org.folio.rest.tenant.annotation.TenantHeader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,18 +20,24 @@ import org.springframework.web.bind.annotation.RestController;
 public class WorkflowController {
 
   @Autowired
-  private WorkflowRepo workflowRepo;
+  private WorkflowEngineService workflowEngineService;
 
   @PutMapping("/activate")
-  public Workflow activateWorkflow(@RequestBody Workflow workflow)
-    throws WorkflowNotFoundException, CamundaServiceException, IOException, WorkflowAlreadyActiveException {
-    return workflowRepo.save(workflow);
+  public Workflow activateWorkflow(
+    @RequestBody Workflow workflow,
+    @TenantHeader String tenant,
+    @TokenHeader String token
+  ) {
+    return workflowEngineService.activate(workflow, tenant, token);
   }
 
   @PutMapping("/deactivate")
-  public Workflow deactivateWorkflow(@RequestBody Workflow workflow)
-    throws WorkflowNotFoundException, CamundaServiceException {
-    return workflowRepo.save(workflow);
+  public Workflow deactivateWorkflow(
+    @RequestBody Workflow workflow,
+    @TenantHeader String tenant,
+    @TokenHeader String token
+  ) {
+    return workflowEngineService.deactivate(workflow, tenant, token);
   }
 
 }
