@@ -40,7 +40,7 @@ public class WorkflowControllerAdvice {
   }
   
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-  @ExceptionHandler(WorkflowDeploymentException.class)
+  @ExceptionHandler(WorkflowEngineServiceException.class)
   public Errors handleWorkflowEngineServiceException(WorkflowEngineServiceException exception) {
     logger.debug(exception.getMessage(), exception);
     return ErrorUtility.buildError(exception, HttpStatus.INTERNAL_SERVER_ERROR);
