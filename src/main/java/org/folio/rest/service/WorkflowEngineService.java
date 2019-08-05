@@ -11,14 +11,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 @Service
 public class WorkflowEngineService {
@@ -43,47 +39,25 @@ public class WorkflowEngineService {
   @Autowired
   private WorkflowRepo workflowRepo;
 
-  public Workflow activate(Workflow workflow, String tenant, String token) throws WorkflowEngineServiceException {
+  public Workflow activate(String workflowId, String tenant, String token) throws WorkflowEngineServiceException {
+    Workflow workflow = workflowRepo.getOne(workflowId);
     return sendRequest(workflow, WORKFLOW_ENGINE_ACTIVATE_URL_TEMPLATE, tenant, token);
   }
 
-  public Workflow deactivate(Workflow workflow, String tenant, String token) throws WorkflowEngineServiceException {
+  public Workflow deactivate(String workflowId, String tenant, String token) throws WorkflowEngineServiceException {
+    Workflow workflow = workflowRepo.getOne(workflowId);
     return sendRequest(workflow, WORKFLOW_ENGINE_DEACTIVATE_URL_TEMPLATE, tenant, token);
   }
 
   private Workflow sendRequest(Workflow workflow, String requestPath, String tenant, String token)
       throws WorkflowEngineServiceException {
 
-    HttpHeaders tenantHeader = new HttpHeaders();
-    tenantHeader.setContentType(MediaType.TEXT_PLAIN);
-    HttpEntity<String> tenantHttpEntity = new HttpEntity<>(tenant, tenantHeader);
-
-    HttpHeaders deploymentNameHeader = new HttpHeaders();
-    deploymentNameHeader.setContentType(MediaType.TEXT_PLAIN);
-    HttpEntity<String> deploymentNameHttpEntity = new HttpEntity<>(workflow.getName(), deploymentNameHeader);
-
-    HttpHeaders deploymentSourceHeader = new HttpHeaders();
-    deploymentSourceHeader.setContentType(MediaType.TEXT_PLAIN);
-    HttpEntity<String> deploymentSourceHttpEntity = new HttpEntity<>("process application", deploymentSourceHeader);
-
-    MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>();
-    parts.add("tenant-id", tenantHttpEntity);
-    parts.add("deployment-name", deploymentNameHttpEntity);
-    parts.add("deployment-source", deploymentSourceHttpEntity);
-
-    parts.add("data", workflow);
-
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-    headers.add(tenantHeaderName, tenant);
-    headers.add(tokenHeaderName, token);
-
-    HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(parts, headers);
+    HttpEntity<Workflow> workflowHttpEntity = new HttpEntity<>(workflow);
 
     ResponseEntity<JsonNode> response = this.httpService.exchange(
       String.format(requestPath, okapiLocation),
       HttpMethod.POST,
-      request,
+      workflowHttpEntity,
       JsonNode.class
     );
 
