@@ -25,7 +25,7 @@ public class WorkflowController {
   @PutMapping("/{id}/activate")
   public Workflow activateWorkflow(
     @PathVariable String id,
-    @TenantHeader String tenant,
+      @TenantHeader String tenant,
     @TokenHeader String token
   ) throws WorkflowEngineServiceException {
     logger.info("Activating: " + id);

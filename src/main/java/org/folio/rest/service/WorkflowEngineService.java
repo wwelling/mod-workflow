@@ -1,8 +1,5 @@
 package org.folio.rest.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.folio.rest.exception.WorkflowEngineServiceException;
 import org.folio.rest.model.Workflow;
 import org.folio.rest.model.repo.WorkflowRepo;
@@ -11,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,22 +50,24 @@ public class WorkflowEngineService {
   private Workflow sendRequest(Workflow workflow, String requestPath, String tenant, String token)
       throws WorkflowEngineServiceException {
 
-    HttpEntity<Workflow> workflowHttpEntity = new HttpEntity<>(workflow);
+    HttpHeaders requestHeaders = new HttpHeaders();
+    requestHeaders.add(tenantHeaderName, tenant);
+    requestHeaders.add(tokenHeaderName, token);
 
-    ResponseEntity<JsonNode> response = this.httpService.exchange(
+    HttpEntity<Workflow> workflowHttpEntity = new HttpEntity<>(workflow, requestHeaders);
+
+    ResponseEntity<Workflow> response = this.httpService.exchange(
       String.format(requestPath, okapiLocation),
       HttpMethod.POST,
       workflowHttpEntity,
-      JsonNode.class
+      Workflow.class
     );
 
     if (response.getStatusCode() == HttpStatus.OK) {
       logger.debug("Response body: {}", response.getBody());
 
       try {
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode responseBody = response.getBody();
-        Workflow responseWorkflow = mapper.convertValue(responseBody, Workflow.class);
+        Workflow responseWorkflow = response.getBody();
         logger.info("Workflow is actvie = {}, deploymentID = {}", responseWorkflow.isActive(), responseWorkflow.getDeploymentId());
         return workflowRepo.save(responseWorkflow);
       } catch (Exception e) {
