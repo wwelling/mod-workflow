@@ -1,18 +1,6 @@
 {
   "id": "@project.artifactId@-@project.version@",
   "name": "Workflow Module",
-  "filters": [
-    {
-      "methods": [
-        "POST", "PUT", "DELETE"
-      ],
-      "pathPattern": "/*",
-      "rewritePath": "/events",
-      "modulePermissions": [ ],
-      "phase": "post",
-      "type": "request-log"
-    }
-  ],
   "provides": [
     {
       "id": "actions",

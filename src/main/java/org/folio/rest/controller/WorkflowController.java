@@ -1,16 +1,12 @@
 package org.folio.rest.controller;
 
-import java.io.IOException;
-import java.util.Optional;
-
 import org.folio.rest.annotation.TokenHeader;
-import org.folio.rest.exception.CamundaServiceException;
-import org.folio.rest.exception.WorkflowAlreadyActiveException;
-import org.folio.rest.exception.WorkflowNotFoundException;
+import org.folio.rest.exception.WorkflowEngineServiceException;
 import org.folio.rest.model.Workflow;
-import org.folio.rest.model.repo.WorkflowRepo;
-import org.folio.rest.service.ModCamundaService;
+import org.folio.rest.service.WorkflowEngineService;
 import org.folio.rest.tenant.annotation.TenantHeader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -21,29 +17,29 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/workflows")
 public class WorkflowController {
 
-  @Autowired
-  private WorkflowRepo workflowRepo;
+  private static final Logger logger = LoggerFactory.getLogger(WorkflowEngineService.class);
 
   @Autowired
-  private ModCamundaService modCamundaService;
+  private WorkflowEngineService workflowEngineService;
 
   @PutMapping("/{id}/activate")
-  public Workflow activateWorkflow(@TenantHeader String tenant, @TokenHeader String token, @PathVariable String id)
-      throws WorkflowNotFoundException, CamundaServiceException, IOException, WorkflowAlreadyActiveException {
-    Optional<Workflow> workflow = workflowRepo.findById(id);
-    if (workflow.isPresent()) {
-      return modCamundaService.deployWorkflow(tenant, token, workflow.get());
-    }
-    throw new WorkflowNotFoundException(id);
+  public Workflow activateWorkflow(
+    @PathVariable String id,
+      @TenantHeader String tenant,
+    @TokenHeader String token
+  ) throws WorkflowEngineServiceException {
+    logger.info("Activating: " + id);
+    return workflowEngineService.activate(id, tenant, token);
   }
 
   @PutMapping("/{id}/deactivate")
-  public Workflow deactivateWorkflow(@TenantHeader String tenant, @TokenHeader String token, @PathVariable String id) throws WorkflowNotFoundException, CamundaServiceException {
-    Optional<Workflow> workflow = workflowRepo.findById(id);
-    if (workflow.isPresent()) {
-      return modCamundaService.undeployWorkflow(tenant, token, workflow.get());
-    }
-    throw new WorkflowNotFoundException(id);
+  public Workflow deactivateWorkflow(
+    @PathVariable String id,
+    @TenantHeader String tenant,
+    @TokenHeader String token
+  ) throws WorkflowEngineServiceException {
+    logger.info("Deactivating: " + id);
+    return workflowEngineService.deactivate(id, tenant, token);
   }
 
 }
