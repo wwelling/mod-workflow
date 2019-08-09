@@ -32,8 +32,6 @@ public class EventController {
 
   private static final Logger logger = LoggerFactory.getLogger(EventController.class);
 
-  private static final String FILTER_PATH_PATTERN_PREFIX = "/events";
-
   @Autowired
   private EventProducer eventProducer;
 
@@ -88,8 +86,7 @@ public class EventController {
   private Optional<Trigger> checkTrigger(HttpMethod method, String path) {
     Optional<Trigger> trigger = Optional.empty();
     for (Trigger currentTrigger : triggerRepo.findByMethod(method)) {
-      String pathPattern = FILTER_PATH_PATTERN_PREFIX + currentTrigger.getPathPattern();
-      if (pathMatcher.match(pathPattern, path)) {
+      if (pathMatcher.match(currentTrigger.getPathPattern(), path)) {
         trigger = Optional.of(currentTrigger);
         break;
       }
