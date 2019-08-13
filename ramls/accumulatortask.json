@@ -20,11 +20,17 @@
     "delegate" : {
       "type" : "string"
     },
-    "acumulateTo" : {
+    "streaming" : {
+      "type" : "boolean"
+    },
+    "accumulateTo" : {
       "type" : "integer"
     },
     "delayDuration" : {
       "type" : "integer"
+    },
+    "storageDestination" : {
+      "type" : "string"
     }
   },
   "required" : [ "type", "name" ]
