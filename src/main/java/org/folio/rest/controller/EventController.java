@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.folio.rest.exception.EventPublishException;
 import org.folio.rest.jms.EventProducer;
 import org.folio.rest.jms.model.Event;
+import org.folio.rest.model.EventTrigger;
 import org.folio.rest.model.Trigger;
 import org.folio.rest.model.repo.TriggerRepo;
 import org.folio.rest.tenant.annotation.TenantHeader;
@@ -58,7 +59,7 @@ public class EventController {
     logger.debug("Request method: {}", method);
     logger.debug("Request headers: {}", headers);
     logger.debug("Request body: {}", body);
-    Optional<Trigger> trigger = checkTrigger(method, path);
+    Optional<EventTrigger> trigger = checkTrigger(method, path);
     if (trigger.isPresent()) {
       logger.debug("Publishing event: {}: {}", trigger.get().getName(), trigger.get().getDescription());
       try {
@@ -83,14 +84,16 @@ public class EventController {
     return body;
   }
 
-  private Optional<Trigger> checkTrigger(HttpMethod method, String path) {
-    Optional<Trigger> trigger = Optional.empty();
-    for (Trigger currentTrigger : triggerRepo.findByMethod(method)) {
-      if (pathMatcher.match(currentTrigger.getPathPattern(), path)) {
-        trigger = Optional.of(currentTrigger);
+  private Optional<EventTrigger> checkTrigger(HttpMethod method, String path) {
+    Optional<EventTrigger> trigger = Optional.empty();
+    for (Trigger currentTrigger : triggerRepo.findByMethodAndDeserializeAs(method, "EventTrigger")) {
+      EventTrigger eventTrigger = (EventTrigger) currentTrigger;
+      if (pathMatcher.match(eventTrigger.getPathPattern(), path)) {
+        trigger = Optional.of(eventTrigger);
         break;
       }
     }
+
     return trigger;
   }
 
