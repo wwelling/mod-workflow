@@ -1,13 +1,13 @@
 {
   "$schema" : "http://json-schema.org/draft-04/schema#",
-  "title" : "CreateForEachTask",
+  "title" : "StreamCreateForEachTask",
   "type" : "object",
   "additionalProperties" : false,
   "properties" : {
-    "deserializeAs" : {
+    "type" : {
       "type" : "string",
-      "enum" : [ "CreateForEachTask" ],
-      "default" : "CreateForEachTask"
+      "enum" : [ "StreamCreateForEachTask" ],
+      "default" : "StreamCreateForEachTask"
     },
     "id" : {
       "type" : "string"
@@ -36,5 +36,5 @@
       "type" : "string"
     }
   },
-  "required" : [ "deserializeAs", "name" ]
+  "required" : [ "type", "name" ]
 }

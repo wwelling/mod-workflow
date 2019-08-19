@@ -14,15 +14,17 @@ import org.folio.rest.domain.model.AbstractBaseEntity;
 
 @Entity(name="tasks")
 @Inheritance
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type" )
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "deserializeAs")
 @JsonSubTypes({
     @JsonSubTypes.Type(value = ProcessorTask.class, name = "ProcessorTask"),
 
-    @JsonSubTypes.Type(value = ExtractorTask.class, name = "ExtractorTask"), 
+    @JsonSubTypes.Type(value = ExtractorTask.class, name = "ExtractorTask"),
+
+    @JsonSubTypes.Type(value = StreamingExtractorTask.class, name = "StreamingExtractorTask"),
 
     @JsonSubTypes.Type(value = AccumulatorTask.class, name = "AccumulatorTask"),
 
-    @JsonSubTypes.Type(value = CreateForEachTask.class, name = "CreateForEachTask")
+    @JsonSubTypes.Type(value = StreamCreateForEachTask.class, name = "StreamCreateForEachTask")
   }
 )
 public abstract class Task extends AbstractBaseEntity {
@@ -36,10 +38,14 @@ public abstract class Task extends AbstractBaseEntity {
   private String delegate;
 
   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-  private String type = this.getClass().getSimpleName();
+  private String deserializeAs = this.getClass().getSimpleName();
+
+  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+  private Boolean streaming;
 
   public Task() {
     super();
+    setStreaming(false);
   }
 
   public String getName() {
@@ -58,12 +64,20 @@ public abstract class Task extends AbstractBaseEntity {
     this.delegate = delegate;
   }
 
-  public String getType() {
-    return type;
+  public String getDeserializeAs() {
+    return deserializeAs;
   }
 
-  public void setType(String type) {
-    this.type = type;
+  public void setDeserializeAs(String deserializeAs) {
+    this.deserializeAs = deserializeAs;
+  }
+
+  public Boolean isStreaming() {
+    return streaming;
+  }
+
+  public void setStreaming(Boolean streaming) {
+    this.streaming = streaming;
   }
 
 }

@@ -1,18 +1,6 @@
 {
   "id": "@project.artifactId@-@project.version@",
   "name": "Workflow Module",
-  "filters": [
-    {
-      "methods": [
-        "POST", "PUT", "DELETE"
-      ],
-      "pathPattern": "/*",
-      "rewritePath": "/events",
-      "modulePermissions": [ ],
-      "phase": "post",
-      "type": "request-log"
-    }
-  ],
   "provides": [
     {
       "id": "actions",
@@ -34,6 +22,12 @@
           "methods": ["GET"],
           "pathPattern": "/events/*",
           "permissionsRequired": ["event.collection.get"],
+          "permissionsDesired": ["event.domain.*", "event.domain.all"]
+        },
+        {
+          "methods": ["POST"],
+          "pathPattern": "/events/*",
+          "permissionsRequired": ["event.collection.post"],
           "permissionsDesired": ["event.domain.*", "event.domain.all"]
         }
       ]
@@ -249,6 +243,11 @@
     },
     {
       "permissionName": "event.collection.get",
+      "displayName": "Event - emit event",
+      "description": "Emit event"
+    },
+    {
+      "permissionName": "event.collection.post",
       "displayName": "Event - emit event",
       "description": "Emit event"
     },

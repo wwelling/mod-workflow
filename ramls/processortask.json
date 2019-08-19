@@ -4,7 +4,7 @@
   "type" : "object",
   "additionalProperties" : false,
   "properties" : {
-    "type" : {
+    "deserializeAs" : {
       "type" : "string",
       "enum" : [ "ProcessorTask" ],
       "default" : "ProcessorTask"
@@ -20,6 +20,9 @@
     "delegate" : {
       "type" : "string"
     },
+    "streaming" : {
+      "type" : "boolean"
+    },
     "script" : {
       "type" : "string"
     },
@@ -28,5 +31,5 @@
       "enum" : [ "NONE", "GROOVY", "JAVA", "JS", "PYTHON", "RUBY", "XSLT" ]
     }
   },
-  "required" : [ "type", "name" ]
+  "required" : [ "deserializeAs", "name" ]
 }

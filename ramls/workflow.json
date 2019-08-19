@@ -32,14 +32,22 @@
         }, {
           "$ref" : "#/definitions/ExtractorTask"
         }, {
+          "$ref" : "#/definitions/StreamingExtractorTask"
+        }, {
           "$ref" : "#/definitions/AccumulatorTask"
         }, {
-          "$ref" : "#/definitions/CreateForEachTask"
+          "$ref" : "#/definitions/StreamCreateForEachTask"
         } ]
       }
     },
     "startTrigger" : {
-      "$ref" : "#/definitions/Trigger"
+      "oneOf" : [ {
+        "$ref" : "#/definitions/EventTrigger"
+      }, {
+        "$ref" : "#/definitions/ManualTrigger"
+      }, {
+        "$ref" : "#/definitions/ScheduleTrigger"
+      } ]
     }
   },
   "required" : [ "name", "active" ],
@@ -48,7 +56,7 @@
       "type" : "object",
       "additionalProperties" : false,
       "properties" : {
-        "type" : {
+        "deserializeAs" : {
           "type" : "string",
           "enum" : [ "ProcessorTask" ],
           "default" : "ProcessorTask"
@@ -64,6 +72,9 @@
         "delegate" : {
           "type" : "string"
         },
+        "streaming" : {
+          "type" : "boolean"
+        },
         "script" : {
           "type" : "string"
         },
@@ -73,16 +84,21 @@
         }
       },
       "title" : "ProcessorTask",
-      "required" : [ "type", "name" ]
+      "required" : [ "deserializeAs", "name" ]
     },
     "ExtractorTask" : {
+      "oneOf" : [ {
+        "$ref" : "#/definitions/StreamingExtractorTask"
+      } ]
+    },
+    "StreamingExtractorTask" : {
       "type" : "object",
       "additionalProperties" : false,
       "properties" : {
-        "type" : {
+        "deserializeAs" : {
           "type" : "string",
-          "enum" : [ "ExtractorTask" ],
-          "default" : "ExtractorTask"
+          "enum" : [ "StreamingExtractorTask" ],
+          "default" : "StreamingExtractorTask"
         },
         "id" : {
           "type" : "string"
@@ -94,16 +110,29 @@
         },
         "delegate" : {
           "type" : "string"
+        },
+        "streaming" : {
+          "type" : "boolean"
+        },
+        "predicateProperty" : {
+          "type" : "string"
+        },
+        "mergeStrategy" : {
+          "type" : "string",
+          "enum" : [ "MERGE", "CONCAT" ]
+        },
+        "streamSource" : {
+          "type" : "string"
         }
       },
-      "title" : "ExtractorTask",
-      "required" : [ "type", "name" ]
+      "title" : "StreamingExtractorTask",
+      "required" : [ "deserializeAs", "name" ]
     },
     "AccumulatorTask" : {
       "type" : "object",
       "additionalProperties" : false,
       "properties" : {
-        "type" : {
+        "deserializeAs" : {
           "type" : "string",
           "enum" : [ "AccumulatorTask" ],
           "default" : "AccumulatorTask"
@@ -119,24 +148,30 @@
         "delegate" : {
           "type" : "string"
         },
-        "acumulateTo" : {
+        "streaming" : {
+          "type" : "boolean"
+        },
+        "accumulateTo" : {
           "type" : "integer"
         },
         "delayDuration" : {
           "type" : "integer"
+        },
+        "storageDestination" : {
+          "type" : "string"
         }
       },
       "title" : "AccumulatorTask",
-      "required" : [ "type", "name" ]
+      "required" : [ "deserializeAs", "name" ]
     },
-    "CreateForEachTask" : {
+    "StreamCreateForEachTask" : {
       "type" : "object",
       "additionalProperties" : false,
       "properties" : {
-        "type" : {
+        "deserializeAs" : {
           "type" : "string",
-          "enum" : [ "CreateForEachTask" ],
-          "default" : "CreateForEachTask"
+          "enum" : [ "StreamCreateForEachTask" ],
+          "default" : "StreamCreateForEachTask"
         },
         "id" : {
           "type" : "string"
@@ -148,6 +183,9 @@
         },
         "delegate" : {
           "type" : "string"
+        },
+        "streaming" : {
+          "type" : "boolean"
         },
         "endpoint" : {
           "type" : "string"
@@ -162,13 +200,18 @@
           "type" : "string"
         }
       },
-      "title" : "CreateForEachTask",
-      "required" : [ "type", "name" ]
+      "title" : "StreamCreateForEachTask",
+      "required" : [ "deserializeAs", "name" ]
     },
-    "Trigger" : {
+    "EventTrigger" : {
       "type" : "object",
       "additionalProperties" : false,
       "properties" : {
+        "deserializeAs" : {
+          "type" : "string",
+          "enum" : [ "EventTrigger" ],
+          "default" : "EventTrigger"
+        },
         "id" : {
           "type" : "string"
         },
@@ -194,7 +237,76 @@
           "type" : "string"
         }
       },
-      "required" : [ "name", "description", "type", "method", "pathPattern" ]
+      "title" : "EventTrigger",
+      "required" : [ "deserializeAs", "name", "description", "type", "method", "pathPattern" ]
+    },
+    "ManualTrigger" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "deserializeAs" : {
+          "type" : "string",
+          "enum" : [ "ManualTrigger" ],
+          "default" : "ManualTrigger"
+        },
+        "id" : {
+          "type" : "string"
+        },
+        "name" : {
+          "type" : "string",
+          "minLength" : 4,
+          "maxLength" : 64
+        },
+        "description" : {
+          "type" : "string",
+          "minLength" : 4,
+          "maxLength" : 256
+        },
+        "type" : {
+          "type" : "string",
+          "enum" : [ "PROCESS_START", "TASK_COMPLETE", "MESSAGE_CORRELATE" ]
+        },
+        "method" : {
+          "type" : "string",
+          "enum" : [ "GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "TRACE" ]
+        }
+      },
+      "title" : "ManualTrigger",
+      "required" : [ "deserializeAs", "name", "description", "type", "method" ]
+    },
+    "ScheduleTrigger" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "deserializeAs" : {
+          "type" : "string",
+          "enum" : [ "ScheduleTrigger" ],
+          "default" : "ScheduleTrigger"
+        },
+        "id" : {
+          "type" : "string"
+        },
+        "name" : {
+          "type" : "string",
+          "minLength" : 4,
+          "maxLength" : 64
+        },
+        "description" : {
+          "type" : "string",
+          "minLength" : 4,
+          "maxLength" : 256
+        },
+        "type" : {
+          "type" : "string",
+          "enum" : [ "PROCESS_START", "TASK_COMPLETE", "MESSAGE_CORRELATE" ]
+        },
+        "method" : {
+          "type" : "string",
+          "enum" : [ "GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "TRACE" ]
+        }
+      },
+      "title" : "ScheduleTrigger",
+      "required" : [ "deserializeAs", "name", "description", "type", "method" ]
     }
   }
 }

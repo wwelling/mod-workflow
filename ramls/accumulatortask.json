@@ -4,7 +4,7 @@
   "type" : "object",
   "additionalProperties" : false,
   "properties" : {
-    "type" : {
+    "deserializeAs" : {
       "type" : "string",
       "enum" : [ "AccumulatorTask" ],
       "default" : "AccumulatorTask"
@@ -20,12 +20,18 @@
     "delegate" : {
       "type" : "string"
     },
-    "acumulateTo" : {
+    "streaming" : {
+      "type" : "boolean"
+    },
+    "accumulateTo" : {
       "type" : "integer"
     },
     "delayDuration" : {
       "type" : "integer"
+    },
+    "storageDestination" : {
+      "type" : "string"
     }
   },
-  "required" : [ "type", "name" ]
+  "required" : [ "deserializeAs", "name" ]
 }

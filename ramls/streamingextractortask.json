@@ -1,13 +1,13 @@
 {
   "$schema" : "http://json-schema.org/draft-04/schema#",
-  "title" : "CreateForEachTask",
+  "title" : "StreamingExtractorTask",
   "type" : "object",
   "additionalProperties" : false,
   "properties" : {
     "deserializeAs" : {
       "type" : "string",
-      "enum" : [ "CreateForEachTask" ],
-      "default" : "CreateForEachTask"
+      "enum" : [ "StreamingExtractorTask" ],
+      "default" : "StreamingExtractorTask"
     },
     "id" : {
       "type" : "string"
@@ -23,16 +23,14 @@
     "streaming" : {
       "type" : "boolean"
     },
-    "endpoint" : {
+    "predicateProperty" : {
       "type" : "string"
     },
-    "target" : {
-      "type" : "string"
+    "mergeStrategy" : {
+      "type" : "string",
+      "enum" : [ "MERGE", "CONCAT" ]
     },
-    "source" : {
-      "type" : "string"
-    },
-    "uniqueBy" : {
+    "streamSource" : {
       "type" : "string"
     }
   },
