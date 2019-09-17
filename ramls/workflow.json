@@ -38,7 +38,7 @@
         }, {
           "$ref" : "#/definitions/StreamCreateForEachTask"
         }, {
-          "$ref" : "#/definitions/StreamingRestRequestTask"
+          "$ref" : "#/definitions/RestRequestTask"
         } ]
       }
     },
@@ -208,14 +208,14 @@
       "title" : "StreamCreateForEachTask",
       "required" : [ "deserializeAs", "name" ]
     },
-    "StreamingRestRequestTask" : {
+    "RestRequestTask" : {
       "type" : "object",
       "additionalProperties" : false,
       "properties" : {
         "deserializeAs" : {
           "type" : "string",
-          "enum" : [ "StreamingRestRequestTask" ],
-          "default" : "StreamingRestRequestTask"
+          "enum" : [ "RestRequestTask" ],
+          "default" : "RestRequestTask"
         },
         "id" : {
           "type" : "string"
@@ -238,11 +238,11 @@
           "type" : "string",
           "pattern" : "GET|POST|PUT|DELETE"
         },
-        "payload" : {
+        "requestBody" : {
           "type" : "string"
         }
       },
-      "title" : "StreamingRestRequestTask",
+      "title" : "RestRequestTask",
       "required" : [ "deserializeAs", "name", "url", "httpMethod" ]
     },
     "EventTrigger" : {
