@@ -14,7 +14,7 @@ public class RestRequestTask extends Task {
   private String url;
 
   @NotNull
-  @Pattern(regexp = "GET|POST|PUT|DELETE", message = "'httpMethod must be GET, POST, PUT or DELETE'")
+  @Pattern(regexp = "GET|POST|PUT|DELETE", message = "httpMethod must be GET, POST, PUT or DELETE")
   private String httpMethod;
 
   private String requestBody;
