@@ -17,7 +17,6 @@ public class StreamingRestRequestTask extends Task {
   @Pattern(regexp = "GET|POST|PUT|DELETE", message = "'httpMethod must be GET, POST, PUT or DELETE'")
   private String httpMethod;
 
-
   private String payload;
 
   public StreamingRestRequestTask() {
