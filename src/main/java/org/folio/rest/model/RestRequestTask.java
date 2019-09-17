@@ -7,7 +7,7 @@ import javax.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.URL;
 
 @Entity
-public class StreamingRestRequestTask extends Task {
+public class RestRequestTask extends Task {
 
   @NotNull
   @URL(protocol = "http", message = "Not a valid URL")
@@ -19,7 +19,7 @@ public class StreamingRestRequestTask extends Task {
 
   private String requestBody;
 
-  public StreamingRestRequestTask() {
+  public RestRequestTask() {
     super();
     this.setDelegate("streamingRestRequestDelegate");
   }
