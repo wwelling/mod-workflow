@@ -37,6 +37,8 @@
           "$ref" : "#/definitions/AccumulatorTask"
         }, {
           "$ref" : "#/definitions/StreamCreateForEachTask"
+        }, {
+          "$ref" : "#/definitions/StreamingRestRequestTask"
         } ]
       }
     },
@@ -205,6 +207,43 @@
       },
       "title" : "StreamCreateForEachTask",
       "required" : [ "deserializeAs", "name" ]
+    },
+    "StreamingRestRequestTask" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "deserializeAs" : {
+          "type" : "string",
+          "enum" : [ "StreamingRestRequestTask" ],
+          "default" : "StreamingRestRequestTask"
+        },
+        "id" : {
+          "type" : "string"
+        },
+        "name" : {
+          "type" : "string",
+          "minLength" : 4,
+          "maxLength" : 64
+        },
+        "delegate" : {
+          "type" : "string"
+        },
+        "streaming" : {
+          "type" : "boolean"
+        },
+        "url" : {
+          "type" : "string"
+        },
+        "httpMethod" : {
+          "type" : "string",
+          "pattern" : "GET|POST|PUT|DELETE"
+        },
+        "payload" : {
+          "type" : "string"
+        }
+      },
+      "title" : "StreamingRestRequestTask",
+      "required" : [ "deserializeAs", "name", "url", "httpMethod" ]
     },
     "EventTrigger" : {
       "type" : "object",
