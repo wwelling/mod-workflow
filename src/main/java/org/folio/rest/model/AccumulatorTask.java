@@ -9,11 +9,9 @@ public class AccumulatorTask extends Task {
 
   Long delayDuration;
 
-  String storageDestination;
-
   public AccumulatorTask()  {
     super();
-    this.setDelegate("testAccumulatorDelegate");
+    this.setDelegate("streamAccumulationDelegate");
   }
 
   public AccumulatorTask(String name) {
@@ -35,14 +33,6 @@ public class AccumulatorTask extends Task {
 
   public void setDelayDuration(Long delayDuration) {
     this.delayDuration = delayDuration;
-  }
-
-  public String getStorageDestination() {
-    return storageDestination;
-  }
-
-  public void setStorageDestination(String storageDestination) {
-    this.storageDestination = storageDestination;
   }
 
 }
