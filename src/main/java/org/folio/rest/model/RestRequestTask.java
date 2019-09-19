@@ -7,21 +7,21 @@ import javax.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.URL;
 
 @Entity
-public class StreamingRestRequestTask extends Task {
+public class RestRequestTask extends Task {
 
   @NotNull
   @URL(protocol = "http", message = "Not a valid URL")
   private String url;
 
   @NotNull
-  @Pattern(regexp = "GET|POST|PUT|DELETE", message = "'httpMethod must be GET, POST, PUT or DELETE'")
+  @Pattern(regexp = "GET|POST|PUT|DELETE", message = "httpMethod must be GET, POST, PUT or DELETE")
   private String httpMethod;
 
-  private String payload;
+  private String requestBody;
 
-  public StreamingRestRequestTask() {
+  public RestRequestTask() {
     super();
-    this.setDelegate("streamingRestRequestDelegate");
+    this.setDelegate("restRequestTaskDelegate");
   }
 
   public String getUrl() {
@@ -40,12 +40,12 @@ public class StreamingRestRequestTask extends Task {
     this.httpMethod = httpMethod;
   }
 
-  public String getPayload() {
-    return payload;
+  public String getRequestBody() {
+    return requestBody;
   }
 
-  public void setPayload(String payload) {
-    this.payload = payload;
+  public void setRequestBody(String requestBody) {
+    this.requestBody = requestBody;
   }
 
 }
