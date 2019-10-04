@@ -35,7 +35,7 @@
               <goal>java</goal>
             </goals>
             <configuration>
-              <mainClass>org.folio.rest.domain.generator.EntityJsonSchemaGenerator</mainClass>
+              <mainClass>org.folio.spring.domain.generator.EntityJsonSchemaGenerator</mainClass>
             </configuration>
           </execution>
         </executions>
@@ -109,14 +109,14 @@
   <dependencies>
 
     <dependency>
-      <groupId>org.folio.spring</groupId>
-      <artifactId>tenant</artifactId>
+      <groupId>org.folio</groupId>
+      <artifactId>spring-tenant</artifactId>
       <version>1.0.0-SNAPSHOT</version>
     </dependency>
 
     <dependency>
-      <groupId>org.folio.spring</groupId>
-      <artifactId>web</artifactId>
+      <groupId>org.folio</groupId>
+      <artifactId>spring-web</artifactId>
       <version>1.0.0-SNAPSHOT</version>
     </dependency>
 

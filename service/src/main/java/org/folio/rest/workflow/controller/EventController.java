@@ -12,7 +12,7 @@ import org.folio.rest.workflow.jms.model.Event;
 import org.folio.rest.workflow.components.EventTrigger;
 import org.folio.rest.workflow.components.Trigger;
 import org.folio.rest.workflow.model.repo.TriggerRepo;
-import org.folio.rest.tenant.annotation.TenantHeader;
+import org.folio.spring.tenant.annotation.TenantHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

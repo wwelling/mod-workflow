@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-import org.folio.rest.domain.model.AbstractBaseEntity;
+import org.folio.spring.domain.model.AbstractBaseEntity;
 
 @Entity(name="tasks")
 @Inheritance

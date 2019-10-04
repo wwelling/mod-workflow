@@ -8,7 +8,7 @@ import javax.persistence.Inheritance;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.folio.rest.domain.model.AbstractBaseEntity;
+import org.folio.spring.domain.model.AbstractBaseEntity;
 import org.folio.rest.workflow.jms.model.TriggerType;
 import org.springframework.http.HttpMethod;
 

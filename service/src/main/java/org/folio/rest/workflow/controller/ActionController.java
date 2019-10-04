@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.folio.rest.workflow.model.Action;
 import org.folio.rest.workflow.service.OkapiDiscoveryService;
-import org.folio.rest.tenant.annotation.TenantHeader;
+import org.folio.spring.tenant.annotation.TenantHeader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

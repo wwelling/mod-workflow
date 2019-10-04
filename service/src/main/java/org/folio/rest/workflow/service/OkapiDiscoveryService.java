@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.folio.rest.service.HttpService;
+import org.folio.spring.service.HttpService;
 import org.folio.rest.workflow.model.Action;
 import org.folio.rest.workflow.model.Handler;
 import org.slf4j.Logger;

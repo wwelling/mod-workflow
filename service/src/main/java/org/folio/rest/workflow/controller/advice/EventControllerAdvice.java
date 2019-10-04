@@ -1,8 +1,8 @@
 package org.folio.rest.workflow.controller.advice;
 
-import org.folio.rest.workflow.exception.EventPublishException;;
-import org.folio.rest.model.response.Errors;
-import org.folio.rest.utility.ErrorUtility;
+import org.folio.rest.workflow.exception.EventPublishException;
+import org.folio.spring.model.response.Errors;
+import org.folio.spring.utility.ErrorUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

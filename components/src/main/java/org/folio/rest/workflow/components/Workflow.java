@@ -17,7 +17,7 @@ import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import org.folio.rest.domain.model.AbstractBaseEntity;
+import org.folio.spring.domain.model.AbstractBaseEntity;
 
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})

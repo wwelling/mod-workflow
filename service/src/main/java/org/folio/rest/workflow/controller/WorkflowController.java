@@ -1,10 +1,10 @@
 package org.folio.rest.workflow.controller;
 
-import org.folio.rest.annotation.TokenHeader;
+import org.folio.spring.annotation.TokenHeader;
 import org.folio.rest.workflow.exception.WorkflowEngineServiceException;
 import org.folio.rest.workflow.components.Workflow;
 import org.folio.rest.workflow.service.WorkflowEngineService;
-import org.folio.rest.tenant.annotation.TenantHeader;
+import org.folio.spring.tenant.annotation.TenantHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
