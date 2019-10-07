@@ -5,6 +5,7 @@ import javax.jms.ConnectionFactory;
 import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFactoryConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.config.JmsListenerContainerFactory;
@@ -14,6 +15,7 @@ import org.springframework.jms.support.converter.MessageType;
 
 @EnableJms
 @Configuration
+@Profile("messaging")
 public class JmsMessageConfig {
 
   @Bean
@@ -25,6 +27,7 @@ public class JmsMessageConfig {
   // @formatter:on
     DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
     configurer.configure(factory, connectionFactory);
+    System.out.println("\n\n\nMessaging\n\n\n");
     return factory;
   }
 
