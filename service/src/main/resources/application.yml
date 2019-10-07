@@ -42,7 +42,7 @@ spring:
     open-in-view: true
     show-sql: false
   profiles:
-    active: default
+    active: default, messaging
   thymeleaf:
     mode: TEXT
     suffix: .sql
