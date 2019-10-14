@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 @Entity
 public class ExtractorTask extends Task {
 
-  private String predicateProperty;
+  private String comparisonProperties;
 
   private String enhancementProperty;
 
@@ -15,9 +15,9 @@ public class ExtractorTask extends Task {
     super();
   }
 
-  public ExtractorTask(String predicateProperty, MergeStrategy mergeStrategy) {
+  public ExtractorTask(String comparisonProperties, MergeStrategy mergeStrategy) {
     this();
-    setPredicateProperty(predicateProperty);
+    setComparisonProperties(comparisonProperties);
     setMergeStrategy(mergeStrategy);
   }
 
@@ -34,12 +34,12 @@ public class ExtractorTask extends Task {
     }
   }
 
-  public String getPredicateProperty() {
-    return predicateProperty;
+  public String getComparisonProperties() {
+    return comparisonProperties;
   }
 
-  public void setPredicateProperty(String predicateProperty) {
-    this.predicateProperty = predicateProperty;
+  public void setComparisonProperties(String comparisonProperties) {
+    this.comparisonProperties = comparisonProperties;
   }
 
   public String getEnhancementProperty() {
