@@ -2,18 +2,24 @@ package org.folio.rest.workflow.service;
 
 import org.folio.rest.workflow.exception.WorkflowEngineServiceException;
 import org.folio.spring.service.HttpService;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.folio.rest.workflow.components.Workflow;
 import org.folio.rest.workflow.model.repo.WorkflowRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 public class WorkflowEngineService {
@@ -32,11 +38,32 @@ public class WorkflowEngineService {
   @Value("${okapi.location}")
   private String okapiLocation;
 
+  // @Autowired
+  // private HttpService httpService;
+
   @Autowired
-  private HttpService httpService;
+  private ObjectMapper objectMapper;
 
   @Autowired
   private WorkflowRepo workflowRepo;
+
+  private RestTemplate restTemplate;
+
+  public WorkflowEngineService(RestTemplateBuilder restTemplateBuilder) {
+    this.restTemplate = restTemplateBuilder.build();
+  }
+
+  public <T> ResponseEntity<T> exchange(String url, HttpMethod method, HttpEntity<?> request, Class<T> responseType) {
+    return this.restTemplate.exchange(url, method, request, responseType, (Object[]) new String[0]);
+  }
+
+  // @formatter:off
+  public <T> ResponseEntity<T> exchange(
+    String url, HttpMethod method, HttpEntity<?> request, Class<T> responseType, Object[] uriVariables
+  ) {
+  // @formatter:on
+    return this.restTemplate.exchange(url, method, request, responseType, uriVariables);
+  }
 
   public Workflow activate(String workflowId, String tenant, String token) throws WorkflowEngineServiceException {
     Workflow workflow = workflowRepo.getOne(workflowId);
@@ -54,16 +81,24 @@ public class WorkflowEngineService {
     HttpHeaders requestHeaders = new HttpHeaders();
     requestHeaders.add(tenantHeaderName, tenant);
     requestHeaders.add(tokenHeaderName, token);
+    requestHeaders.add("Content-Type", "application/json");
 
     HttpEntity<Workflow> workflowHttpEntity = new HttpEntity<>(workflow, requestHeaders);
 
-    ResponseEntity<Workflow> response = this.httpService.exchange(
+    try {
+      System.out.printf("%s \n %s \n %s \n %s", objectMapper.writeValueAsString(workflowHttpEntity.getBody()), String.format(requestPath, okapiLocation), tenant, token);
+    } catch (JsonProcessingException e1) {
+      // TODO Auto-generated catch block
+      e1.printStackTrace();
+    }
+
+    ResponseEntity<Workflow> response = this.exchange(
       String.format(requestPath, okapiLocation),
       HttpMethod.POST,
       workflowHttpEntity,
       Workflow.class
     );
-
+    
     if (response.getStatusCode() == HttpStatus.OK) {
       logger.debug("Response body: {}", response.getBody());
 
@@ -75,6 +110,7 @@ public class WorkflowEngineService {
         throw new WorkflowEngineServiceException("Unable to get updated workflow from workflow engine!");
       }
     }
+    
     throw new WorkflowEngineServiceException(response.getStatusCodeValue());
   }
 
