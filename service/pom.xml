@@ -50,7 +50,7 @@
               <goal>repackage</goal>
             </goals>
             <configuration>
-              <mainClass>org.folio.rest.SpringOkapiModule</mainClass>
+              <mainClass>org.folio.rest.workflow.SpringOkapiModule</mainClass>
             </configuration>
           </execution>
         </executions>
