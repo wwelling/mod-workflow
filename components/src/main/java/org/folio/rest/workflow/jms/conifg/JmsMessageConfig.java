@@ -27,7 +27,6 @@ public class JmsMessageConfig {
   // @formatter:on
     DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
     configurer.configure(factory, connectionFactory);
-    System.out.println("\n\n\nMessaging\n\n\n");
     return factory;
   }
 
