@@ -23,19 +23,55 @@
     "streaming" : {
       "type" : "boolean"
     },
-    "comparisonProperties" : {
-      "type" : "string"
+    "enhancementComparisons" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/definitions/EnhancementComparison"
+      }
     },
-    "enhancementProperty" : {
-      "type" : "string"
+    "enhancementMappings" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/definitions/EnhancementMapping"
+      }
     },
     "mergeStrategy" : {
       "type" : "string",
       "enum" : [ "MERGE", "CONCAT", "ENHANCE" ]
     },
+    "sortStrategy" : {
+      "type" : "string",
+      "enum" : [ "NONE", "LEXICOGRAPHICAL", "NUMERICAL" ]
+    },
     "streamSource" : {
       "type" : "string"
     }
   },
-  "required" : [ "deserializeAs", "name" ]
+  "required" : [ "deserializeAs", "name" ],
+  "definitions" : {
+    "EnhancementComparison" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "sourceProperty" : {
+          "type" : "string"
+        },
+        "targetProperty" : {
+          "type" : "string"
+        }
+      }
+    },
+    "EnhancementMapping" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "to" : {
+          "type" : "string"
+        },
+        "from" : {
+          "type" : "string"
+        }
+      }
+    }
+  }
 }
