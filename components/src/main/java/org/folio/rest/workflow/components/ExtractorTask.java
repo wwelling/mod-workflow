@@ -17,13 +17,10 @@ public class ExtractorTask extends Task {
 
   private MergeStrategy mergeStrategy;
 
-  private SortStrategy sortStrategy;
-
   public ExtractorTask() {
     super();
     enhancementComparisons = new ArrayList<EnhancementComparison>();
     enhancementMappings = new ArrayList<EnhancementMapping>();
-    setSortStrategy(SortStrategy.NONE);
   }
 
   @Override
@@ -61,14 +58,6 @@ public class ExtractorTask extends Task {
 
   public void setEnhancementMappings(List<EnhancementMapping> enhancementMappings) {
     this.enhancementMappings = enhancementMappings;
-  }
-
-  public SortStrategy getSortStrategy() {
-    return sortStrategy;
-  }
-
-  public void setSortStrategy(SortStrategy sortStrategy) {
-    this.sortStrategy = sortStrategy;
   }
 
 }
