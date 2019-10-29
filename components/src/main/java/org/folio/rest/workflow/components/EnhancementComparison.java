@@ -5,9 +5,11 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class EnhancementComparison {
   
-  private final String sourceProperty;
+  private String sourceProperty;
   
-  private final String targetProperty;
+  private String targetProperty;
+
+  public EnhancementComparison() {}
   
   public EnhancementComparison(String sourceProperty, String targetProperty) {
     this.sourceProperty = sourceProperty;
@@ -20,6 +22,14 @@ public class EnhancementComparison {
   
   public String getTargetProperty() {
     return targetProperty;
+  }
+
+  public void setSourceProperty(String sourceProperty) {
+    this.sourceProperty = sourceProperty;
+  }
+
+  public void setTargetProperty(String targetProperty) {
+    this.targetProperty = targetProperty;
   }
 
 }
