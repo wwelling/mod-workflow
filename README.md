@@ -14,6 +14,8 @@ Introduction ...
 ## Docker deployment
 
 ```
+docker build -t folio/mod-workflow .
+docker run -d -p 9001:9001 folio/mod-workflow
 ```
 
 ### Issue tracker

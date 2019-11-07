@@ -1,14 +1,38 @@
-#Prerequisites JDK
-FROM maven:3.6.1-jdk-8-alpine
+# build base image
+FROM maven:3-jdk-8-slim as maven
 
-#Settings
-ENV ARTIFACT_VERSION='1.3.0-SNAPSHOT'
-ENV MODULE_VERSION='sprint5-staging'
+# copy pom.xml
+COPY ./pom.xml ./pom.xml
+
+# copy components files
+COPY ./components ./components
+
+# copy components files
+COPY ./service ./service
+
+# install reactor modules
+RUN mvn install
+
+WORKDIR /service
+
+# build service
+RUN mvn package
+
+# final base image
+FROM openjdk:8u171-jre-alpine
+
+# set deployment directory
+WORKDIR /mod-workflow
+
+# copy over the built artifact from the maven image
+COPY --from=maven /target/mod-workflow*.jar ./mod-workflow.jar
+
+# settings
 ENV LOGGING_LEVEL_FOLIO='INFO'
 ENV SERVER_PORT='9001'
 ENV SPRING_ACTIVEMQ_BROKER_URL='tcp://localhost:61616'
 ENV SPRING_DATASOURCE_PLATFORM='h2'
-ENV SPRING_DATASOURCE_URL='jdbc:h2:./workflow-db/workflow;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE'
+ENV SPRING_DATASOURCE_URL='jdbc:h2:./mod-workflow;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE'
 ENV SPRING_DATASOURCE_DRIVERCLASSNAME='org.h2.Driver'
 ENV SPRING_DATASOURCE_USERNAME='folio'
 ENV SPRING_DATASOURCE_PASSWORD='folio'
@@ -19,26 +43,12 @@ ENV EVENT_QUEUE_NAME='event.queue'
 ENV TENANT_DEFAULT_TENANT='tern'
 ENV OKAPI_LOCATION='http://localhost:9130'
 
-#expose port
+# expose ports
 EXPOSE ${SERVER_PORT}
 EXPOSE 61616
 
-#Mvn
-RUN apk add --no-cache curl git
-
-#mod-data-extractor clone and MVN build
-RUN mkdir -p /usr/local/bin/folio/
-WORKDIR /usr/local/bin/folio
-RUN git clone -b ${MODULE_VERSION} https://github.com/TAMULib/mod-workflow.git
-WORKDIR /usr/local/bin/folio/mod-workflow
-RUN mvn install
-WORKDIR /usr/local/bin/folio/mod-workflow/service
-RUN mkdir -p workflow-db
-RUN mkdir -p activemq-data
-RUN mvn package -DskipTests
-
-#run java command
-CMD java -jar /usr/local/bin/folio/mod-workflow/target/mod-workflow-${ARTIFACT_VERSION}.jar \
+# set the startup command to run your binary
+CMD java -jar ./mod-workflow.jar \
     --logging.level.org.folio=${LOGGING_LEVEL_FOLIO} --server.port=${SERVER_PORT} --spring.activemq.broker-url=${SPRING_ACTIVEMQ_BROKER_URL} \
     --spring.datasource.platform=${SPRING_DATASOURCE_PLATFORM} --spring.datasource.url=${SPRING_DATASOURCE_URL} \
     --spring.datasource.driverClassName=${SPRING_DATASOURCE_DRIVERCLASSNAME} --spring.datasource.username=${SPRING_DATASOURCE_USERNAME} \
