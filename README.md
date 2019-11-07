@@ -18,7 +18,7 @@ docker build -t folio/mod-workflow .
 docker run -d -p 9001:9001 folio/mod-workflow
 ```
 
-### Publish Docker Image
+### Publish docker image
 
 ```
 docker build -t [docker repo]/folio/mod-workflow:[version] .
