@@ -25,7 +25,7 @@ FROM openjdk:8u171-jre-alpine
 WORKDIR /mod-workflow
 
 # copy over the built artifact from the maven image
-COPY --from=maven /target/mod-workflow*.jar ./mod-workflow.jar
+COPY --from=maven /service/target/service*.jar ./mod-workflow.jar
 
 # settings
 ENV LOGGING_LEVEL_FOLIO='INFO'

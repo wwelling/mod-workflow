@@ -18,6 +18,13 @@ docker build -t folio/mod-workflow .
 docker run -d -p 9001:9001 folio/mod-workflow
 ```
 
+### Publish Docker Image
+
+```
+docker build -t [docker repo]/folio/mod-workflow:[version] .
+docker push [docker repo]/folio/mod-workflow:[version]
+```
+
 ### Issue tracker
 
 See project [FOLIO](https://issues.folio.org/browse/FOLIO)
