@@ -1,24 +1,26 @@
 package org.folio.rest.workflow.components;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 
 @Entity
 public class ExtractorTask extends Task {
 
-  private String comparisonProperties;
+  @ElementCollection
+  private List<EnhancementComparison> enhancementComparisons;
 
-  private String enhancementProperty;
+  @ElementCollection
+  private List<EnhancementMapping> enhancementMappings;
 
   private MergeStrategy mergeStrategy;
 
   public ExtractorTask() {
     super();
-  }
-
-  public ExtractorTask(String comparisonProperties, MergeStrategy mergeStrategy) {
-    this();
-    setComparisonProperties(comparisonProperties);
-    setMergeStrategy(mergeStrategy);
+    enhancementComparisons = new ArrayList<EnhancementComparison>();
+    enhancementMappings = new ArrayList<EnhancementMapping>();
   }
 
   @Override
@@ -34,28 +36,28 @@ public class ExtractorTask extends Task {
     }
   }
 
-  public String getComparisonProperties() {
-    return comparisonProperties;
-  }
-
-  public void setComparisonProperties(String comparisonProperties) {
-    this.comparisonProperties = comparisonProperties;
-  }
-
-  public String getEnhancementProperty() {
-    return enhancementProperty;
-  }
-
-  public void setEnhancementProperty(String enhancementProperty) {
-    this.enhancementProperty = enhancementProperty;
-  }
-
   public MergeStrategy getMergeStrategy() {
     return mergeStrategy;
   }
 
   public void setMergeStrategy(MergeStrategy mergeStrategy) {
     this.mergeStrategy = mergeStrategy;
+  }
+
+  public List<EnhancementComparison> getEnhancementComparisons() {
+    return enhancementComparisons;
+  }
+
+  public void setEnhancementComparisons(List<EnhancementComparison> enhancementComparisons) {
+    this.enhancementComparisons = enhancementComparisons;
+  }
+
+  public List<EnhancementMapping> getEnhancementMappings() {
+    return enhancementMappings;
+  }
+
+  public void setEnhancementMappings(List<EnhancementMapping> enhancementMappings) {
+    this.enhancementMappings = enhancementMappings;
   }
 
 }

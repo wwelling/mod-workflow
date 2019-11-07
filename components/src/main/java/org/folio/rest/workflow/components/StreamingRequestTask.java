@@ -19,4 +19,5 @@ public class StreamingRequestTask extends Task {
     public void setStorageDestination(String storageDestination) {
       this.storageDestination = storageDestination;
     }
+    
 }
