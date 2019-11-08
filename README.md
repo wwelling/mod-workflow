@@ -21,6 +21,7 @@ docker run -d -p 9001:9001 folio/mod-workflow
 ### Publish docker image
 
 ```
+docker login [docker repo]
 docker build -t [docker repo]/folio/mod-workflow:[version] .
 docker push [docker repo]/folio/mod-workflow:[version]
 ```
