@@ -55,5 +55,5 @@ CMD java -jar ./mod-workflow.jar \
     --spring.datasource.driverClassName=${SPRING_DATASOURCE_DRIVERCLASSNAME} --spring.datasource.username=${SPRING_DATASOURCE_USERNAME} \
     --spring.datasource.password=${SPRING_DATASOURCE_PASSWORD} --spring.h2.console.enabled=${SPRING_H2_CONSOLE_ENABLED} \
     --spring.jpa.database-platform=${SPRING_JPA_DATABASE_PLATFORM} --event.queue.name=${EVENT_QUEUE_NAME} \
-    --tenant.default-tenant=${TENANT_DEFAULT_TENANT} --initialize-default-tenant=${TENANT_INITIALIZE_DEFAULT_TENANT} \
+    --tenant.default-tenant=${TENANT_DEFAULT_TENANT} --tenant.initialize-default-tenant=${TENANT_INITIALIZE_DEFAULT_TENANT} \
     --okapi.location=${OKAPI_LOCATION} --spring.h2.console.settings.web-allow-others=${SPRING_H2_WEBALLOW}
