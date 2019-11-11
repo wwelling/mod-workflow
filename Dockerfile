@@ -48,6 +48,8 @@ ENV OKAPI_LOCATION='http://localhost:9130'
 EXPOSE ${SERVER_PORT}
 EXPOSE 61616
 
+RUN mkdir -p activemq-data
+
 # set the startup command to run your binary
 CMD java -jar ./mod-workflow.jar \
     --logging.level.org.folio=${LOGGING_LEVEL_FOLIO} --server.port=${SERVER_PORT} --spring.activemq.broker-url=${SPRING_ACTIVEMQ_BROKER_URL} \
