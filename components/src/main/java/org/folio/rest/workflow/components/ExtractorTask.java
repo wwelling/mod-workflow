@@ -23,27 +23,6 @@ public class ExtractorTask extends Task {
     enhancementMappings = new ArrayList<EnhancementMapping>();
   }
 
-  @Override
-  public String getDelegate() {
-    switch(getMergeStrategy()) {
-      case MERGE:
-        return "orderedMergingExtractorDelegate";
-      case ENHANCE:
-        return "enhancingExtractorDelegate";
-      case CONCAT:
-      default:
-        return "concatenatingExtractorDelegate";
-    }
-  }
-
-  public MergeStrategy getMergeStrategy() {
-    return mergeStrategy;
-  }
-
-  public void setMergeStrategy(MergeStrategy mergeStrategy) {
-    this.mergeStrategy = mergeStrategy;
-  }
-
   public List<EnhancementComparison> getEnhancementComparisons() {
     return enhancementComparisons;
   }
@@ -58,6 +37,27 @@ public class ExtractorTask extends Task {
 
   public void setEnhancementMappings(List<EnhancementMapping> enhancementMappings) {
     this.enhancementMappings = enhancementMappings;
+  }
+
+  public MergeStrategy getMergeStrategy() {
+    return mergeStrategy;
+  }
+
+  public void setMergeStrategy(MergeStrategy mergeStrategy) {
+    this.mergeStrategy = mergeStrategy;
+  }
+
+  @Override
+  public String getDelegate() {
+    switch (getMergeStrategy()) {
+    case MERGE:
+      return "orderedMergingExtractorDelegate";
+    case ENHANCE:
+      return "enhancingExtractorDelegate";
+    case CONCAT:
+    default:
+      return "concatenatingExtractorDelegate";
+    }
   }
 
 }
