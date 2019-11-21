@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 @Entity
 public class ProcessorTask extends Task {
 
-  @Column(length=10000)
+  @Column(columnDefinition="TEXT")
   private String script;
 
   private TaskScriptType scriptType;
