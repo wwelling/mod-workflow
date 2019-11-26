@@ -15,12 +15,12 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import org.folio.spring.domain.model.AbstractBaseEntity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Workflow extends AbstractBaseEntity implements Serializable {
 
   private static final long serialVersionUID = 6753797239088349869L;
@@ -39,6 +39,9 @@ public class Workflow extends AbstractBaseEntity implements Serializable {
   @Column
   private boolean active;
 
+  @Column
+  private Boolean requiresAuthentication;
+
   @ManyToMany(fetch = FetchType.EAGER)
   private List<Task> tasks;
 
@@ -48,6 +51,7 @@ public class Workflow extends AbstractBaseEntity implements Serializable {
   public Workflow() {
     super();
     active = false;
+    requiresAuthentication = false;
     tasks = new ArrayList<Task>();
   }
 
@@ -96,6 +100,14 @@ public class Workflow extends AbstractBaseEntity implements Serializable {
 
   public void setActive(boolean active) {
     this.active = active;
+  }
+
+  public Boolean getRequiresAuthentication() {
+    return requiresAuthentication;
+  }
+
+  public void setRequiresAuthentication(Boolean requiresAuthentication) {
+    this.requiresAuthentication = requiresAuthentication;
   }
 
   public List<Task> getTasks() {
