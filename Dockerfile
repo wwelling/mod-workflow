@@ -41,11 +41,14 @@ ENV SPRING_H2_WEBALLOW='true'
 ENV SPRING_JPA_DATABASE_PLATFORM='org.hibernate.dialect.H2Dialect'
 ENV EVENT_QUEUE_NAME='event.queue'
 ENV TENANT_DEFAULT_TENANT='tern'
+ENV TENANT_INITIALIZE_DEFAULT_TENANT='false'
 ENV OKAPI_LOCATION='http://localhost:9130'
 
 # expose ports
 EXPOSE ${SERVER_PORT}
 EXPOSE 61616
+
+RUN mkdir -p activemq-data
 
 # set the startup command to run your binary
 CMD java -jar ./mod-workflow.jar \
@@ -54,4 +57,5 @@ CMD java -jar ./mod-workflow.jar \
     --spring.datasource.driverClassName=${SPRING_DATASOURCE_DRIVERCLASSNAME} --spring.datasource.username=${SPRING_DATASOURCE_USERNAME} \
     --spring.datasource.password=${SPRING_DATASOURCE_PASSWORD} --spring.h2.console.enabled=${SPRING_H2_CONSOLE_ENABLED} \
     --spring.jpa.database-platform=${SPRING_JPA_DATABASE_PLATFORM} --event.queue.name=${EVENT_QUEUE_NAME} \
-    --tenant.default-tenant=${TENANT_DEFAULT_TENANT} --okapi.location=${OKAPI_LOCATION} --spring.h2.console.settings.web-allow-others=${SPRING_H2_WEBALLOW}
+    --tenant.default-tenant=${TENANT_DEFAULT_TENANT} --tenant.initialize-default-tenant=${TENANT_INITIALIZE_DEFAULT_TENANT} \
+    --okapi.location=${OKAPI_LOCATION} --spring.h2.console.settings.web-allow-others=${SPRING_H2_WEBALLOW}

@@ -27,8 +27,10 @@ import org.folio.spring.domain.model.AbstractBaseEntity;
     @JsonSubTypes.Type(value = StreamCreateForEachTask.class, name = "StreamCreateForEachTask"),
 
     @JsonSubTypes.Type(value = StreamingRequestTask.class, name = "StreamingRequestTask"),
-  
-    @JsonSubTypes.Type(value = RestRequestTask.class, name = "RestRequestTask")
+
+    @JsonSubTypes.Type(value = RestRequestTask.class, name = "RestRequestTask"),
+
+    @JsonSubTypes.Type(value = StreamingReportingTask.class, name = "StreamingReportingTask")
 
   }
 )
