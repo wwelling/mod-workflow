@@ -33,9 +33,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
   @JsonSubTypes.Type(value = StreamingReportingTask.class, name = "StreamingReportingTask"),
 
-  @JsonSubTypes.Type(value = FileReadTask.class, name = "FileReadTask"),
+  @JsonSubTypes.Type(value = StreamingFileReadTask.class, name = "StreamingFileReadTask"),
 
-  @JsonSubTypes.Type(value = FileWriteTask.class, name = "FileWriteTask")
+  @JsonSubTypes.Type(value = StreamingFileWriteTask.class, name = "StreamingFileWriteTask")
 
 })
 public abstract class Task extends AbstractBaseEntity {

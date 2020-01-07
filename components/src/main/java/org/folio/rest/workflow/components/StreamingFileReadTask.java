@@ -4,18 +4,19 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Entity
-public class FileReadTask extends AbstractFileTask {
+public class StreamingFileReadTask extends AbstractFileTask {
 
   @Column(nullable = false)
   private Long delay;
 
-  public FileReadTask() {
+  public StreamingFileReadTask() {
     super();
     setDelegate("fileReadDelegate");
     setDelay(0L);
+    setStreaming(true);
   }
 
-  public FileReadTask(String name) {
+  public StreamingFileReadTask(String name) {
     this();
     setName(name);
   }

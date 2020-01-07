@@ -3,14 +3,15 @@ package org.folio.rest.workflow.components;
 import javax.persistence.Entity;
 
 @Entity
-public class FileWriteTask extends AbstractFileTask {
+public class StreamingFileWriteTask extends AbstractFileTask {
 
-  public FileWriteTask() {
+  public StreamingFileWriteTask() {
     super();
     setDelegate("fileWriteDelegate");
+    setStreaming(true);
   }
 
-  public FileWriteTask(String name) {
+  public StreamingFileWriteTask(String name) {
     this();
     setName(name);
   }

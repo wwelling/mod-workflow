@@ -47,9 +47,9 @@
         }, {
           "$ref" : "#/definitions/StreamingReportingTask"
         }, {
-          "$ref" : "#/definitions/FileReadTask"
+          "$ref" : "#/definitions/StreamingFileReadTask"
         }, {
-          "$ref" : "#/definitions/FileWriteTask"
+          "$ref" : "#/definitions/StreamingFileWriteTask"
         } ]
       }
     },
@@ -350,14 +350,14 @@
       "title" : "StreamingReportingTask",
       "required" : [ "deserializeAs", "name" ]
     },
-    "FileReadTask" : {
+    "StreamingFileReadTask" : {
       "type" : "object",
       "additionalProperties" : false,
       "properties" : {
         "deserializeAs" : {
           "type" : "string",
-          "enum" : [ "FileReadTask" ],
-          "default" : "FileReadTask"
+          "enum" : [ "StreamingFileReadTask" ],
+          "default" : "StreamingFileReadTask"
         },
         "id" : {
           "type" : "string"
@@ -383,17 +383,17 @@
           "type" : "integer"
         }
       },
-      "title" : "FileReadTask",
+      "title" : "StreamingFileReadTask",
       "required" : [ "deserializeAs", "name", "path", "workflow" ]
     },
-    "FileWriteTask" : {
+    "StreamingFileWriteTask" : {
       "type" : "object",
       "additionalProperties" : false,
       "properties" : {
         "deserializeAs" : {
           "type" : "string",
-          "enum" : [ "FileWriteTask" ],
-          "default" : "FileWriteTask"
+          "enum" : [ "StreamingFileWriteTask" ],
+          "default" : "StreamingFileWriteTask"
         },
         "id" : {
           "type" : "string"
@@ -416,7 +416,7 @@
           "type" : "string"
         }
       },
-      "title" : "FileWriteTask",
+      "title" : "StreamingFileWriteTask",
       "required" : [ "deserializeAs", "name", "path", "workflow" ]
     },
     "EventTrigger" : {
