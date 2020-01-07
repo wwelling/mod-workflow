@@ -11,7 +11,7 @@ public class StreamingFileReadTask extends AbstractFileTask {
 
   public StreamingFileReadTask() {
     super();
-    setDelegate("fileReadDelegate");
+    setDelegate("streamingFileReadDelegate");
     setDelay(0L);
     setStreaming(true);
   }

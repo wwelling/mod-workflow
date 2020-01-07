@@ -7,7 +7,7 @@ public class StreamingFileWriteTask extends AbstractFileTask {
 
   public StreamingFileWriteTask() {
     super();
-    setDelegate("fileWriteDelegate");
+    setDelegate("streamingFileWriteDelegate");
     setStreaming(true);
   }
 
