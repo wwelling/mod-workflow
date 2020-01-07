@@ -1,13 +1,11 @@
 package org.folio.rest.workflow.components;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Entity
 public class StreamingFileReadTask extends AbstractFileTask {
 
-  @Column(nullable = false)
-  private Long delay;
+  Long delay;
 
   public StreamingFileReadTask() {
     super();

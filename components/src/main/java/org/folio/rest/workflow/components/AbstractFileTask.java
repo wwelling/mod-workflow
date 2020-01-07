@@ -1,14 +1,10 @@
 package org.folio.rest.workflow.components;
 
-import javax.persistence.Column;
-
 public abstract class AbstractFileTask extends Task {
 
-  @Column(nullable = false)
-  private String path;
+  String path;
 
-  @Column(nullable = false)
-  private String workflow;
+  String workflow;
 
   public AbstractFileTask() {
     super();
