@@ -9,6 +9,8 @@ public class StreamingFileWriteTask extends Task {
 
   String workflow;
 
+  String filenameTemplate;
+
   public StreamingFileWriteTask() {
     super();
     setDelegate("streamingFileWriteDelegate");
@@ -34,6 +36,14 @@ public class StreamingFileWriteTask extends Task {
 
   public void setWorkflow(String workflow) {
     this.workflow = workflow;
+  }
+
+  public String getFilenameTemplate() {
+    return filenameTemplate;
+  }
+
+  public void setFilenameTemplate(String filenameTemplate) {
+    this.filenameTemplate = filenameTemplate;
   }
 
 }
