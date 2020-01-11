@@ -6,11 +6,11 @@ import java.util.Optional;
 import javax.jms.JMSException;
 import javax.servlet.http.HttpServletRequest;
 
+import org.folio.rest.workflow.components.EventTrigger;
+import org.folio.rest.workflow.components.Trigger;
 import org.folio.rest.workflow.exception.EventPublishException;
 import org.folio.rest.workflow.jms.EventProducer;
 import org.folio.rest.workflow.jms.model.Event;
-import org.folio.rest.workflow.components.EventTrigger;
-import org.folio.rest.workflow.components.Trigger;
 import org.folio.rest.workflow.model.repo.TriggerRepo;
 import org.folio.spring.tenant.annotation.TenantHeader;
 import org.slf4j.Logger;

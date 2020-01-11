@@ -12,30 +12,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-@Entity(name = "tasks")
 @Inheritance
+@Entity(name = "tasks")
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "deserializeAs")
 @JsonSubTypes({
-  
-  @JsonSubTypes.Type(value = ProcessorTask.class, name = "ProcessorTask"),
 
-  @JsonSubTypes.Type(value = ExtractorTask.class, name = "ExtractorTask"),
+    @JsonSubTypes.Type(value = EmailTask.class, name = "EmailTask"),
 
-  @JsonSubTypes.Type(value = StreamingExtractorTask.class, name = "StreamingExtractorTask"),
+    @JsonSubTypes.Type(value = ProcessorTask.class, name = "ProcessorTask"),
 
-  @JsonSubTypes.Type(value = AccumulatorTask.class, name = "AccumulatorTask"),
-
-  @JsonSubTypes.Type(value = StreamCreateForEachTask.class, name = "StreamCreateForEachTask"),
-
-  @JsonSubTypes.Type(value = StreamingRequestTask.class, name = "StreamingRequestTask"),
-
-  @JsonSubTypes.Type(value = RestRequestTask.class, name = "RestRequestTask"),
-
-  @JsonSubTypes.Type(value = StreamingReportingTask.class, name = "StreamingReportingTask"),
-
-  @JsonSubTypes.Type(value = StreamingFileReadTask.class, name = "StreamingFileReadTask"),
-
-  @JsonSubTypes.Type(value = StreamingFileWriteTask.class, name = "StreamingFileWriteTask")
+    @JsonSubTypes.Type(value = RequestTask.class, name = "RequestTask")
 
 })
 public abstract class Task extends AbstractBaseEntity {
@@ -45,18 +31,16 @@ public abstract class Task extends AbstractBaseEntity {
   @Column(unique = true)
   private String name;
 
-  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-  private String delegate;
+  @NotNull
+  @Size(min = 4, max = 512)
+  @Column(nullable = false)
+  private String description;
 
   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   private String deserializeAs = this.getClass().getSimpleName();
 
-  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-  private Boolean streaming;
-
   public Task() {
     super();
-    setStreaming(false);
   }
 
   public String getName() {
@@ -67,12 +51,12 @@ public abstract class Task extends AbstractBaseEntity {
     this.name = name;
   }
 
-  public String getDelegate() {
-    return delegate;
+  public String getDescription() {
+    return description;
   }
 
-  public void setDelegate(String delegate) {
-    this.delegate = delegate;
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   public String getDeserializeAs() {
@@ -81,14 +65,6 @@ public abstract class Task extends AbstractBaseEntity {
 
   public void setDeserializeAs(String deserializeAs) {
     this.deserializeAs = deserializeAs;
-  }
-
-  public Boolean isStreaming() {
-    return streaming;
-  }
-
-  public void setStreaming(Boolean streaming) {
-    this.streaming = streaming;
   }
 
 }

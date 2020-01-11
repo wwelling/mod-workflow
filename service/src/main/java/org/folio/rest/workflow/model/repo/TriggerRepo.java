@@ -11,6 +11,7 @@ import org.springframework.http.HttpMethod;
 public interface TriggerRepo extends JpaRepository<Trigger, String> {
 
   public List<Trigger> findByMethod(HttpMethod method);
+
   public List<Trigger> findByMethodAndDeserializeAs(HttpMethod method, String deserializeAs);
 
 }

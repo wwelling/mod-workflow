@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
   @ExceptionHandler({ TransactionSystemException.class })
   public ResponseEntity<Errors> handleConstraintViolation(TransactionSystemException ex) {
-    return ResponseEntity
-      .status(HttpStatus.BAD_REQUEST)
-      .body(ErrorUtility
-        .buildError((Exception)ex.getRootCause(), HttpStatus.BAD_REQUEST));
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        .body(ErrorUtility.buildError((Exception) ex.getRootCause(), HttpStatus.BAD_REQUEST));
   }
+
 }

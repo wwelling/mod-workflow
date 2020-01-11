@@ -8,13 +8,17 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class ProcessorTask extends Task {
 
-  @Column(columnDefinition = "TEXT")
+  @NotNull
+  @Column(columnDefinition = "TEXT", nullable = false)
   private String script;
 
+  @NotNull
+  @Column(nullable = false)
   @Enumerated(EnumType.STRING)
   private TaskScriptType scriptType;
 
@@ -23,7 +27,6 @@ public class ProcessorTask extends Task {
 
   public ProcessorTask() {
     super();
-    this.setDelegate("streamingProcessDelegate");
     this.contextProperties = new ArrayList<String>();
   }
 

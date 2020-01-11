@@ -1,6 +1,5 @@
 package org.folio.rest.workflow.components;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -17,13 +16,11 @@ import javax.validation.constraints.Size;
 
 import org.folio.spring.domain.model.AbstractBaseEntity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 @Entity
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class Workflow extends AbstractBaseEntity implements Serializable {
+public class Workflow extends AbstractBaseEntity {
 
-  private static final long serialVersionUID = 6753797239088349869L;
+  @Column
+  private boolean active;
 
   @NotNull
   @Size(min = 4, max = 64)
@@ -34,30 +31,40 @@ public class Workflow extends AbstractBaseEntity implements Serializable {
   private String deploymentId;
 
   @ElementCollection(fetch = FetchType.EAGER)
-  private Set<String> processDefinitionIds = new HashSet<String>();
+  private Set<String> processDefinitionIds;
 
   @Column
-  private boolean active;
+  private Boolean reportingEnabled;
 
   @Column
   private Boolean requiresAuthentication;
 
-  @ManyToMany(fetch = FetchType.EAGER)
-  private List<Task> tasks;
-
   @ManyToOne(fetch = FetchType.EAGER, optional = true)
   private Trigger startTrigger;
+
+  @ManyToMany(fetch = FetchType.EAGER)
+  private List<Task> tasks;
 
   public Workflow() {
     super();
     active = false;
+    reportingEnabled = false;
     requiresAuthentication = false;
+    processDefinitionIds = new HashSet<String>();
     tasks = new ArrayList<Task>();
   }
 
   public Workflow(String name) {
     this();
     this.name = name;
+  }
+
+  public boolean isActive() {
+    return active;
+  }
+
+  public void setActive(boolean active) {
+    this.active = active;
   }
 
   public String getName() {
@@ -84,22 +91,12 @@ public class Workflow extends AbstractBaseEntity implements Serializable {
     this.processDefinitionIds = processDefinitionIds;
   }
 
-  public void addProcessDefinitionId(String processDefinitionId) {
-    if (!processDefinitionIds.contains(processDefinitionId)) {
-      processDefinitionIds.add(processDefinitionId);
-    }
+  public Boolean getReportingEnabled() {
+    return reportingEnabled;
   }
 
-  public void clearProcessDefinitionIds() {
-    processDefinitionIds.clear();
-  }
-
-  public boolean isActive() {
-    return active;
-  }
-
-  public void setActive(boolean active) {
-    this.active = active;
+  public void setReportingEnabled(Boolean reportingEnabled) {
+    this.reportingEnabled = reportingEnabled;
   }
 
   public Boolean getRequiresAuthentication() {
@@ -110,20 +107,20 @@ public class Workflow extends AbstractBaseEntity implements Serializable {
     this.requiresAuthentication = requiresAuthentication;
   }
 
-  public List<Task> getTasks() {
-    return tasks;
-  }
-
-  public void setTasks(List<Task> tasks) {
-    this.tasks = tasks;
-  }
-
   public Trigger getStartTrigger() {
     return startTrigger;
   }
 
   public void setStartTrigger(Trigger startTrigger) {
     this.startTrigger = startTrigger;
+  }
+
+  public List<Task> getTasks() {
+    return tasks;
+  }
+
+  public void setTasks(List<Task> tasks) {
+    this.tasks = tasks;
   }
 
 }

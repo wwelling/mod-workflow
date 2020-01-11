@@ -11,16 +11,16 @@ import org.springframework.http.HttpMethod;
 @Embeddable
 public class Action {
 
-  @Column
   @NotNull
+  @Column(nullable = false)
   private String interfaceName;
 
-  @Column
   @NotNull
+  @Column(nullable = false)
   private String pathPattern;
 
-  @Column
   @NotNull
+  @Column(nullable = false)
   @Enumerated(EnumType.STRING)
   private HttpMethod method;
 

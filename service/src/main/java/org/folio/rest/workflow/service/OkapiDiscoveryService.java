@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.folio.spring.service.HttpService;
 import org.folio.rest.workflow.model.Action;
 import org.folio.rest.workflow.model.Handler;
+import org.folio.spring.service.HttpService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +28,9 @@ public class OkapiDiscoveryService {
 
   private static final Logger logger = LoggerFactory.getLogger(OkapiDiscoveryService.class);
 
-  private static final String PROVIDES = "provides";
   private static final String ID = "id";
   private static final String HANDLERS = "handlers";
+  private static final String PROVIDES = "provides";
 
   private static final String PROXY_TENANT_BASE_PATH = "/_/proxy/tenants/";
   private static final String PROXY_MODULE_BASE_PATH = "/_/proxy/modules/";
@@ -73,8 +73,8 @@ public class OkapiDiscoveryService {
     JsonNode moduleDescriptorNode = getModuleDescriptor(tenant, id);
 
     Map<String, List<Handler>> handlerMap = new HashMap<>();
-    
-    if(moduleDescriptorNode.get(PROVIDES) != null) {
+
+    if (moduleDescriptorNode.get(PROVIDES) != null) {
       for (JsonNode interfaceNode : moduleDescriptorNode.get(PROVIDES)) {
         List<Handler> handlers = new ArrayList<>();
         String interfaceName = interfaceNode.get(ID).asText();
@@ -84,7 +84,7 @@ public class OkapiDiscoveryService {
         handlerMap.put(interfaceName, handlers);
       }
     }
-    
+
     return handlerMap;
   }
 

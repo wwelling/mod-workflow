@@ -46,7 +46,8 @@ public class WorkflowEngineService {
     return this.restTemplate.exchange(url, method, request, responseType, (Object[]) new String[0]);
   }
 
-  public <T> ResponseEntity<T> exchange(String url, HttpMethod method, HttpEntity<?> request, Class<T> responseType, Object[] uriVariables) {
+  public <T> ResponseEntity<T> exchange(String url, HttpMethod method, HttpEntity<?> request, Class<T> responseType,
+      Object[] uriVariables) {
     return this.restTemplate.exchange(url, method, request, responseType, uriVariables);
   }
 
@@ -70,13 +71,9 @@ public class WorkflowEngineService {
 
     HttpEntity<Workflow> workflowHttpEntity = new HttpEntity<>(workflow, requestHeaders);
 
-    ResponseEntity<Workflow> response = this.exchange(
-      String.format(requestPath, okapiLocation),
-      HttpMethod.POST,
-      workflowHttpEntity,
-      Workflow.class
-    );
-    
+    String url = String.format(requestPath, okapiLocation);
+    ResponseEntity<Workflow> response = this.exchange(url, HttpMethod.POST, workflowHttpEntity, Workflow.class);
+
     if (response.getStatusCode() == HttpStatus.OK) {
       logger.debug("Response body: {}", response.getBody());
 
@@ -88,7 +85,7 @@ public class WorkflowEngineService {
         throw new WorkflowEngineServiceException("Unable to get updated workflow from workflow engine!");
       }
     }
-    
+
     throw new WorkflowEngineServiceException(response.getStatusCodeValue());
   }
 
