@@ -1,12 +1,22 @@
 package org.folio.rest.workflow.components;
 
 public enum TaskScriptType {
-  GROOVY("groovy"), JAVA("java"), JS("js"), PYTHON("py"), RUBY("rb");
+  GROOVY("groovy"),
+  JAVA("java"),
+  JS("js"),
+  PYTHON("py"),
+  RUBY("rb");
 
-  public final String engineName;
+  private final String extension;
 
-  private TaskScriptType(String engineName) {
-    this.engineName = engineName;
+  private TaskScriptType(String extension) {
+    this.extension = extension;
   }
+
+  public String getExtension() {
+    return extension;
+  }
+  
+  
 
 }
