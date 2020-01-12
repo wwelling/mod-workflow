@@ -38,12 +38,6 @@ public class Workflow extends AbstractBaseEntity {
   @ElementCollection(fetch = FetchType.EAGER)
   private Set<String> processDefinitionIds;
 
-  @Column
-  private Boolean reportingEnabled;
-
-  @Column
-  private Boolean requiresAuthentication;
-
   @ManyToOne(fetch = FetchType.EAGER, optional = false)
   private Trigger startTrigger;
 
@@ -53,8 +47,6 @@ public class Workflow extends AbstractBaseEntity {
   public Workflow() {
     super();
     active = false;
-    reportingEnabled = false;
-    requiresAuthentication = false;
     processDefinitionIds = new HashSet<String>();
     tasks = new ArrayList<Task>();
   }
@@ -94,22 +86,6 @@ public class Workflow extends AbstractBaseEntity {
 
   public void setProcessDefinitionIds(Set<String> processDefinitionIds) {
     this.processDefinitionIds = processDefinitionIds;
-  }
-
-  public Boolean getReportingEnabled() {
-    return reportingEnabled;
-  }
-
-  public void setReportingEnabled(Boolean reportingEnabled) {
-    this.reportingEnabled = reportingEnabled;
-  }
-
-  public Boolean getRequiresAuthentication() {
-    return requiresAuthentication;
-  }
-
-  public void setRequiresAuthentication(Boolean requiresAuthentication) {
-    this.requiresAuthentication = requiresAuthentication;
   }
 
   public Trigger getStartTrigger() {
