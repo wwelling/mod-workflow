@@ -1,4 +1,4 @@
-package org.folio.rest.workflow.components;
+package org.folio.rest.workflow.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -6,22 +6,28 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 
+import org.folio.rest.workflow.annotation.Expression;
+
 @Entity
 public class ProcessorTask extends Task {
 
+  @Expression
   @NotNull
   @Column(columnDefinition = "TEXT", nullable = false)
   private String script;
 
+  @Expression
   @NotNull
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
   private TaskScriptType scriptType;
 
+  @Expression
   @NotNull
   @Column(nullable = false)
   private String contextInputKey;
 
+  @Expression
   @NotNull
   @Column(nullable = false)
   private String contextOutputKey;
@@ -60,6 +66,11 @@ public class ProcessorTask extends Task {
 
   public void setContextOutputKey(String contextOutputKey) {
     this.contextOutputKey = contextOutputKey;
+  }
+
+  @Override
+  public String id(int index) {
+    return String.format("process_task_%s", index);
   }
 
 }

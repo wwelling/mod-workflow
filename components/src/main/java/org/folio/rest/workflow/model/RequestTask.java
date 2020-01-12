@@ -1,4 +1,4 @@
-package org.folio.rest.workflow.components;
+package org.folio.rest.workflow.model;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -10,35 +10,43 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 
+import org.folio.rest.workflow.annotation.Expression;
 import org.springframework.http.HttpMethod;
 
 @Entity
 public class RequestTask extends Task {
 
+  @Expression
   @NotNull
   @Column(nullable = false)
   private String url;
 
+  @Expression
   @NotNull
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
   private HttpMethod method;
 
+  @Expression
   @NotNull
   @Column(nullable = false)
   private String contentType;
 
+  @Expression
   @NotNull
   @Column(nullable = false)
   private String accept;
 
+  @Expression
   @NotNull
   @Column(columnDefinition = "TEXT", nullable = false)
   private String bodyTemplate;
 
+  @Expression
   @ElementCollection
   private Set<String> contextRequestKeys;
 
+  @Expression
   @NotNull
   @Column(nullable = false)
   private String contextResponseKey;
@@ -102,6 +110,11 @@ public class RequestTask extends Task {
 
   public void setContextResponseKey(String contextResponseKey) {
     this.contextResponseKey = contextResponseKey;
+  }
+
+  @Override
+  public String id(int index) {
+    return String.format("request_task_%s", index);
   }
 
 }

@@ -1,4 +1,4 @@
-package org.folio.rest.workflow.components;
+package org.folio.rest.workflow.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -67,6 +67,11 @@ public class EmailTask extends Task {
 
   public void setBcc(String bcc) {
     this.bcc = bcc;
+  }
+
+  @Override
+  public String id(int index) {
+    return String.format("email_task_%s", index);
   }
 
 }

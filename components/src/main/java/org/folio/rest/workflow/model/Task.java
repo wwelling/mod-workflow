@@ -1,9 +1,7 @@
-package org.folio.rest.workflow.components;
+package org.folio.rest.workflow.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.Inheritance;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -15,18 +13,18 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @Inheritance
-@Entity(name = "triggers")
+@Entity(name = "tasks")
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "deserializeAs")
 @JsonSubTypes({
 
-    @JsonSubTypes.Type(value = EventTrigger.class, name = "EventTrigger"),
+    @JsonSubTypes.Type(value = EmailTask.class, name = "EmailTask"),
 
-    @JsonSubTypes.Type(value = ManualTrigger.class, name = "ManualTrigger"),
+    @JsonSubTypes.Type(value = ProcessorTask.class, name = "ProcessorTask"),
 
-    @JsonSubTypes.Type(value = ScheduleTrigger.class, name = "ScheduleTrigger")
+    @JsonSubTypes.Type(value = RequestTask.class, name = "RequestTask")
 
 })
-public abstract class Trigger extends AbstractBaseEntity {
+public abstract class Task extends AbstractBaseEntity {
 
   @NotNull
   @Size(min = 4, max = 64)
@@ -34,19 +32,14 @@ public abstract class Trigger extends AbstractBaseEntity {
   private String name;
 
   @NotNull
-  @Size(min = 4, max = 256)
+  @Size(min = 4, max = 512)
   @Column(nullable = false)
   private String description;
-
-  @NotNull
-  @Column(nullable = false)
-  @Enumerated(EnumType.STRING)
-  private TriggerType type;
 
   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   private String deserializeAs = this.getClass().getSimpleName();
 
-  public Trigger() {
+  public Task() {
     super();
   }
 
@@ -66,14 +59,6 @@ public abstract class Trigger extends AbstractBaseEntity {
     this.description = description;
   }
 
-  public TriggerType getType() {
-    return type;
-  }
-
-  public void setType(TriggerType type) {
-    this.type = type;
-  }
-
   public String getDeserializeAs() {
     return deserializeAs;
   }
@@ -81,5 +66,7 @@ public abstract class Trigger extends AbstractBaseEntity {
   public void setDeserializeAs(String deserializeAs) {
     this.deserializeAs = deserializeAs;
   }
+  
+  public abstract String id(int index); 
 
 }

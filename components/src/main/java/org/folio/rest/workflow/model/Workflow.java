@@ -1,4 +1,4 @@
-package org.folio.rest.workflow.components;
+package org.folio.rest.workflow.model;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -44,7 +44,7 @@ public class Workflow extends AbstractBaseEntity {
   @Column
   private Boolean requiresAuthentication;
 
-  @ManyToOne(fetch = FetchType.EAGER, optional = true)
+  @ManyToOne(fetch = FetchType.EAGER, optional = false)
   private Trigger startTrigger;
 
   @ManyToMany(fetch = FetchType.EAGER)

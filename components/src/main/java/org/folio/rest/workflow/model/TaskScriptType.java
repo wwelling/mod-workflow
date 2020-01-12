@@ -1,4 +1,4 @@
-package org.folio.rest.workflow.components;
+package org.folio.rest.workflow.model;
 
 public enum TaskScriptType {
   GROOVY("groovy"),
