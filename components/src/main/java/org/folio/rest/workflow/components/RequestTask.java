@@ -1,6 +1,10 @@
 package org.folio.rest.workflow.components;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -10,6 +14,10 @@ import org.springframework.http.HttpMethod;
 
 @Entity
 public class RequestTask extends Task {
+
+  @NotNull
+  @Column(nullable = false)
+  private String url;
 
   @NotNull
   @Column(nullable = false)
@@ -28,9 +36,8 @@ public class RequestTask extends Task {
   @Column(columnDefinition = "TEXT", nullable = false)
   private String bodyTemplate;
 
-  @NotNull
-  @Column(nullable = false)
-  private String contextRequestKey;
+  @ElementCollection
+  private Set<String> contextRequestKeys;
 
   @NotNull
   @Column(nullable = false)
@@ -38,6 +45,15 @@ public class RequestTask extends Task {
 
   public RequestTask() {
     super();
+    this.contextRequestKeys = new HashSet<String>();
+  }
+
+  public String getUrl() {
+    return url;
+  }
+
+  public void setUrl(String url) {
+    this.url = url;
   }
 
   public HttpMethod getMethod() {
@@ -72,12 +88,12 @@ public class RequestTask extends Task {
     this.bodyTemplate = bodyTemplate;
   }
 
-  public String getContextRequestKey() {
-    return contextRequestKey;
+  public Set<String> getContextRequestKeys() {
+    return contextRequestKeys;
   }
 
-  public void setContextRequestKey(String contextRequestKey) {
-    this.contextRequestKey = contextRequestKey;
+  public void setContextRequestKeys(Set<String> contextRequestKeys) {
+    this.contextRequestKeys = contextRequestKeys;
   }
 
   public String getContextResponseKey() {
