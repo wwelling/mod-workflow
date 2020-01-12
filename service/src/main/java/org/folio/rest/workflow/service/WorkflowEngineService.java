@@ -42,15 +42,6 @@ public class WorkflowEngineService {
     this.restTemplate = restTemplateBuilder.build();
   }
 
-  public <T> ResponseEntity<T> exchange(String url, HttpMethod method, HttpEntity<?> request, Class<T> responseType) {
-    return this.restTemplate.exchange(url, method, request, responseType, (Object[]) new String[0]);
-  }
-
-  public <T> ResponseEntity<T> exchange(String url, HttpMethod method, HttpEntity<?> request, Class<T> responseType,
-      Object[] uriVariables) {
-    return this.restTemplate.exchange(url, method, request, responseType, uriVariables);
-  }
-
   public Workflow activate(String workflowId, String tenant, String token) throws WorkflowEngineServiceException {
     Workflow workflow = workflowRepo.getOne(workflowId);
     return sendRequest(workflow, WORKFLOW_ENGINE_ACTIVATE_URL_TEMPLATE, tenant, token);
@@ -72,14 +63,15 @@ public class WorkflowEngineService {
     HttpEntity<Workflow> workflowHttpEntity = new HttpEntity<>(workflow, requestHeaders);
 
     String url = String.format(requestPath, okapiLocation);
-    ResponseEntity<Workflow> response = this.exchange(url, HttpMethod.POST, workflowHttpEntity, Workflow.class);
+    ResponseEntity<Workflow> response = exchange(url, HttpMethod.POST, workflowHttpEntity, Workflow.class);
 
     if (response.getStatusCode() == HttpStatus.OK) {
       logger.debug("Response body: {}", response.getBody());
 
       try {
         Workflow responseWorkflow = response.getBody();
-        logger.info("Workflow is actvie = {}, deploymentID = {}", responseWorkflow.isActive(), responseWorkflow.getDeploymentId());
+        String deploymentId = responseWorkflow.getDeploymentId();
+        logger.info("Workflow is actvie = {}, deploymentID = {}", responseWorkflow.isActive(), deploymentId);
         return workflowRepo.save(responseWorkflow);
       } catch (Exception e) {
         throw new WorkflowEngineServiceException("Unable to get updated workflow from workflow engine!");
@@ -87,6 +79,10 @@ public class WorkflowEngineService {
     }
 
     throw new WorkflowEngineServiceException(response.getStatusCodeValue());
+  }
+
+  private <T> ResponseEntity<T> exchange(String url, HttpMethod method, HttpEntity<?> request, Class<T> responseType) {
+    return this.restTemplate.exchange(url, method, request, responseType, (Object[]) new String[0]);
   }
 
 }
