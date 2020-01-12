@@ -27,6 +27,11 @@ public class Workflow extends AbstractBaseEntity {
   @Column(unique = true)
   private String name;
 
+  @NotNull
+  @Size(min = 4, max = 512)
+  @Column(nullable = false)
+  private String description;
+
   @Column(unique = true)
   private String deploymentId;
 

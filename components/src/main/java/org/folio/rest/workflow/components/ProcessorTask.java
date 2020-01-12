@@ -1,10 +1,6 @@
 package org.folio.rest.workflow.components;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -22,12 +18,16 @@ public class ProcessorTask extends Task {
   @Enumerated(EnumType.STRING)
   private TaskScriptType scriptType;
 
-  @ElementCollection
-  private List<String> contextProperties;
+  @NotNull
+  @Column(nullable = false)
+  private String contextInputKey;
+
+  @NotNull
+  @Column(nullable = false)
+  private String contextOutputKey;
 
   public ProcessorTask() {
     super();
-    this.contextProperties = new ArrayList<String>();
   }
 
   public String getScript() {
@@ -46,12 +46,20 @@ public class ProcessorTask extends Task {
     this.scriptType = scriptType;
   }
 
-  public List<String> getContextProperties() {
-    return contextProperties;
+  public String getContextInputKey() {
+    return contextInputKey;
   }
 
-  public void setContextProperties(List<String> contextProperties) {
-    this.contextProperties = contextProperties;
+  public void setContextInputKey(String contextInputKey) {
+    this.contextInputKey = contextInputKey;
+  }
+
+  public String getContextOutputKey() {
+    return contextOutputKey;
+  }
+
+  public void setContextOutputKey(String contextOutputKey) {
+    this.contextOutputKey = contextOutputKey;
   }
 
 }
