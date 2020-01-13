@@ -1,13 +1,13 @@
 {
   "$schema" : "http://json-schema.org/draft-04/schema#",
-  "title" : "ProcessorTask",
+  "title" : "EmailTask",
   "type" : "object",
   "additionalProperties" : false,
   "properties" : {
     "deserializeAs" : {
       "type" : "string",
-      "enum" : [ "ProcessorTask" ],
-      "default" : "ProcessorTask"
+      "enum" : [ "EmailTask" ],
+      "default" : "EmailTask"
     },
     "id" : {
       "type" : "string"
@@ -22,19 +22,21 @@
       "minLength" : 4,
       "maxLength" : 512
     },
-    "script" : {
+    "bodyContextKey" : {
       "type" : "string"
     },
-    "scriptType" : {
-      "type" : "string",
-      "enum" : [ "GROOVY", "JAVA", "JS", "PYTHON", "RUBY" ]
-    },
-    "contextInputKey" : {
+    "subject" : {
       "type" : "string"
     },
-    "contextOutputKey" : {
+    "to" : {
+      "type" : "string"
+    },
+    "cc" : {
+      "type" : "string"
+    },
+    "bcc" : {
       "type" : "string"
     }
   },
-  "required" : [ "deserializeAs", "name", "description", "script", "scriptType", "contextInputKey", "contextOutputKey" ]
+  "required" : [ "deserializeAs", "name", "description", "bodyContextKey", "subject", "to" ]
 }

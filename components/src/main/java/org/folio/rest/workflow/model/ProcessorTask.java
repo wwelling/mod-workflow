@@ -6,28 +6,22 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 
-import org.folio.rest.workflow.annotation.Expression;
-
 @Entity
 public class ProcessorTask extends Task {
 
-  @Expression
   @NotNull
   @Column(columnDefinition = "TEXT", nullable = false)
   private String script;
 
-  @Expression
   @NotNull
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
   private TaskScriptType scriptType;
 
-  @Expression
   @NotNull
   @Column(nullable = false)
   private String contextInputKey;
 
-  @Expression
   @NotNull
   @Column(nullable = false)
   private String contextOutputKey;

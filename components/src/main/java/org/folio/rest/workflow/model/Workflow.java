@@ -16,7 +16,10 @@ import javax.validation.constraints.Size;
 
 import org.folio.spring.domain.model.AbstractBaseEntity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Workflow extends AbstractBaseEntity {
 
   @Column
@@ -51,11 +54,6 @@ public class Workflow extends AbstractBaseEntity {
     tasks = new ArrayList<Task>();
   }
 
-  public Workflow(String name) {
-    this();
-    this.name = name;
-  }
-
   public boolean isActive() {
     return active;
   }
@@ -70,6 +68,14 @@ public class Workflow extends AbstractBaseEntity {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   public String getDeploymentId() {

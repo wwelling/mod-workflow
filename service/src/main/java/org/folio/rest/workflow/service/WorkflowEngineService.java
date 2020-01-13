@@ -1,7 +1,7 @@
 package org.folio.rest.workflow.service;
 
-import org.folio.rest.workflow.components.Workflow;
 import org.folio.rest.workflow.exception.WorkflowEngineServiceException;
+import org.folio.rest.workflow.model.Workflow;
 import org.folio.rest.workflow.model.repo.WorkflowRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

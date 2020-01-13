@@ -6,11 +6,11 @@ import java.util.Optional;
 import javax.jms.JMSException;
 import javax.servlet.http.HttpServletRequest;
 
-import org.folio.rest.workflow.components.EventTrigger;
-import org.folio.rest.workflow.components.Trigger;
 import org.folio.rest.workflow.exception.EventPublishException;
 import org.folio.rest.workflow.jms.EventProducer;
 import org.folio.rest.workflow.jms.model.Event;
+import org.folio.rest.workflow.model.EventTrigger;
+import org.folio.rest.workflow.model.Trigger;
 import org.folio.rest.workflow.model.repo.TriggerRepo;
 import org.folio.spring.tenant.annotation.TenantHeader;
 import org.slf4j.Logger;
@@ -86,9 +86,9 @@ public class EventController {
 
   private Optional<EventTrigger> checkTrigger(HttpMethod method, String path) {
     Optional<EventTrigger> trigger = Optional.empty();
-    for (Trigger currentTrigger : triggerRepo.findByMethodAndDeserializeAs(method, "EventTrigger")) {
+    for (Trigger currentTrigger : triggerRepo.findByDeserializeAs("EventTrigger")) {
       EventTrigger eventTrigger = (EventTrigger) currentTrigger;
-      if (pathMatcher.match(eventTrigger.getPathPattern(), path)) {
+      if (method.equals(eventTrigger.getMethod()) && pathMatcher.match(eventTrigger.getPathPattern(), path)) {
         trigger = Optional.of(eventTrigger);
         break;
       }

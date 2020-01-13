@@ -13,7 +13,7 @@ import org.springframework.http.HttpMethod;
 public class EventTrigger extends Trigger {
 
   @NotNull
-  @Size(min = 0, max = 256)
+  @Size(min = 2, max = 256)
   @Column(nullable = false)
   private String pathPattern;
 

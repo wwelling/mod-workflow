@@ -1,7 +1,7 @@
 package org.folio.rest.workflow.controller;
 
-import org.folio.rest.workflow.components.Workflow;
 import org.folio.rest.workflow.exception.WorkflowEngineServiceException;
+import org.folio.rest.workflow.model.Workflow;
 import org.folio.rest.workflow.service.WorkflowEngineService;
 import org.folio.spring.annotation.TokenHeader;
 import org.folio.spring.tenant.annotation.TenantHeader;

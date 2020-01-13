@@ -2,7 +2,7 @@ package org.folio.rest.workflow.model.repo;
 
 import java.util.List;
 
-import org.folio.rest.workflow.components.Workflow;
+import org.folio.rest.workflow.model.Workflow;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
