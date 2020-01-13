@@ -20,7 +20,7 @@ public class ProcessorTask extends Task {
 
   @NotNull
   @Column(nullable = false)
-  private String contextInputKey;
+  private String[] contextInputKeys;
 
   @NotNull
   @Column(nullable = false)
@@ -46,12 +46,12 @@ public class ProcessorTask extends Task {
     this.scriptType = scriptType;
   }
 
-  public String getContextInputKey() {
-    return contextInputKey;
+  public String[] getContextInputKeys() {
+    return contextInputKeys;
   }
 
-  public void setContextInputKey(String contextInputKey) {
-    this.contextInputKey = contextInputKey;
+  public void setContextInputKeys(String[] contextInputKeys) {
+    this.contextInputKeys = contextInputKeys;
   }
 
   public String getContextOutputKey() {

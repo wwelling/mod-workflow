@@ -1,16 +1,21 @@
 package org.folio.rest.workflow.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKeyColumn;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -47,11 +52,18 @@ public class Workflow extends AbstractBaseEntity {
   @ManyToMany(fetch = FetchType.EAGER)
   private List<Task> tasks;
 
+  @ElementCollection(fetch = FetchType.EAGER)
+  @CollectionTable(name = "workflow_initial_context", joinColumns = @JoinColumn(name = "workflow_id"))
+  @MapKeyColumn(name = "context_key")
+  @Column(name = "context_value")
+  private Map<String, String> initialContext;
+
   public Workflow() {
     super();
     active = false;
     processDefinitionIds = new HashSet<String>();
     tasks = new ArrayList<Task>();
+    initialContext = new HashMap<String, String>();
   }
 
   public boolean isActive() {
@@ -108,6 +120,14 @@ public class Workflow extends AbstractBaseEntity {
 
   public void setTasks(List<Task> tasks) {
     this.tasks = tasks;
+  }
+
+  public Map<String, String> getInitialContext() {
+    return initialContext;
+  }
+
+  public void setInitialContext(Map<String, String> initialContext) {
+    this.initialContext = initialContext;
   }
 
 }
