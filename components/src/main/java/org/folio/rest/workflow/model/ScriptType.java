@@ -1,6 +1,6 @@
 package org.folio.rest.workflow.model;
 
-public enum TaskScriptType {
+public enum ScriptType {
   GROOVY("groovy"),
   JAVA("java"),
   JS("js"),
@@ -9,7 +9,7 @@ public enum TaskScriptType {
 
   private final String extension;
 
-  private TaskScriptType(String extension) {
+  private ScriptType(String extension) {
     this.extension = extension;
   }
 

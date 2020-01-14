@@ -2,19 +2,15 @@ package org.folio.rest.workflow.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyColumn;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -27,9 +23,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Workflow extends AbstractBaseEntity {
 
-  @Column
-  private boolean active;
-
   @NotNull
   @Size(min = 4, max = 64)
   @Column(unique = true)
@@ -40,19 +33,16 @@ public class Workflow extends AbstractBaseEntity {
   @Column(nullable = false)
   private String description;
 
+  @Column(nullable = false)
+  private boolean active;
+
   @Column(unique = true)
   private String deploymentId;
 
-  @ElementCollection(fetch = FetchType.EAGER)
-  private Set<String> processDefinitionIds;
+  @ManyToMany
+  private List<Node> nodes;
 
-  @ManyToOne(fetch = FetchType.EAGER, optional = false)
-  private Trigger startTrigger;
-
-  @ManyToMany(fetch = FetchType.EAGER)
-  private List<Task> tasks;
-
-  @ElementCollection(fetch = FetchType.EAGER)
+  @ElementCollection
   @CollectionTable(name = "workflow_initial_context", joinColumns = @JoinColumn(name = "workflow_id"))
   @MapKeyColumn(name = "context_key")
   @Column(name = "context_value")
@@ -61,17 +51,8 @@ public class Workflow extends AbstractBaseEntity {
   public Workflow() {
     super();
     active = false;
-    processDefinitionIds = new HashSet<String>();
-    tasks = new ArrayList<Task>();
+    nodes = new ArrayList<Node>();
     initialContext = new HashMap<String, String>();
-  }
-
-  public boolean isActive() {
-    return active;
-  }
-
-  public void setActive(boolean active) {
-    this.active = active;
   }
 
   public String getName() {
@@ -90,6 +71,14 @@ public class Workflow extends AbstractBaseEntity {
     this.description = description;
   }
 
+  public boolean isActive() {
+    return active;
+  }
+
+  public void setActive(boolean active) {
+    this.active = active;
+  }
+
   public String getDeploymentId() {
     return deploymentId;
   }
@@ -98,28 +87,12 @@ public class Workflow extends AbstractBaseEntity {
     this.deploymentId = deploymentId;
   }
 
-  public Set<String> getProcessDefinitionIds() {
-    return processDefinitionIds;
+  public List<Node> getNodes() {
+    return nodes;
   }
 
-  public void setProcessDefinitionIds(Set<String> processDefinitionIds) {
-    this.processDefinitionIds = processDefinitionIds;
-  }
-
-  public Trigger getStartTrigger() {
-    return startTrigger;
-  }
-
-  public void setStartTrigger(Trigger startTrigger) {
-    this.startTrigger = startTrigger;
-  }
-
-  public List<Task> getTasks() {
-    return tasks;
-  }
-
-  public void setTasks(List<Task> tasks) {
-    this.tasks = tasks;
+  public void setNodes(List<Node> nodes) {
+    this.nodes = nodes;
   }
 
   public Map<String, String> getInitialContext() {

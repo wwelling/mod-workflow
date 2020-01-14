@@ -7,7 +7,7 @@ import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class ProcessorTask extends Task {
+public class ProcessorTask extends Node implements Task {
 
   @NotNull
   @Column(columnDefinition = "TEXT", nullable = false)
@@ -16,7 +16,7 @@ public class ProcessorTask extends Task {
   @NotNull
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
-  private TaskScriptType scriptType;
+  private ScriptType scriptType;
 
   @NotNull
   @Column(nullable = false)
@@ -38,11 +38,11 @@ public class ProcessorTask extends Task {
     this.script = script;
   }
 
-  public TaskScriptType getScriptType() {
+  public ScriptType getScriptType() {
     return scriptType;
   }
 
-  public void setScriptType(TaskScriptType scriptType) {
+  public void setScriptType(ScriptType scriptType) {
     this.scriptType = scriptType;
   }
 
@@ -60,11 +60,6 @@ public class ProcessorTask extends Task {
 
   public void setContextOutputKey(String contextOutputKey) {
     this.contextOutputKey = contextOutputKey;
-  }
-
-  @Override
-  public String id(int index) {
-    return String.format("process_task_%s", index);
   }
 
 }

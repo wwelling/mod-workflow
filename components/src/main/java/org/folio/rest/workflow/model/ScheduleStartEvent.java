@@ -5,13 +5,13 @@ import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class ScheduleTrigger extends Trigger {
+public class ScheduleStartEvent extends Node implements StartEvent {
 
   @NotNull
   @Column(nullable = false)
   private String chronExpression;
 
-  public ScheduleTrigger() {
+  public ScheduleStartEvent() {
     super();
   }
 
@@ -22,4 +22,5 @@ public class ScheduleTrigger extends Trigger {
   public void setChronExpression(String chronExpression) {
     this.chronExpression = chronExpression;
   }
+
 }

@@ -14,7 +14,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 
 @Entity
-public class RequestTask extends Task {
+public class RequestTask extends Node implements Task {
 
   @NotNull
   @Column(nullable = false)
@@ -105,11 +105,6 @@ public class RequestTask extends Task {
 
   public void setContextResponseKey(String contextResponseKey) {
     this.contextResponseKey = contextResponseKey;
-  }
-
-  @Override
-  public String id(int index) {
-    return String.format("request_task_%s", index);
   }
 
 }

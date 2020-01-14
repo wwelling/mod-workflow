@@ -7,10 +7,21 @@ import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.folio.spring.domain.model.AbstractBaseEntity;
 import org.springframework.http.HttpMethod;
 
 @Entity
-public class EventTrigger extends Trigger {
+public class Trigger extends AbstractBaseEntity {
+
+  @NotNull
+  @Size(min = 4, max = 64)
+  @Column(unique = true)
+  private String name;
+
+  @NotNull
+  @Size(min = 4, max = 256)
+  @Column(nullable = false)
+  private String description;
 
   @NotNull
   @Size(min = 2, max = 256)
@@ -22,8 +33,24 @@ public class EventTrigger extends Trigger {
   @Enumerated(EnumType.STRING)
   private HttpMethod method;
 
-  public EventTrigger() {
+  public Trigger() {
     super();
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   public String getPathPattern() {

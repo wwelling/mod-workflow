@@ -1,0 +1,152 @@
+{
+  "$schema" : "http://json-schema.org/draft-04/schema#",
+  "title" : null,
+  "type" : "object",
+  "additionalProperties" : false,
+  "properties" : {
+    "deserializeAs" : {
+      "type" : "string",
+      "enum" : [ null ],
+      "default" : null
+    },
+    "id" : {
+      "type" : "string"
+    },
+    "name" : {
+      "type" : "string",
+      "minLength" : 4,
+      "maxLength" : 64
+    },
+    "description" : {
+      "type" : "string",
+      "minLength" : 4,
+      "maxLength" : 512
+    },
+    "nodes" : {
+      "type" : "array",
+      "items" : {
+        "oneOf" : [ {
+          "$ref" : "#/definitions/ProcessorTask"
+        }, {
+          "$ref" : "#/definitions/RequestTask"
+        } ]
+      }
+    }
+  },
+  "required" : [ "deserializeAs", "name", "description" ],
+  "definitions" : {
+    "ProcessorTask" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "deserializeAs" : {
+          "type" : "string",
+          "enum" : [ "ProcessorTask" ],
+          "default" : "ProcessorTask"
+        },
+        "id" : {
+          "type" : "string"
+        },
+        "name" : {
+          "type" : "string",
+          "minLength" : 4,
+          "maxLength" : 64
+        },
+        "description" : {
+          "type" : "string",
+          "minLength" : 4,
+          "maxLength" : 512
+        },
+        "nodes" : {
+          "type" : "array",
+          "items" : {
+            "oneOf" : [ {
+              "$ref" : "#/definitions/ProcessorTask"
+            }, {
+              "$ref" : "#/definitions/RequestTask"
+            } ]
+          }
+        },
+        "script" : {
+          "type" : "string"
+        },
+        "scriptType" : {
+          "type" : "string",
+          "enum" : [ "GROOVY", "JAVA", "JS", "PYTHON", "RUBY" ]
+        },
+        "contextInputKeys" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "contextOutputKey" : {
+          "type" : "string"
+        }
+      },
+      "title" : "ProcessorTask",
+      "required" : [ "deserializeAs", "name", "description", "script", "scriptType", "contextInputKeys", "contextOutputKey" ]
+    },
+    "RequestTask" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "deserializeAs" : {
+          "type" : "string",
+          "enum" : [ "RequestTask" ],
+          "default" : "RequestTask"
+        },
+        "id" : {
+          "type" : "string"
+        },
+        "name" : {
+          "type" : "string",
+          "minLength" : 4,
+          "maxLength" : 64
+        },
+        "description" : {
+          "type" : "string",
+          "minLength" : 4,
+          "maxLength" : 512
+        },
+        "nodes" : {
+          "type" : "array",
+          "items" : {
+            "oneOf" : [ {
+              "$ref" : "#/definitions/ProcessorTask"
+            }, {
+              "$ref" : "#/definitions/RequestTask"
+            } ]
+          }
+        },
+        "url" : {
+          "type" : "string"
+        },
+        "method" : {
+          "type" : "string",
+          "enum" : [ "GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "TRACE" ]
+        },
+        "contentType" : {
+          "type" : "string"
+        },
+        "accept" : {
+          "type" : "string"
+        },
+        "bodyTemplate" : {
+          "type" : "string"
+        },
+        "contextRequestKeys" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "contextResponseKey" : {
+          "type" : "string"
+        }
+      },
+      "title" : "RequestTask",
+      "required" : [ "deserializeAs", "name", "description", "url", "method", "contentType", "accept", "bodyTemplate", "contextResponseKey" ]
+    }
+  }
+}

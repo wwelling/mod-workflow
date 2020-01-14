@@ -2,8 +2,6 @@ package org.folio.rest.workflow.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.validation.constraints.NotNull;
@@ -20,34 +18,42 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "deserializeAs")
 @JsonSubTypes({
 
-    @JsonSubTypes.Type(value = EventTrigger.class, name = "EventTrigger"),
+    @JsonSubTypes.Type(value = ScheduleStartEvent.class, name = "ChronExpressionStartEvent"),
 
-    @JsonSubTypes.Type(value = ManualTrigger.class, name = "ManualTrigger"),
+    @JsonSubTypes.Type(value = ConnectTo.class, name = "ConnectTo"),
 
-    @JsonSubTypes.Type(value = ScheduleTrigger.class, name = "ScheduleTrigger")
+    @JsonSubTypes.Type(value = EndEvent.class, name = "EndEvent"),
+
+    @JsonSubTypes.Type(value = ExclusiveGateway.class, name = "ExclusiveGateway"),
+
+    @JsonSubTypes.Type(value = MessageCorrelationStartEvent.class, name = "MessageCorrelationStartEvent"),
+
+    @JsonSubTypes.Type(value = MoveToLastGateway.class, name = "MoveToLastGateway"),
+
+    @JsonSubTypes.Type(value = MoveToNode.class, name = "MoveToNode"),
+
+    @JsonSubTypes.Type(value = ProcessorTask.class, name = "ProcessorTask"),
+
+    @JsonSubTypes.Type(value = RequestTask.class, name = "RequestTask"),
+
+    @JsonSubTypes.Type(value = SetupTask.class, name = "SetupTask")
 
 })
-public abstract class Trigger extends AbstractBaseEntity {
+public abstract class Node extends AbstractBaseEntity {
 
   @NotNull
   @Size(min = 4, max = 64)
   @Column(unique = true)
   private String name;
 
-  @NotNull
-  @Size(min = 4, max = 256)
-  @Column(nullable = false)
+  @Size(min = 0, max = 512)
+  @Column(nullable = true)
   private String description;
-
-  @NotNull
-  @Column(nullable = false)
-  @Enumerated(EnumType.STRING)
-  private TriggerType type;
 
   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   private String deserializeAs = this.getClass().getSimpleName();
 
-  public Trigger() {
+  public Node() {
     super();
   }
 
@@ -67,20 +73,19 @@ public abstract class Trigger extends AbstractBaseEntity {
     this.description = description;
   }
 
-  public TriggerType getType() {
-    return type;
-  }
-
-  public void setType(TriggerType type) {
-    this.type = type;
-  }
-
   public String getDeserializeAs() {
     return deserializeAs;
   }
 
   public void setDeserializeAs(String deserializeAs) {
     this.deserializeAs = deserializeAs;
+  }
+
+  public String getIdentifier() {
+    String regex = "([a-z])([A-Z]+)";
+    String replacement = "$1_$2";
+    String name = getClass().getSimpleName();
+    return String.format("%s_%s", name.replaceAll(regex, replacement).toLowerCase(), getId().replace("-", "_"));
   }
 
 }
