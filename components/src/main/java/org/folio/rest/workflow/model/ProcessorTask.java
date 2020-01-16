@@ -26,8 +26,12 @@ public class ProcessorTask extends Node implements Task {
   @Column(nullable = false)
   private String contextOutputKey;
 
+  @Column(nullable = false)
+  private boolean asyncBefore;
+
   public ProcessorTask() {
     super();
+    asyncBefore = false;
   }
 
   public String getScript() {
@@ -60,6 +64,14 @@ public class ProcessorTask extends Node implements Task {
 
   public void setContextOutputKey(String contextOutputKey) {
     this.contextOutputKey = contextOutputKey;
+  }
+
+  public boolean isAsyncBefore() {
+    return asyncBefore;
+  }
+
+  public void setAsyncBefore(boolean asyncBefore) {
+    this.asyncBefore = asyncBefore;
   }
 
 }

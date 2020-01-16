@@ -11,8 +11,12 @@ public class ScheduleStartEvent extends Node implements StartEvent {
   @Column(nullable = false)
   private String chronExpression;
 
+  @Column(nullable = false)
+  private boolean asyncBefore;
+
   public ScheduleStartEvent() {
     super();
+    asyncBefore = false;
   }
 
   public String getChronExpression() {
@@ -21,6 +25,14 @@ public class ScheduleStartEvent extends Node implements StartEvent {
 
   public void setChronExpression(String chronExpression) {
     this.chronExpression = chronExpression;
+  }
+
+  public boolean isAsyncBefore() {
+    return asyncBefore;
+  }
+
+  public void setAsyncBefore(boolean asyncBefore) {
+    this.asyncBefore = asyncBefore;
   }
 
 }

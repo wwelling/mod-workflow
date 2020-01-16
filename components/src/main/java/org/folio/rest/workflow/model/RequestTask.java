@@ -44,11 +44,15 @@ public class RequestTask extends Node implements Task {
   @Column(nullable = false)
   private String contextResponseKey;
 
+  @Column(nullable = false)
+  private boolean asyncBefore;
+
   public RequestTask() {
     super();
-    this.contextRequestKeys = new HashSet<String>();
-    this.contentType = MediaType.APPLICATION_JSON_VALUE;
-    this.accept = MediaType.APPLICATION_JSON_VALUE;
+    contextRequestKeys = new HashSet<String>();
+    contentType = MediaType.APPLICATION_JSON_VALUE;
+    accept = MediaType.APPLICATION_JSON_VALUE;
+    asyncBefore = false;
   }
 
   public String getUrl() {
@@ -105,6 +109,14 @@ public class RequestTask extends Node implements Task {
 
   public void setContextResponseKey(String contextResponseKey) {
     this.contextResponseKey = contextResponseKey;
+  }
+
+  public boolean isAsyncBefore() {
+    return asyncBefore;
+  }
+
+  public void setAsyncBefore(boolean asyncBefore) {
+    this.asyncBefore = asyncBefore;
   }
 
 }

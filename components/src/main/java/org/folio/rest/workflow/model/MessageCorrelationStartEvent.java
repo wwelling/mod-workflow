@@ -13,8 +13,12 @@ public class MessageCorrelationStartEvent extends Node implements StartEvent {
   @Column(nullable = false)
   private String message;
 
+  @Column(nullable = false)
+  private boolean asyncBefore;
+
   public MessageCorrelationStartEvent() {
     super();
+    asyncBefore = true;
   }
 
   public String getMessage() {
@@ -23,6 +27,14 @@ public class MessageCorrelationStartEvent extends Node implements StartEvent {
 
   public void setMessage(String message) {
     this.message = message;
+  }
+
+  public boolean isAsyncBefore() {
+    return asyncBefore;
+  }
+
+  public void setAsyncBefore(boolean asyncBefore) {
+    this.asyncBefore = asyncBefore;
   }
 
 }
