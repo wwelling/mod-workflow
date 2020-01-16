@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.MapKeyColumn;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -27,6 +28,15 @@ public class Workflow extends AbstractBaseEntity {
   @Size(min = 4, max = 64)
   @Column(unique = true)
   private String name;
+
+  @NotNull
+  @Size(min = 1, max = 64)
+  @Column(unique = true)
+  private String versionTag;
+
+  @Min(0)
+  @Column(nullable = false)
+  private Integer historyTimeToLive;
 
   @NotNull
   @Size(min = 4, max = 512)
@@ -53,6 +63,7 @@ public class Workflow extends AbstractBaseEntity {
     active = false;
     nodes = new ArrayList<Node>();
     initialContext = new HashMap<String, String>();
+    historyTimeToLive = 0;
   }
 
   public String getName() {
@@ -61,6 +72,22 @@ public class Workflow extends AbstractBaseEntity {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public String getVersionTag() {
+    return versionTag;
+  }
+
+  public void setVersionTag(String versionTag) {
+    this.versionTag = versionTag;
+  }
+
+  public Integer getHistoryTimeToLive() {
+    return historyTimeToLive;
+  }
+
+  public void setHistoryTimeToLive(Integer historyTimeToLive) {
+    this.historyTimeToLive = historyTimeToLive;
   }
 
   public String getDescription() {
