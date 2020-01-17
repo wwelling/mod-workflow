@@ -34,9 +34,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
     @JsonSubTypes.Type(value = ProcessorTask.class, name = "ProcessorTask"),
 
-    @JsonSubTypes.Type(value = RequestTask.class, name = "RequestTask"),
-
-    @JsonSubTypes.Type(value = SetupTask.class, name = "SetupTask")
+    @JsonSubTypes.Type(value = RequestTask.class, name = "RequestTask")
 
 })
 public abstract class Node extends AbstractBaseEntity {

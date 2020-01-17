@@ -38,21 +38,33 @@ public class RequestTask extends Node implements Task {
   private String bodyTemplate;
 
   @ElementCollection
-  private Set<String> contextRequestKeys;
+  private Set<String> contextInputKeys;
+
+  @ElementCollection
+  private Set<String> contextCacheInputKeys;
 
   @NotNull
   @Column(nullable = false)
-  private String contextResponseKey;
+  private String outputKey;
+
+  @Column(nullable = false)
+  private Boolean useCacheOutput;
 
   @Column(nullable = false)
   private boolean asyncBefore;
 
+  @Column(nullable = false)
+  private boolean asyncAfter;
+
   public RequestTask() {
     super();
-    contextRequestKeys = new HashSet<String>();
     contentType = MediaType.APPLICATION_JSON_VALUE;
     accept = MediaType.APPLICATION_JSON_VALUE;
+    contextInputKeys = new HashSet<String>();
+    contextCacheInputKeys = new HashSet<String>();
+    useCacheOutput = false;
     asyncBefore = false;
+    asyncAfter = false;
   }
 
   public String getUrl() {
@@ -95,20 +107,36 @@ public class RequestTask extends Node implements Task {
     this.bodyTemplate = bodyTemplate;
   }
 
-  public Set<String> getContextRequestKeys() {
-    return contextRequestKeys;
+  public Set<String> getContextInputKeys() {
+    return contextInputKeys;
   }
 
-  public void setContextRequestKeys(Set<String> contextRequestKeys) {
-    this.contextRequestKeys = contextRequestKeys;
+  public void setContextInputKeys(Set<String> contextInputKeys) {
+    this.contextInputKeys = contextInputKeys;
   }
 
-  public String getContextResponseKey() {
-    return contextResponseKey;
+  public Set<String> getContextCacheInputKeys() {
+    return contextCacheInputKeys;
   }
 
-  public void setContextResponseKey(String contextResponseKey) {
-    this.contextResponseKey = contextResponseKey;
+  public void setContextCacheInputKeys(Set<String> contextCacheInputKeys) {
+    this.contextCacheInputKeys = contextCacheInputKeys;
+  }
+
+  public String getOutputKey() {
+    return outputKey;
+  }
+
+  public void setOutputKey(String outputKey) {
+    this.outputKey = outputKey;
+  }
+
+  public Boolean getUseCacheOutput() {
+    return useCacheOutput;
+  }
+
+  public void setUseCacheOutput(Boolean useCacheOutput) {
+    this.useCacheOutput = useCacheOutput;
   }
 
   public boolean isAsyncBefore() {
@@ -117,6 +145,14 @@ public class RequestTask extends Node implements Task {
 
   public void setAsyncBefore(boolean asyncBefore) {
     this.asyncBefore = asyncBefore;
+  }
+
+  public boolean isAsyncAfter() {
+    return asyncAfter;
+  }
+
+  public void setAsyncAfter(boolean asyncAfter) {
+    this.asyncAfter = asyncAfter;
   }
 
 }

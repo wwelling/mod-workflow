@@ -1,6 +1,10 @@
 package org.folio.rest.workflow.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -18,20 +22,32 @@ public class ProcessorTask extends Node implements Task {
   @Enumerated(EnumType.STRING)
   private ScriptType scriptType;
 
-  @NotNull
-  @Column(nullable = false)
-  private String[] contextInputKeys;
+  @ElementCollection
+  private Set<String> contextInputKeys;
+
+  @ElementCollection
+  private Set<String> contextCacheInputKeys;
 
   @NotNull
   @Column(nullable = false)
-  private String contextOutputKey;
+  private String outputKey;
+
+  @Column(nullable = false)
+  private Boolean useCacheOutput;
 
   @Column(nullable = false)
   private boolean asyncBefore;
 
+  @Column(nullable = false)
+  private boolean asyncAfter;
+
   public ProcessorTask() {
     super();
+    contextInputKeys = new HashSet<String>();
+    contextCacheInputKeys = new HashSet<String>();
+    useCacheOutput = false;
     asyncBefore = false;
+    asyncAfter = false;
   }
 
   public String getScript() {
@@ -50,20 +66,36 @@ public class ProcessorTask extends Node implements Task {
     this.scriptType = scriptType;
   }
 
-  public String[] getContextInputKeys() {
+  public Set<String> getContextInputKeys() {
     return contextInputKeys;
   }
 
-  public void setContextInputKeys(String[] contextInputKeys) {
+  public void setContextInputKeys(Set<String> contextInputKeys) {
     this.contextInputKeys = contextInputKeys;
   }
 
-  public String getContextOutputKey() {
-    return contextOutputKey;
+  public Set<String> getContextCacheInputKeys() {
+    return contextCacheInputKeys;
   }
 
-  public void setContextOutputKey(String contextOutputKey) {
-    this.contextOutputKey = contextOutputKey;
+  public void setContextCacheInputKeys(Set<String> contextCacheInputKeys) {
+    this.contextCacheInputKeys = contextCacheInputKeys;
+  }
+
+  public String getOutputKey() {
+    return outputKey;
+  }
+
+  public void setOutputKey(String outputKey) {
+    this.outputKey = outputKey;
+  }
+
+  public Boolean getUseCacheOutput() {
+    return useCacheOutput;
+  }
+
+  public void setUseCacheOutput(Boolean useCacheOutput) {
+    this.useCacheOutput = useCacheOutput;
   }
 
   public boolean isAsyncBefore() {
@@ -72,6 +104,14 @@ public class ProcessorTask extends Node implements Task {
 
   public void setAsyncBefore(boolean asyncBefore) {
     this.asyncBefore = asyncBefore;
+  }
+
+  public boolean isAsyncAfter() {
+    return asyncAfter;
+  }
+
+  public void setAsyncAfter(boolean asyncAfter) {
+    this.asyncAfter = asyncAfter;
   }
 
 }

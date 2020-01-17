@@ -16,7 +16,7 @@ public class ScheduleStartEvent extends Node implements StartEvent {
 
   public ScheduleStartEvent() {
     super();
-    asyncBefore = false;
+    asyncBefore = true;
   }
 
   public String getChronExpression() {
