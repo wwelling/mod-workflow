@@ -53,7 +53,7 @@ public abstract class Node extends AbstractBaseEntity {
 
   @NotNull
   @Size(min = 4, max = 64)
-  @Column(unique = true)
+  @Column(nullable = false)
   private String name;
 
   @Size(min = 0, max = 512)
