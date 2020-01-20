@@ -31,7 +31,7 @@ public class Workflow extends AbstractBaseEntity {
 
   @NotNull
   @Size(min = 1, max = 64)
-  @Column(unique = true)
+  @Column(nullable = false)
   private String versionTag;
 
   @Min(0)
