@@ -2,16 +2,25 @@ package org.folio.rest.workflow.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
-import org.folio.rest.workflow.components.StartEvent;
+import org.folio.rest.workflow.components.Event;
 
 @Entity
-public class ScheduleStartEvent extends Node implements StartEvent {
+public class StartEvent extends Node implements Event {
 
   @NotNull
   @Column(nullable = false)
-  private String chronExpression;
+  @Enumerated(EnumType.STRING)
+  private StartEventType type;
+
+  @NotNull
+  @Size(min = 4, max = 256)
+  @Column(nullable = false)
+  private String expression;
 
   @Column(nullable = false)
   private boolean interrupting;
@@ -19,18 +28,26 @@ public class ScheduleStartEvent extends Node implements StartEvent {
   @Column(nullable = false)
   private boolean asyncBefore;
 
-  public ScheduleStartEvent() {
+  public StartEvent() {
     super();
     interrupting = false;
     asyncBefore = true;
   }
 
-  public String getChronExpression() {
-    return chronExpression;
+  public StartEventType getType() {
+    return type;
   }
 
-  public void setChronExpression(String chronExpression) {
-    this.chronExpression = chronExpression;
+  public void setType(StartEventType type) {
+    this.type = type;
+  }
+
+  public String getExpression() {
+    return expression;
+  }
+
+  public void setExpression(String expression) {
+    this.expression = expression;
   }
 
   public boolean isInterrupting() {

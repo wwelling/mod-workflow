@@ -5,15 +5,22 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.folio.rest.workflow.components.Branch;
 import org.folio.rest.workflow.components.Conditional;
+import org.folio.rest.workflow.components.Gateway;
 
 @Entity
-public class MoveToLastGateway extends Node implements Branch, Conditional {
+public class ConditionalGateway extends Node implements Gateway, Conditional {
+
+  @NotNull
+  @Column(nullable = false)
+  @Enumerated(EnumType.STRING)
+  private ConditionalGatewayType type;
 
   @NotNull
   @Size(min = 4, max = 128)
@@ -28,9 +35,17 @@ public class MoveToLastGateway extends Node implements Branch, Conditional {
   @ManyToMany
   private List<Node> nodes;
 
-  public MoveToLastGateway() {
+  public ConditionalGateway() {
     super();
     nodes = new ArrayList<Node>();
+  }
+
+  public ConditionalGatewayType getType() {
+    return type;
+  }
+
+  public void setType(ConditionalGatewayType type) {
+    this.type = type;
   }
 
   public String getCondition() {

@@ -7,16 +7,21 @@ import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.validation.constraints.NotNull;
+import javax.persistence.ManyToMany;
 
 import org.folio.rest.workflow.components.Task;
 
 @Entity
-public class RequestTask extends Node implements Task {
+public class StreamingEctractTransformLoadTask extends Node implements Task {
 
-  @NotNull
-  @Embedded
-  private Request request;
+  @ManyToMany
+  private Set<Stream> streams;
+
+  @ElementCollection
+  private Set<Process> processes;
+
+  @ElementCollection
+  private Set<Request> requests;
 
   @ElementCollection
   private Set<Variable> inputVariables;
@@ -30,19 +35,37 @@ public class RequestTask extends Node implements Task {
   @Column(nullable = false)
   private boolean asyncAfter;
 
-  public RequestTask() {
-    super();
+  public StreamingEctractTransformLoadTask() {
+    streams = new HashSet<Stream>();
+    processes = new HashSet<Process>();
+    requests = new HashSet<Request>();
     inputVariables = new HashSet<Variable>();
     asyncBefore = false;
     asyncAfter = false;
   }
 
-  public Request getRequest() {
-    return request;
+  public Set<Stream> getStreams() {
+    return streams;
   }
 
-  public void setRequest(Request request) {
-    this.request = request;
+  public void setStreams(Set<Stream> streams) {
+    this.streams = streams;
+  }
+
+  public Set<Process> getProcesses() {
+    return processes;
+  }
+
+  public void setProcesses(Set<Process> processes) {
+    this.processes = processes;
+  }
+
+  public Set<Request> getRequests() {
+    return requests;
+  }
+
+  public void setRequests(Set<Request> requests) {
+    this.requests = requests;
   }
 
   public Set<Variable> getInputVariables() {

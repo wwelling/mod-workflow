@@ -3,16 +3,21 @@ package org.folio.rest.workflow.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 
-import org.folio.rest.workflow.components.Subprocess;
-
 @Entity
-public class EventSubprocess extends Node implements Subprocess {
+public class EventSubprocess extends Node {
 
   @ManyToMany
   private List<Node> nodes;
+
+  @Column(nullable = false)
+  private boolean asyncBefore;
+
+  @Column(nullable = false)
+  private boolean asyncAfter;
 
   public EventSubprocess() {
     super();

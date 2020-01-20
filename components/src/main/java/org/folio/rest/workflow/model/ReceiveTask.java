@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 import org.folio.rest.workflow.components.Wait;
 
 @Entity
-public class MessageCorrelationWait extends Node implements Wait {
+public class ReceiveTask extends Node implements Wait {
 
   @NotNull
   @Size(min = 4, max = 256)
@@ -21,7 +21,7 @@ public class MessageCorrelationWait extends Node implements Wait {
   @Column(nullable = false)
   private boolean asyncAfter;
 
-  public MessageCorrelationWait() {
+  public ReceiveTask() {
     super();
     asyncBefore = false;
     asyncAfter = false;

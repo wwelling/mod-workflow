@@ -5,45 +5,25 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.folio.rest.workflow.components.Task;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 
 @Entity
 public class StreamRequestToDirectoryTask extends Node implements Task {
 
   @NotNull
-  @Column(nullable = false)
-  private String url;
-
-  @NotNull
-  @Column(nullable = false)
-  @Enumerated(EnumType.STRING)
-  private HttpMethod method;
-
-  @NotNull
-  @Column(nullable = false)
-  private String contentType;
-
-  @NotNull
-  @Column(nullable = false)
-  private String accept;
-
-  @NotNull
-  @Column(columnDefinition = "TEXT", nullable = false)
-  private String bodyTemplate;
+  @Embedded
+  private Request request;
 
   @ElementCollection
-  private Set<String> contextInputKeys;
+  private Set<Variable> inputVariables;
 
-  @ElementCollection
-  private Set<String> contextCacheInputKeys;
+  @Embedded
+  private Variable outputVariable;
 
   @NotNull
   @Column(nullable = false)
@@ -62,6 +42,14 @@ public class StreamRequestToDirectoryTask extends Node implements Task {
   @Column(nullable = false)
   private String completeMessage;
 
+  @NotNull
+  @Size(min = 4, max = 256)
+  @Column(nullable = false)
+  private String writeSignalMessage;
+
+  @Column(nullable = false)
+  private boolean emitWriteSignal;
+
   @Column(nullable = false)
   private boolean asyncBefore;
 
@@ -70,68 +58,34 @@ public class StreamRequestToDirectoryTask extends Node implements Task {
 
   public StreamRequestToDirectoryTask() {
     super();
-    contentType = MediaType.APPLICATION_JSON_VALUE;
-    accept = MediaType.APPLICATION_JSON_VALUE;
-    contextInputKeys = new HashSet<String>();
-    contextCacheInputKeys = new HashSet<String>();
+    inputVariables = new HashSet<Variable>();
+    emitWriteSignal = false;
     asyncBefore = false;
     asyncAfter = false;
   }
 
-  public String getUrl() {
-    return url;
+  public Request getRequest() {
+    return request;
   }
 
-  public void setUrl(String url) {
-    this.url = url;
+  public void setRequest(Request request) {
+    this.request = request;
   }
 
-  public HttpMethod getMethod() {
-    return method;
+  public Set<Variable> getInputVariables() {
+    return inputVariables;
   }
 
-  public void setMethod(HttpMethod method) {
-    this.method = method;
+  public void setInputVariables(Set<Variable> inputVariables) {
+    this.inputVariables = inputVariables;
   }
 
-  public String getContentType() {
-    return contentType;
+  public Variable getOutputVariable() {
+    return outputVariable;
   }
 
-  public void setContentType(String contentType) {
-    this.contentType = contentType;
-  }
-
-  public String getAccept() {
-    return accept;
-  }
-
-  public void setAccept(String accept) {
-    this.accept = accept;
-  }
-
-  public String getBodyTemplate() {
-    return bodyTemplate;
-  }
-
-  public void setBodyTemplate(String bodyTemplate) {
-    this.bodyTemplate = bodyTemplate;
-  }
-
-  public Set<String> getContextInputKeys() {
-    return contextInputKeys;
-  }
-
-  public void setContextInputKeys(Set<String> contextInputKeys) {
-    this.contextInputKeys = contextInputKeys;
-  }
-
-  public Set<String> getContextCacheInputKeys() {
-    return contextCacheInputKeys;
-  }
-
-  public void setContextCacheInputKeys(Set<String> contextCacheInputKeys) {
-    this.contextCacheInputKeys = contextCacheInputKeys;
+  public void setOutputVariable(Variable outputVariable) {
+    this.outputVariable = outputVariable;
   }
 
   public String getPath() {
@@ -164,6 +118,22 @@ public class StreamRequestToDirectoryTask extends Node implements Task {
 
   public void setCompleteMessage(String completeMessage) {
     this.completeMessage = completeMessage;
+  }
+
+  public String getWriteSignalMessage() {
+    return writeSignalMessage;
+  }
+
+  public void setWriteSignalMessage(String writeSignalMessage) {
+    this.writeSignalMessage = writeSignalMessage;
+  }
+
+  public boolean isEmitWriteSignal() {
+    return emitWriteSignal;
+  }
+
+  public void setEmitWriteSignal(boolean emitWriteSignal) {
+    this.emitWriteSignal = emitWriteSignal;
   }
 
   public boolean isAsyncBefore() {

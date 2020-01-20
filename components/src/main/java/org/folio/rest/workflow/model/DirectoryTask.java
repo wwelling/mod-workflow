@@ -1,13 +1,20 @@
 package org.folio.rest.workflow.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 
 import org.folio.rest.workflow.components.Task;
 
 @Entity
-public class ReadDirectoryTask extends Node implements Task {
+public class DirectoryTask extends Node implements Task {
 
   @NotNull
   @Column(nullable = false)
@@ -19,10 +26,14 @@ public class ReadDirectoryTask extends Node implements Task {
 
   @NotNull
   @Column(nullable = false)
-  private String outputKey;
+  @Enumerated(EnumType.STRING)
+  private DirectoryAction action;
 
-  @Column(nullable = false)
-  private Boolean useCacheOutput;
+  @ElementCollection
+  private Set<Variable> inputVariables;
+
+  @Embedded
+  private Variable outputVariable;
 
   @Column(nullable = false)
   private boolean asyncBefore;
@@ -30,9 +41,9 @@ public class ReadDirectoryTask extends Node implements Task {
   @Column(nullable = false)
   private boolean asyncAfter;
 
-  public ReadDirectoryTask() {
+  public DirectoryTask() {
     super();
-    useCacheOutput = false;
+    inputVariables = new HashSet<Variable>();
     asyncBefore = false;
     asyncAfter = false;
   }
@@ -53,20 +64,28 @@ public class ReadDirectoryTask extends Node implements Task {
     this.workflow = workflow;
   }
 
-  public String getOutputKey() {
-    return outputKey;
+  public DirectoryAction getAction() {
+    return action;
   }
 
-  public void setOutputKey(String outputKey) {
-    this.outputKey = outputKey;
+  public void setAction(DirectoryAction action) {
+    this.action = action;
   }
 
-  public Boolean getUseCacheOutput() {
-    return useCacheOutput;
+  public Set<Variable> getInputVariables() {
+    return inputVariables;
   }
 
-  public void setUseCacheOutput(Boolean useCacheOutput) {
-    this.useCacheOutput = useCacheOutput;
+  public void setInputVariables(Set<Variable> inputVariables) {
+    this.inputVariables = inputVariables;
+  }
+
+  public Variable getOutputVariable() {
+    return outputVariable;
+  }
+
+  public void setOutputVariable(Variable outputVariable) {
+    this.outputVariable = outputVariable;
   }
 
   public boolean isAsyncBefore() {

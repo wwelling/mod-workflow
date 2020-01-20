@@ -18,17 +18,13 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "deserializeAs")
 @JsonSubTypes({
 
-    @JsonSubTypes.Type(value = ScheduleStartEvent.class, name = "ScheduleStartEvent"),
-
-    @JsonSubTypes.Type(value = SignalStartEvent.class, name = "SignalStartEvent"),
-
-    @JsonSubTypes.Type(value = MessageCorrelationStartEvent.class, name = "MessageCorrelationStartEvent"),
+    @JsonSubTypes.Type(value = StartEvent.class, name = "StartEvent"),
 
     @JsonSubTypes.Type(value = EndEvent.class, name = "EndEvent"),
 
-    @JsonSubTypes.Type(value = ExclusiveGateway.class, name = "ExclusiveGateway"),
+    @JsonSubTypes.Type(value = ConditionalGateway.class, name = "ConditionalGateway"),
 
-    @JsonSubTypes.Type(value = MoveToLastGateway.class, name = "MoveToLastGateway"),
+    @JsonSubTypes.Type(value = ParallelGateway.class, name = "ParallelGateway"),
 
     @JsonSubTypes.Type(value = ConnectTo.class, name = "ConnectTo"),
 
@@ -38,15 +34,17 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
     @JsonSubTypes.Type(value = RequestTask.class, name = "RequestTask"),
 
-    @JsonSubTypes.Type(value = RemoveFileTask.class, name = "RemoveFileTask"),
+    @JsonSubTypes.Type(value = DirectoryTask.class, name = "DirectoryTask"),
 
-    @JsonSubTypes.Type(value = ReadDirectoryTask.class, name = "ReadDirectoryTask"),
+    @JsonSubTypes.Type(value = ReceiveTask.class, name = "ReceiveTask"),
 
     @JsonSubTypes.Type(value = StreamRequestToDirectoryTask.class, name = "StreamRequestToDirectoryTask"),
 
-    @JsonSubTypes.Type(value = EventSubprocess.class, name = "EventSubprocess"),
+    @JsonSubTypes.Type(value = StreamingEctractTransformLoadTask.class, name = "StreamingEctractTransformLoadTask"),
 
-    @JsonSubTypes.Type(value = MessageCorrelationWait.class, name = "MessageCorrelationWait")
+    @JsonSubTypes.Type(value = Subprocess.class, name = "Subprocess"),
+
+    @JsonSubTypes.Type(value = EventSubprocess.class, name = "EventSubprocess")
 
 })
 public abstract class Node extends AbstractBaseEntity {

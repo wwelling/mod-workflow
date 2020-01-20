@@ -5,9 +5,8 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 
 import org.folio.rest.workflow.components.Task;
@@ -16,26 +15,14 @@ import org.folio.rest.workflow.components.Task;
 public class ProcessorTask extends Node implements Task {
 
   @NotNull
-  @Column(columnDefinition = "TEXT", nullable = false)
-  private String script;
-
-  @NotNull
-  @Column(nullable = false)
-  @Enumerated(EnumType.STRING)
-  private ScriptType scriptType;
+  @Embedded
+  private Process process;
 
   @ElementCollection
-  private Set<String> contextInputKeys;
+  private Set<Variable> inputVariables;
 
-  @ElementCollection
-  private Set<String> contextCacheInputKeys;
-
-  @NotNull
-  @Column(nullable = false)
-  private String outputKey;
-
-  @Column(nullable = false)
-  private Boolean useCacheOutput;
+  @Embedded
+  private Variable outputVariable;
 
   @Column(nullable = false)
   private boolean asyncBefore;
@@ -45,59 +32,33 @@ public class ProcessorTask extends Node implements Task {
 
   public ProcessorTask() {
     super();
-    contextInputKeys = new HashSet<String>();
-    contextCacheInputKeys = new HashSet<String>();
-    useCacheOutput = false;
+    inputVariables = new HashSet<Variable>();
     asyncBefore = false;
     asyncAfter = false;
   }
 
-  public String getScript() {
-    return script;
+  public Process getProcess() {
+    return process;
   }
 
-  public void setScript(String script) {
-    this.script = script;
+  public void setProcess(Process process) {
+    this.process = process;
   }
 
-  public ScriptType getScriptType() {
-    return scriptType;
+  public Set<Variable> getInputVariables() {
+    return inputVariables;
   }
 
-  public void setScriptType(ScriptType scriptType) {
-    this.scriptType = scriptType;
+  public void setInputVariables(Set<Variable> inputVariables) {
+    this.inputVariables = inputVariables;
   }
 
-  public Set<String> getContextInputKeys() {
-    return contextInputKeys;
+  public Variable getOutputVariable() {
+    return outputVariable;
   }
 
-  public void setContextInputKeys(Set<String> contextInputKeys) {
-    this.contextInputKeys = contextInputKeys;
-  }
-
-  public Set<String> getContextCacheInputKeys() {
-    return contextCacheInputKeys;
-  }
-
-  public void setContextCacheInputKeys(Set<String> contextCacheInputKeys) {
-    this.contextCacheInputKeys = contextCacheInputKeys;
-  }
-
-  public String getOutputKey() {
-    return outputKey;
-  }
-
-  public void setOutputKey(String outputKey) {
-    this.outputKey = outputKey;
-  }
-
-  public Boolean getUseCacheOutput() {
-    return useCacheOutput;
-  }
-
-  public void setUseCacheOutput(Boolean useCacheOutput) {
-    this.useCacheOutput = useCacheOutput;
+  public void setOutputVariable(Variable outputVariable) {
+    this.outputVariable = outputVariable;
   }
 
   public boolean isAsyncBefore() {
