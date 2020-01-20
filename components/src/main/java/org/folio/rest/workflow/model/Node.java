@@ -18,23 +18,35 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "deserializeAs")
 @JsonSubTypes({
 
-    @JsonSubTypes.Type(value = ScheduleStartEvent.class, name = "ChronExpressionStartEvent"),
+    @JsonSubTypes.Type(value = ScheduleStartEvent.class, name = "ScheduleStartEvent"),
 
-    @JsonSubTypes.Type(value = ConnectTo.class, name = "ConnectTo"),
+    @JsonSubTypes.Type(value = SignalStartEvent.class, name = "SignalStartEvent"),
+
+    @JsonSubTypes.Type(value = MessageCorrelationStartEvent.class, name = "MessageCorrelationStartEvent"),
 
     @JsonSubTypes.Type(value = EndEvent.class, name = "EndEvent"),
 
     @JsonSubTypes.Type(value = ExclusiveGateway.class, name = "ExclusiveGateway"),
 
-    @JsonSubTypes.Type(value = MessageCorrelationStartEvent.class, name = "MessageCorrelationStartEvent"),
-
     @JsonSubTypes.Type(value = MoveToLastGateway.class, name = "MoveToLastGateway"),
+
+    @JsonSubTypes.Type(value = ConnectTo.class, name = "ConnectTo"),
 
     @JsonSubTypes.Type(value = MoveToNode.class, name = "MoveToNode"),
 
     @JsonSubTypes.Type(value = ProcessorTask.class, name = "ProcessorTask"),
 
-    @JsonSubTypes.Type(value = RequestTask.class, name = "RequestTask")
+    @JsonSubTypes.Type(value = RequestTask.class, name = "RequestTask"),
+
+    @JsonSubTypes.Type(value = RemoveFileTask.class, name = "RemoveFileTask"),
+
+    @JsonSubTypes.Type(value = ReadDirectoryTask.class, name = "ReadDirectoryTask"),
+
+    @JsonSubTypes.Type(value = StreamRequestToDirectoryTask.class, name = "StreamRequestToDirectoryTask"),
+
+    @JsonSubTypes.Type(value = EventSubprocess.class, name = "EventSubprocess"),
+
+    @JsonSubTypes.Type(value = MessageCorrelationWait.class, name = "MessageCorrelationWait")
 
 })
 public abstract class Node extends AbstractBaseEntity {

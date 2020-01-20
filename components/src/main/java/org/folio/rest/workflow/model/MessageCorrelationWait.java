@@ -5,10 +5,10 @@ import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.folio.rest.workflow.components.StartEvent;
+import org.folio.rest.workflow.components.Wait;
 
 @Entity
-public class MessageCorrelationStartEvent extends Node implements StartEvent {
+public class MessageCorrelationWait extends Node implements Wait {
 
   @NotNull
   @Size(min = 4, max = 256)
@@ -16,15 +16,15 @@ public class MessageCorrelationStartEvent extends Node implements StartEvent {
   private String message;
 
   @Column(nullable = false)
-  private boolean interrupting;
-
-  @Column(nullable = false)
   private boolean asyncBefore;
 
-  public MessageCorrelationStartEvent() {
+  @Column(nullable = false)
+  private boolean asyncAfter;
+
+  public MessageCorrelationWait() {
     super();
-    interrupting = false;
-    asyncBefore = true;
+    asyncBefore = false;
+    asyncAfter = false;
   }
 
   public String getMessage() {
@@ -35,20 +35,20 @@ public class MessageCorrelationStartEvent extends Node implements StartEvent {
     this.message = message;
   }
 
-  public boolean isInterrupting() {
-    return interrupting;
-  }
-
-  public void setInterrupting(boolean interrupting) {
-    this.interrupting = interrupting;
-  }
-
   public boolean isAsyncBefore() {
     return asyncBefore;
   }
 
   public void setAsyncBefore(boolean asyncBefore) {
     this.asyncBefore = asyncBefore;
+  }
+
+  public boolean isAsyncAfter() {
+    return asyncAfter;
+  }
+
+  public void setAsyncAfter(boolean asyncAfter) {
+    this.asyncAfter = asyncAfter;
   }
 
 }

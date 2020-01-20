@@ -10,6 +10,8 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 
+import org.folio.rest.workflow.components.Task;
+
 @Entity
 public class ProcessorTask extends Node implements Task {
 

@@ -9,6 +9,9 @@ import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.folio.rest.workflow.components.Branch;
+import org.folio.rest.workflow.components.Conditional;
+
 @Entity
 public class ExclusiveGateway extends Node implements Branch, Conditional {
 

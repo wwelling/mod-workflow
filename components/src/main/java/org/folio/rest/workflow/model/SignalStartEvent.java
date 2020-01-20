@@ -3,15 +3,17 @@ package org.folio.rest.workflow.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.folio.rest.workflow.components.StartEvent;
 
 @Entity
-public class ScheduleStartEvent extends Node implements StartEvent {
+public class SignalStartEvent extends Node implements StartEvent {
 
   @NotNull
+  @Size(min = 4, max = 256)
   @Column(nullable = false)
-  private String chronExpression;
+  private String signal;
 
   @Column(nullable = false)
   private boolean interrupting;
@@ -19,18 +21,18 @@ public class ScheduleStartEvent extends Node implements StartEvent {
   @Column(nullable = false)
   private boolean asyncBefore;
 
-  public ScheduleStartEvent() {
+  public SignalStartEvent() {
     super();
     interrupting = false;
     asyncBefore = true;
   }
 
-  public String getChronExpression() {
-    return chronExpression;
+  public String getSignal() {
+    return signal;
   }
 
-  public void setChronExpression(String chronExpression) {
-    this.chronExpression = chronExpression;
+  public void setSignal(String signal) {
+    this.signal = signal;
   }
 
   public boolean isInterrupting() {

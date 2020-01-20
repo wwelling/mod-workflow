@@ -4,6 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 
+import org.folio.rest.workflow.components.Navigation;
+
 @Entity
 public class ConnectTo extends Node implements Navigation {
 

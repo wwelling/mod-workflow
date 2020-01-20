@@ -9,13 +9,14 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.folio.rest.workflow.components.Task;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 
 @Entity
-public class RequestTask extends Node implements Task {
+public class StreamRequestToDirectoryTask extends Node implements Task {
 
   @NotNull
   @Column(nullable = false)
@@ -46,10 +47,20 @@ public class RequestTask extends Node implements Task {
 
   @NotNull
   @Column(nullable = false)
-  private String outputKey;
+  private String path;
 
+  @NotNull
   @Column(nullable = false)
-  private Boolean useCacheOutput;
+  private String workflow;
+
+  @NotNull
+  @Column(nullable = false)
+  private int batchSize;
+
+  @NotNull
+  @Size(min = 4, max = 256)
+  @Column(nullable = false)
+  private String completeMessage;
 
   @Column(nullable = false)
   private boolean asyncBefore;
@@ -57,13 +68,12 @@ public class RequestTask extends Node implements Task {
   @Column(nullable = false)
   private boolean asyncAfter;
 
-  public RequestTask() {
+  public StreamRequestToDirectoryTask() {
     super();
     contentType = MediaType.APPLICATION_JSON_VALUE;
     accept = MediaType.APPLICATION_JSON_VALUE;
     contextInputKeys = new HashSet<String>();
     contextCacheInputKeys = new HashSet<String>();
-    useCacheOutput = false;
     asyncBefore = false;
     asyncAfter = false;
   }
@@ -124,20 +134,36 @@ public class RequestTask extends Node implements Task {
     this.contextCacheInputKeys = contextCacheInputKeys;
   }
 
-  public String getOutputKey() {
-    return outputKey;
+  public String getPath() {
+    return path;
   }
 
-  public void setOutputKey(String outputKey) {
-    this.outputKey = outputKey;
+  public void setPath(String path) {
+    this.path = path;
   }
 
-  public Boolean getUseCacheOutput() {
-    return useCacheOutput;
+  public String getWorkflow() {
+    return workflow;
   }
 
-  public void setUseCacheOutput(Boolean useCacheOutput) {
-    this.useCacheOutput = useCacheOutput;
+  public void setWorkflow(String workflow) {
+    this.workflow = workflow;
+  }
+
+  public int getBatchSize() {
+    return batchSize;
+  }
+
+  public void setBatchSize(int batchSize) {
+    this.batchSize = batchSize;
+  }
+
+  public String getCompleteMessage() {
+    return completeMessage;
+  }
+
+  public void setCompleteMessage(String completeMessage) {
+    this.completeMessage = completeMessage;
   }
 
   public boolean isAsyncBefore() {

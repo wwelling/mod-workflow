@@ -1,6 +1,6 @@
-package org.folio.rest.workflow.model;
+package org.folio.rest.workflow.components;
 
-public interface Task {
+public interface Wait {
 
   public boolean isAsyncBefore();
 
@@ -9,5 +9,9 @@ public interface Task {
   public boolean isAsyncAfter();
 
   public void setAsyncAfter(boolean asyncAfter);
+
+  public String getMessage();
+
+  public void setMessage(String mesasge);
 
 }
