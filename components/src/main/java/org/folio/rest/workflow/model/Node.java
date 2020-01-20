@@ -52,7 +52,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 public abstract class Node extends AbstractBaseEntity {
 
   @NotNull
-  @Size(min = 4, max = 64)
+  @Size(min = 3, max = 64)
   @Column(nullable = false)
   private String name;
 
