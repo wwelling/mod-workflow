@@ -17,9 +17,8 @@ public class StartEvent extends Node implements Event {
   @Enumerated(EnumType.STRING)
   private StartEventType type;
 
-  @NotNull
   @Size(min = 4, max = 256)
-  @Column(nullable = false)
+  @Column(nullable = true)
   private String expression;
 
   @Column(nullable = false)
