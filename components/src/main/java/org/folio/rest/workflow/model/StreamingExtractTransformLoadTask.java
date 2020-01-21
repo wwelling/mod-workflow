@@ -17,10 +17,10 @@ import org.folio.rest.workflow.components.Task;
 public class StreamingExtractTransformLoadTask extends Node implements Task {
 
   @ManyToMany
-  private List<Stream> streams;
+  private List<Extractor> extractors;
 
   @ElementCollection
-  private List<Process> processes;
+  private List<Processor> processors;
 
   @ElementCollection
   private List<Request> requests;
@@ -38,28 +38,28 @@ public class StreamingExtractTransformLoadTask extends Node implements Task {
   private boolean asyncAfter;
 
   public StreamingExtractTransformLoadTask() {
-    streams = new ArrayList<Stream>();
-    processes = new ArrayList<Process>();
+    extractors = new ArrayList<Extractor>();
+    processors = new ArrayList<Processor>();
     requests = new ArrayList<Request>();
     inputVariables = new HashSet<Variable>();
     asyncBefore = false;
     asyncAfter = false;
   }
 
-  public List<Stream> getStreams() {
-    return streams;
+  public List<Extractor> getExtractors() {
+    return extractors;
   }
 
-  public void setStreams(List<Stream> streams) {
-    this.streams = streams;
+  public void setExtractors(List<Extractor> extractors) {
+    this.extractors = extractors;
   }
 
-  public List<Process> getProcesses() {
-    return processes;
+  public List<Processor> getProcessors() {
+    return processors;
   }
 
-  public void setProcesses(List<Process> processes) {
-    this.processes = processes;
+  public void setProcessors(List<Processor> scripts) {
+    this.processors = scripts;
   }
 
   public List<Request> getRequests() {

@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 import org.folio.spring.domain.model.AbstractBaseEntity;
 
 @Entity
-public class Stream extends AbstractBaseEntity {
+public class Extractor extends AbstractBaseEntity {
 
   @NotNull
   @Embedded
@@ -26,12 +26,12 @@ public class Stream extends AbstractBaseEntity {
   private List<Comparison> comparisons;
 
   @ElementCollection
-  private List<EnhancementMapping> enhancementMappings;
+  private List<Mapping> mappings;
 
-  public Stream() {
+  public Extractor() {
     super();
     comparisons = new ArrayList<Comparison>();
-    enhancementMappings = new ArrayList<EnhancementMapping>();
+    mappings = new ArrayList<Mapping>();
   }
 
   public Request getRequest() {
@@ -58,12 +58,12 @@ public class Stream extends AbstractBaseEntity {
     this.comparisons = comparisons;
   }
 
-  public List<EnhancementMapping> getEnhancementMappings() {
-    return enhancementMappings;
+  public List<Mapping> getMappings() {
+    return mappings;
   }
 
-  public void setEnhancementMappings(List<EnhancementMapping> enhancementMappings) {
-    this.enhancementMappings = enhancementMappings;
+  public void setMappings(List<Mapping> mappings) {
+    this.mappings = mappings;
   }
 
 }

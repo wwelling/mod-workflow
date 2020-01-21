@@ -4,7 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class EnhancementMapping {
+public class Mapping {
 
   @Column(nullable = false)
   private String toProperty;
@@ -15,7 +15,7 @@ public class EnhancementMapping {
   @Column(nullable = false)
   private boolean multiple;
 
-  public EnhancementMapping() {
+  public Mapping() {
     super();
     multiple = false;
   }

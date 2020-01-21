@@ -16,7 +16,7 @@ public class ProcessorTask extends Node implements Task {
 
   @NotNull
   @Embedded
-  private Process process;
+  private Processor processor;
 
   @ElementCollection
   private Set<Variable> inputVariables;
@@ -37,12 +37,12 @@ public class ProcessorTask extends Node implements Task {
     asyncAfter = false;
   }
 
-  public Process getProcess() {
-    return process;
+  public Processor getProcessor() {
+    return processor;
   }
 
-  public void setProcess(Process process) {
-    this.process = process;
+  public void setProcessor(Processor processor) {
+    this.processor = processor;
   }
 
   public Set<Variable> getInputVariables() {
