@@ -40,7 +40,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
     @JsonSubTypes.Type(value = StreamRequestToDirectoryTask.class, name = "StreamRequestToDirectoryTask"),
 
-    @JsonSubTypes.Type(value = StreamingExtractTransformLoadTask.class, name = "StreamingEctractTransformLoadTask"),
+    @JsonSubTypes.Type(value = StreamingExtractTransformLoadTask.class, name = "StreamingExtractTransformLoadTask"),
 
     @JsonSubTypes.Type(value = Subprocess.class, name = "Subprocess"),
 
