@@ -23,14 +23,14 @@ public class Stream extends AbstractBaseEntity {
   private StreamMergeStrategy mergeStrategy;
 
   @ElementCollection
-  private List<EnhancementComparison> enhancementComparisons;
+  private List<Comparison> comparisons;
 
   @ElementCollection
   private List<EnhancementMapping> enhancementMappings;
 
   public Stream() {
     super();
-    enhancementComparisons = new ArrayList<EnhancementComparison>();
+    comparisons = new ArrayList<Comparison>();
     enhancementMappings = new ArrayList<EnhancementMapping>();
   }
 
@@ -50,12 +50,12 @@ public class Stream extends AbstractBaseEntity {
     this.mergeStrategy = mergeStrategy;
   }
 
-  public List<EnhancementComparison> getEnhancementComparisons() {
-    return enhancementComparisons;
+  public List<Comparison> getComparisons() {
+    return comparisons;
   }
 
-  public void setEnhancementComparisons(List<EnhancementComparison> enhancementComparisons) {
-    this.enhancementComparisons = enhancementComparisons;
+  public void settComparisons(List<Comparison> comparisons) {
+    this.comparisons = comparisons;
   }
 
   public List<EnhancementMapping> getEnhancementMappings() {

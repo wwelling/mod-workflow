@@ -4,7 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class EnhancementComparison {
+public class Comparison {
 
   @Column(nullable = false)
   private String sourceProperty;
@@ -12,7 +12,7 @@ public class EnhancementComparison {
   @Column(nullable = false)
   private String targetProperty;
 
-  public EnhancementComparison() {
+  public Comparison() {
     super();
   }
 
