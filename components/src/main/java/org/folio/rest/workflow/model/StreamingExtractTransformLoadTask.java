@@ -12,7 +12,7 @@ import javax.persistence.ManyToMany;
 import org.folio.rest.workflow.components.Task;
 
 @Entity
-public class StreamingEctractTransformLoadTask extends Node implements Task {
+public class StreamingExtractTransformLoadTask extends Node implements Task {
 
   @ManyToMany
   private Set<Stream> streams;
@@ -35,7 +35,7 @@ public class StreamingEctractTransformLoadTask extends Node implements Task {
   @Column(nullable = false)
   private boolean asyncAfter;
 
-  public StreamingEctractTransformLoadTask() {
+  public StreamingExtractTransformLoadTask() {
     streams = new HashSet<Stream>();
     processes = new HashSet<Process>();
     requests = new HashSet<Request>();
