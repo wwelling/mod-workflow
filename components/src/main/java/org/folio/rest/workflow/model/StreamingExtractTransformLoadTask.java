@@ -1,6 +1,8 @@
 package org.folio.rest.workflow.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -15,13 +17,13 @@ import org.folio.rest.workflow.components.Task;
 public class StreamingExtractTransformLoadTask extends Node implements Task {
 
   @ManyToMany
-  private Set<Stream> streams;
+  private List<Stream> streams;
 
   @ElementCollection
-  private Set<Process> processes;
+  private List<Process> processes;
 
   @ElementCollection
-  private Set<Request> requests;
+  private List<Request> requests;
 
   @ElementCollection
   private Set<Variable> inputVariables;
@@ -36,35 +38,35 @@ public class StreamingExtractTransformLoadTask extends Node implements Task {
   private boolean asyncAfter;
 
   public StreamingExtractTransformLoadTask() {
-    streams = new HashSet<Stream>();
-    processes = new HashSet<Process>();
-    requests = new HashSet<Request>();
+    streams = new ArrayList<Stream>();
+    processes = new ArrayList<Process>();
+    requests = new ArrayList<Request>();
     inputVariables = new HashSet<Variable>();
     asyncBefore = false;
     asyncAfter = false;
   }
 
-  public Set<Stream> getStreams() {
+  public List<Stream> getStreams() {
     return streams;
   }
 
-  public void setStreams(Set<Stream> streams) {
+  public void setStreams(List<Stream> streams) {
     this.streams = streams;
   }
 
-  public Set<Process> getProcesses() {
+  public List<Process> getProcesses() {
     return processes;
   }
 
-  public void setProcesses(Set<Process> processes) {
+  public void setProcesses(List<Process> processes) {
     this.processes = processes;
   }
 
-  public Set<Request> getRequests() {
+  public List<Request> getRequests() {
     return requests;
   }
 
-  public void setRequests(Set<Request> requests) {
+  public void setRequests(List<Request> requests) {
     this.requests = requests;
   }
 
