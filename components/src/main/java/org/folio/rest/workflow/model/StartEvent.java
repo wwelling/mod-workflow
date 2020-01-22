@@ -30,7 +30,7 @@ public class StartEvent extends Node implements Event {
   public StartEvent() {
     super();
     interrupting = false;
-    asyncBefore = true;
+    asyncBefore = false;
   }
 
   public StartEventType getType() {
