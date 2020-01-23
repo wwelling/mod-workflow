@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Embeddable
-public class Variable {
+public class EmbeddedVariable {
 
   @NotNull
   @Size(min = 4, max = 64)
@@ -19,7 +19,7 @@ public class Variable {
   @Enumerated(EnumType.STRING)
   private VariableType type;
 
-  public Variable() {
+  public EmbeddedVariable() {
     type = VariableType.PROCESS;
   }
 

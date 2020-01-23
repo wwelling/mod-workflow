@@ -15,15 +15,14 @@ import org.folio.rest.workflow.components.Task;
 @Entity
 public class StreamRequestToDirectoryTask extends Node implements Task {
 
-  @NotNull
   @Embedded
-  private Request request;
+  private EmbeddedRequest request;
 
   @ElementCollection
-  private Set<Variable> inputVariables;
+  private Set<EmbeddedVariable> inputVariables;
 
   @Embedded
-  private Variable outputVariable;
+  private EmbeddedVariable outputVariable;
 
   @NotNull
   @Column(nullable = false)
@@ -58,33 +57,33 @@ public class StreamRequestToDirectoryTask extends Node implements Task {
 
   public StreamRequestToDirectoryTask() {
     super();
-    inputVariables = new HashSet<Variable>();
+    inputVariables = new HashSet<EmbeddedVariable>();
     emitWriteSignal = false;
     asyncBefore = false;
     asyncAfter = false;
   }
 
-  public Request getRequest() {
+  public EmbeddedRequest getRequest() {
     return request;
   }
 
-  public void setRequest(Request request) {
+  public void setRequest(EmbeddedRequest request) {
     this.request = request;
   }
 
-  public Set<Variable> getInputVariables() {
+  public Set<EmbeddedVariable> getInputVariables() {
     return inputVariables;
   }
 
-  public void setInputVariables(Set<Variable> inputVariables) {
+  public void setInputVariables(Set<EmbeddedVariable> inputVariables) {
     this.inputVariables = inputVariables;
   }
 
-  public Variable getOutputVariable() {
+  public EmbeddedVariable getOutputVariable() {
     return outputVariable;
   }
 
-  public void setOutputVariable(Variable outputVariable) {
+  public void setOutputVariable(EmbeddedVariable outputVariable) {
     this.outputVariable = outputVariable;
   }
 

@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Embeddable
-public class Processor {
+public class EmbeddedProcessor {
 
   @NotNull
   @Column(nullable = false)
@@ -30,7 +30,7 @@ public class Processor {
   @Column(nullable = false)
   private int delay;
 
-  public Processor() {
+  public EmbeddedProcessor() {
     super();
     buffer = 0;
     delay = 0;

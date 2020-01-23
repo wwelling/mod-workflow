@@ -1,18 +1,16 @@
-package org.folio.rest.workflow.model;
+package org.folio.rest.workflow.dto;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import javax.validation.constraints.NotNull;
 
-@Embeddable
 public class Mapping {
 
-  @Column(nullable = false)
+  @NotNull
   private String toProperty;
 
-  @Column(nullable = false)
+  @NotNull
   private String fromProperty;
 
-  @Column(nullable = false)
+  @NotNull
   private boolean multiple;
 
   public Mapping() {

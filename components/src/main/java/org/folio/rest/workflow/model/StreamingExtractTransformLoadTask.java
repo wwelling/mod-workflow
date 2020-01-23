@@ -9,27 +9,26 @@ import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
 
 import org.folio.rest.workflow.components.Task;
 
 @Entity
 public class StreamingExtractTransformLoadTask extends Node implements Task {
 
-  @ManyToMany
-  private List<Extractor> extractors;
+  @ElementCollection
+  private List<EmbeddedExtractor> extractors;
 
   @ElementCollection
-  private List<Processor> processors;
+  private List<EmbeddedProcessor> processors;
 
   @ElementCollection
-  private List<Request> requests;
+  private List<EmbeddedRequest> requests;
 
   @ElementCollection
-  private Set<Variable> inputVariables;
+  private Set<EmbeddedVariable> inputVariables;
 
   @Embedded
-  private Variable outputVariable;
+  private EmbeddedVariable outputVariable;
 
   @Column(nullable = false)
   private boolean asyncBefore;
@@ -38,51 +37,51 @@ public class StreamingExtractTransformLoadTask extends Node implements Task {
   private boolean asyncAfter;
 
   public StreamingExtractTransformLoadTask() {
-    extractors = new ArrayList<Extractor>();
-    processors = new ArrayList<Processor>();
-    requests = new ArrayList<Request>();
-    inputVariables = new HashSet<Variable>();
+    extractors = new ArrayList<EmbeddedExtractor>();
+    processors = new ArrayList<EmbeddedProcessor>();
+    requests = new ArrayList<EmbeddedRequest>();
+    inputVariables = new HashSet<EmbeddedVariable>();
     asyncBefore = false;
     asyncAfter = false;
   }
 
-  public List<Extractor> getExtractors() {
+  public List<EmbeddedExtractor> getExtractors() {
     return extractors;
   }
 
-  public void setExtractors(List<Extractor> extractors) {
+  public void setExtractors(List<EmbeddedExtractor> extractors) {
     this.extractors = extractors;
   }
 
-  public List<Processor> getProcessors() {
+  public List<EmbeddedProcessor> getProcessors() {
     return processors;
   }
 
-  public void setProcessors(List<Processor> scripts) {
+  public void setProcessors(List<EmbeddedProcessor> scripts) {
     this.processors = scripts;
   }
 
-  public List<Request> getRequests() {
+  public List<EmbeddedRequest> getRequests() {
     return requests;
   }
 
-  public void setRequests(List<Request> requests) {
+  public void setRequests(List<EmbeddedRequest> requests) {
     this.requests = requests;
   }
 
-  public Set<Variable> getInputVariables() {
+  public Set<EmbeddedVariable> getInputVariables() {
     return inputVariables;
   }
 
-  public void setInputVariables(Set<Variable> inputVariables) {
+  public void setInputVariables(Set<EmbeddedVariable> inputVariables) {
     this.inputVariables = inputVariables;
   }
 
-  public Variable getOutputVariable() {
+  public EmbeddedVariable getOutputVariable() {
     return outputVariable;
   }
 
-  public void setOutputVariable(Variable outputVariable) {
+  public void setOutputVariable(EmbeddedVariable outputVariable) {
     this.outputVariable = outputVariable;
   }
 

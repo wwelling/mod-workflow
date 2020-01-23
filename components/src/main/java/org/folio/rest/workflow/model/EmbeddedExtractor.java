@@ -4,31 +4,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
+import javax.persistence.Convert;
+import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 
-import org.folio.spring.domain.model.AbstractBaseEntity;
+import org.folio.rest.workflow.dto.Comparison;
+import org.folio.rest.workflow.dto.Mapping;
+import org.folio.rest.workflow.dto.Request;
+import org.folio.rest.workflow.model.converter.ComparisonListConverter;
+import org.folio.rest.workflow.model.converter.MappingListConverter;
+import org.folio.rest.workflow.model.converter.RequestConverter;
 
-@Entity
-public class Extractor extends AbstractBaseEntity {
+@Embeddable
+public class EmbeddedExtractor {
 
-  @NotNull
-  @Embedded
+  @Column(nullable = false)
+  @Convert(converter = RequestConverter.class)
   private Request request;
 
   @NotNull
   @Column(nullable = false)
   private StreamMergeStrategy mergeStrategy;
 
-  @ElementCollection
+  @Column(columnDefinition = "TEXT", nullable = false)
+  @Convert(converter = ComparisonListConverter.class)
   private List<Comparison> comparisons;
 
-  @ElementCollection
+  @Column(columnDefinition = "TEXT", nullable = false)
+  @Convert(converter = MappingListConverter.class)
   private List<Mapping> mappings;
 
-  public Extractor() {
+  public EmbeddedExtractor() {
     super();
     comparisons = new ArrayList<Comparison>();
     mappings = new ArrayList<Mapping>();

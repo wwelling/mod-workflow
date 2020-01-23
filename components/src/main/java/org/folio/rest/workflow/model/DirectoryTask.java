@@ -30,10 +30,10 @@ public class DirectoryTask extends Node implements Task {
   private DirectoryAction action;
 
   @ElementCollection
-  private Set<Variable> inputVariables;
+  private Set<EmbeddedVariable> inputVariables;
 
   @Embedded
-  private Variable outputVariable;
+  private EmbeddedVariable outputVariable;
 
   @Column(nullable = false)
   private boolean asyncBefore;
@@ -43,7 +43,7 @@ public class DirectoryTask extends Node implements Task {
 
   public DirectoryTask() {
     super();
-    inputVariables = new HashSet<Variable>();
+    inputVariables = new HashSet<EmbeddedVariable>();
     asyncBefore = false;
     asyncAfter = false;
   }
@@ -72,19 +72,19 @@ public class DirectoryTask extends Node implements Task {
     this.action = action;
   }
 
-  public Set<Variable> getInputVariables() {
+  public Set<EmbeddedVariable> getInputVariables() {
     return inputVariables;
   }
 
-  public void setInputVariables(Set<Variable> inputVariables) {
+  public void setInputVariables(Set<EmbeddedVariable> inputVariables) {
     this.inputVariables = inputVariables;
   }
 
-  public Variable getOutputVariable() {
+  public EmbeddedVariable getOutputVariable() {
     return outputVariable;
   }
 
-  public void setOutputVariable(Variable outputVariable) {
+  public void setOutputVariable(EmbeddedVariable outputVariable) {
     this.outputVariable = outputVariable;
   }
 

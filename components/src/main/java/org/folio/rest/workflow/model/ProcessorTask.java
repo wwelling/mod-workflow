@@ -7,22 +7,20 @@ import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.validation.constraints.NotNull;
 
 import org.folio.rest.workflow.components.Task;
 
 @Entity
 public class ProcessorTask extends Node implements Task {
 
-  @NotNull
   @Embedded
-  private Processor processor;
+  private EmbeddedProcessor processor;
 
   @ElementCollection
-  private Set<Variable> inputVariables;
+  private Set<EmbeddedVariable> inputVariables;
 
   @Embedded
-  private Variable outputVariable;
+  private EmbeddedVariable outputVariable;
 
   @Column(nullable = false)
   private boolean asyncBefore;
@@ -32,32 +30,32 @@ public class ProcessorTask extends Node implements Task {
 
   public ProcessorTask() {
     super();
-    inputVariables = new HashSet<Variable>();
+    inputVariables = new HashSet<EmbeddedVariable>();
     asyncBefore = false;
     asyncAfter = false;
   }
 
-  public Processor getProcessor() {
+  public EmbeddedProcessor getProcessor() {
     return processor;
   }
 
-  public void setProcessor(Processor processor) {
+  public void setProcessor(EmbeddedProcessor processor) {
     this.processor = processor;
   }
 
-  public Set<Variable> getInputVariables() {
+  public Set<EmbeddedVariable> getInputVariables() {
     return inputVariables;
   }
 
-  public void setInputVariables(Set<Variable> inputVariables) {
+  public void setInputVariables(Set<EmbeddedVariable> inputVariables) {
     this.inputVariables = inputVariables;
   }
 
-  public Variable getOutputVariable() {
+  public EmbeddedVariable getOutputVariable() {
     return outputVariable;
   }
 
-  public void setOutputVariable(Variable outputVariable) {
+  public void setOutputVariable(EmbeddedVariable outputVariable) {
     this.outputVariable = outputVariable;
   }
 

@@ -10,7 +10,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 
 @Embeddable
-public class Request {
+public class EmbeddedRequest {
 
   @NotNull
   @Column(nullable = false)
@@ -33,10 +33,14 @@ public class Request {
   @Column(columnDefinition = "TEXT", nullable = false)
   private String bodyTemplate;
 
-  public Request() {
+  @Column(nullable = false)
+  private boolean iterate;
+
+  public EmbeddedRequest() {
     super();
     contentType = MediaType.APPLICATION_JSON_VALUE;
     accept = MediaType.APPLICATION_JSON_VALUE;
+    iterate = false;
   }
 
   public String getUrl() {
@@ -77,6 +81,14 @@ public class Request {
 
   public void setBodyTemplate(String bodyTemplate) {
     this.bodyTemplate = bodyTemplate;
+  }
+
+  public boolean isIterate() {
+    return iterate;
+  }
+
+  public void setIterate(boolean iterate) {
+    this.iterate = iterate;
   }
 
 }

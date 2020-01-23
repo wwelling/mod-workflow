@@ -1,15 +1,13 @@
-package org.folio.rest.workflow.model;
+package org.folio.rest.workflow.dto;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import javax.validation.constraints.NotNull;
 
-@Embeddable
 public class Comparison {
 
-  @Column(nullable = false)
+  @NotNull
   private String sourceProperty;
 
-  @Column(nullable = false)
+  @NotNull
   private String targetProperty;
 
   public Comparison() {

@@ -2,7 +2,7 @@ package org.folio.rest.workflow.components;
 
 import java.util.Set;
 
-import org.folio.rest.workflow.model.Variable;
+import org.folio.rest.workflow.model.EmbeddedVariable;
 
 public interface Task {
 
@@ -14,12 +14,12 @@ public interface Task {
 
   public void setAsyncAfter(boolean asyncAfter);
 
-  public Set<Variable> getInputVariables();
+  public Set<EmbeddedVariable> getInputVariables();
 
-  public void setInputVariables(Set<Variable> inputVariables);
+  public void setInputVariables(Set<EmbeddedVariable> inputVariables);
 
-  public Variable getOutputVariable();
+  public EmbeddedVariable getOutputVariable();
 
-  public void setOutputVariable(Variable outputVariable);
+  public void setOutputVariable(EmbeddedVariable outputVariable);
 
 }

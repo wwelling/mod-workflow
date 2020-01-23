@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
@@ -48,6 +49,9 @@ public class Workflow extends AbstractBaseEntity {
 
   @Column(unique = true)
   private String deploymentId;
+
+  @Embedded
+  private Setup setup;
 
   @ManyToMany
   private List<Node> nodes;
@@ -112,6 +116,14 @@ public class Workflow extends AbstractBaseEntity {
 
   public void setDeploymentId(String deploymentId) {
     this.deploymentId = deploymentId;
+  }
+
+  public Setup getSetup() {
+    return setup;
+  }
+
+  public void setSetup(Setup setup) {
+    this.setup = setup;
   }
 
   public List<Node> getNodes() {
