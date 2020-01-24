@@ -19,6 +19,9 @@ public class RequestTask extends Node implements Task {
   @ElementCollection
   private Set<EmbeddedVariable> inputVariables;
 
+  @ElementCollection
+  private Set<EmbeddedVariable> headerOutputVariables;
+
   @Embedded
   private EmbeddedVariable outputVariable;
 
@@ -31,6 +34,7 @@ public class RequestTask extends Node implements Task {
   public RequestTask() {
     super();
     inputVariables = new HashSet<EmbeddedVariable>();
+    headerOutputVariables = new HashSet<EmbeddedVariable>();
     asyncBefore = false;
     asyncAfter = false;
   }
@@ -49,6 +53,14 @@ public class RequestTask extends Node implements Task {
 
   public void setInputVariables(Set<EmbeddedVariable> inputVariables) {
     this.inputVariables = inputVariables;
+  }
+
+  public Set<EmbeddedVariable> getHeaderOutputVariables() {
+    return headerOutputVariables;
+  }
+
+  public void setHeaderOutputVariables(Set<EmbeddedVariable> headerOutputVariables) {
+    this.headerOutputVariables = headerOutputVariables;
   }
 
   public EmbeddedVariable getOutputVariable() {
