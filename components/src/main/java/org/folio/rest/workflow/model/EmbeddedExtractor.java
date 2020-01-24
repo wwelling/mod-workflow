@@ -18,7 +18,7 @@ import org.folio.rest.workflow.model.converter.RequestConverter;
 @Embeddable
 public class EmbeddedExtractor {
 
-  @Column(nullable = false)
+  @Column(columnDefinition = "TEXT", nullable = false)
   @Convert(converter = RequestConverter.class)
   private Request request;
 

@@ -19,16 +19,20 @@ public class Request {
   @NotNull
   private String accept;
 
-  @NotNull
   private String bodyTemplate;
 
-  private boolean iterate;
+  private boolean iterable;
+
+  private String iterableKey;
+
+  private String responseKey;
 
   public Request() {
     super();
     contentType = MediaType.APPLICATION_JSON_VALUE;
     accept = MediaType.APPLICATION_JSON_VALUE;
-    iterate = false;
+    bodyTemplate = "{}";
+    iterable = false;
   }
 
   public String getUrl() {
@@ -71,12 +75,28 @@ public class Request {
     this.bodyTemplate = bodyTemplate;
   }
 
-  public boolean isIterate() {
-    return iterate;
+  public boolean isIterable() {
+    return iterable;
   }
 
-  public void setIterate(boolean iterate) {
-    this.iterate = iterate;
+  public void setIterable(boolean iterable) {
+    this.iterable = iterable;
+  }
+
+  public String getIterableKey() {
+    return iterableKey;
+  }
+
+  public void setIterableKey(String iterableKey) {
+    this.iterableKey = iterableKey;
+  }
+
+  public String getResponseKey() {
+    return responseKey;
+  }
+
+  public void setResponseKey(String responseKey) {
+    this.responseKey = responseKey;
   }
 
 }
