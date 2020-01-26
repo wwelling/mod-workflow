@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.folio.rest.workflow.components.Wait;
+import org.folio.rest.workflow.model.components.Wait;
 
 @Entity
 public class ReceiveTask extends Node implements Wait {

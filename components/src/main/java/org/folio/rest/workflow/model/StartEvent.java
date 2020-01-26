@@ -7,7 +7,7 @@ import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.folio.rest.workflow.components.Event;
+import org.folio.rest.workflow.model.components.Event;
 
 @Entity
 public class StartEvent extends Node implements Event {

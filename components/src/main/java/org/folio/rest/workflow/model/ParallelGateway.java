@@ -6,7 +6,7 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 
-import org.folio.rest.workflow.components.Gateway;
+import org.folio.rest.workflow.model.components.Gateway;
 
 @Entity
 public class ParallelGateway extends Node implements Gateway {

@@ -11,8 +11,8 @@ import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.folio.rest.workflow.components.Conditional;
-import org.folio.rest.workflow.components.Gateway;
+import org.folio.rest.workflow.model.components.Conditional;
+import org.folio.rest.workflow.model.components.Gateway;
 
 @Entity
 public class ConditionalGateway extends Node implements Gateway, Conditional {

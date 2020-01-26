@@ -11,7 +11,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 
-import org.folio.rest.workflow.components.Task;
+import org.folio.rest.workflow.model.components.Task;
 
 @Entity
 public class DirectoryTask extends Node implements Task {

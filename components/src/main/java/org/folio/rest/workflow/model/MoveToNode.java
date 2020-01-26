@@ -8,7 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
 
-import org.folio.rest.workflow.components.Branch;
+import org.folio.rest.workflow.model.components.Branch;
 
 @Entity
 public class MoveToNode extends Node implements Branch {

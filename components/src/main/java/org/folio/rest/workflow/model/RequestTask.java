@@ -8,7 +8,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 
-import org.folio.rest.workflow.components.Task;
+import org.folio.rest.workflow.model.components.Task;
 
 @Entity
 public class RequestTask extends Node implements Task {

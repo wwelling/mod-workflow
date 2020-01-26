@@ -10,7 +10,7 @@ import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.folio.rest.workflow.components.Task;
+import org.folio.rest.workflow.model.components.Task;
 
 @Entity
 public class StreamRequestToDirectoryTask extends Node implements Task {
