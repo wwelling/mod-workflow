@@ -12,8 +12,8 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.MapKeyColumn;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -56,7 +56,7 @@ public class Workflow extends AbstractBaseEntity {
   @Embedded
   private Setup setup;
 
-  @ManyToMany
+  @OneToMany
   private List<Node> nodes;
 
   @ElementCollection
