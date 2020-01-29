@@ -4,14 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 
 import org.folio.rest.workflow.model.components.Gateway;
 
 @Entity
 public class ParallelGateway extends Node implements Gateway {
 
-  @ManyToMany
+  @OneToMany(fetch = FetchType.EAGER)
   private List<Node> nodes;
 
   public ParallelGateway() {

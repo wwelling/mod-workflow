@@ -8,7 +8,8 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.ManyToMany;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
 import org.folio.rest.workflow.model.components.Branch;
@@ -22,7 +23,7 @@ public class Subprocess extends Node implements Branch, MultiInstance {
   @Enumerated(EnumType.STRING)
   private SubprocessType type;
 
-  @ManyToMany
+  @OneToMany(fetch = FetchType.EAGER)
   private List<Node> nodes;
 
   @Column(nullable = false)
