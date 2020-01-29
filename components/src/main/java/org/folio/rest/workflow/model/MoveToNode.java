@@ -5,7 +5,8 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 import javax.validation.constraints.NotNull;
 
 import org.folio.rest.workflow.model.components.Branch;
@@ -17,7 +18,8 @@ public class MoveToNode extends Node implements Branch {
   @Column(nullable = false)
   private String gatewayId;
 
-  @ManyToMany
+  @OneToMany
+  @OrderColumn
   private List<Node> nodes;
 
   public MoveToNode() {

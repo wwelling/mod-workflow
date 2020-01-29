@@ -5,13 +5,14 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 
 @Entity
 public class EventSubprocess extends Node {
 
-  @OneToMany(fetch = FetchType.EAGER)
+  @OneToMany
+  @OrderColumn
   private List<Node> nodes;
 
   @Column(nullable = false)

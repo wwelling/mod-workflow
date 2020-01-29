@@ -7,8 +7,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -33,7 +33,8 @@ public class ConditionalGateway extends Node implements Gateway, Conditional {
   @Column(nullable = false)
   private String answer;
 
-  @OneToMany(fetch = FetchType.EAGER)
+  @OneToMany
+  @OrderColumn
   private List<Node> nodes;
 
   public ConditionalGateway() {
