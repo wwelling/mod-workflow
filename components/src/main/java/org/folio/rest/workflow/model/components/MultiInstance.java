@@ -9,7 +9,7 @@ public interface MultiInstance {
   public void setLoopRef(EmbeddedLoopReference loopRef);
 
   public default boolean isMultiInstance() {
-    return getLoopRef() != null;
+    return getLoopRef() != null && (getLoopRef().hasCardinalityExpression() || getLoopRef().hasDataInput());
   }
 
 }

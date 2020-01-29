@@ -10,10 +10,10 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 
-import org.folio.rest.workflow.model.components.Task;
+import org.folio.rest.workflow.model.components.DelegateTask;
 
 @Entity
-public class StreamingExtractTransformLoadTask extends Node implements Task {
+public class StreamingExtractTransformLoadTask extends Node implements DelegateTask {
 
   @ElementCollection
   private List<EmbeddedExtractor> extractors;

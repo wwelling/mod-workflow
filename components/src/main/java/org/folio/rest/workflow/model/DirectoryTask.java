@@ -11,10 +11,10 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 
-import org.folio.rest.workflow.model.components.Task;
+import org.folio.rest.workflow.model.components.DelegateTask;
 
 @Entity
-public class DirectoryTask extends Node implements Task {
+public class DirectoryTask extends Node implements DelegateTask {
 
   @NotNull
   @Column(nullable = false)

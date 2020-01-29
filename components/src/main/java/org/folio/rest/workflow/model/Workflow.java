@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -17,9 +18,11 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.folio.rest.workflow.model.converter.JsonNodeConverter;
 import org.folio.spring.domain.model.AbstractBaseEntity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.JsonNode;
 
 @Entity
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
@@ -60,13 +63,14 @@ public class Workflow extends AbstractBaseEntity {
   @CollectionTable(name = "workflow_initial_context", joinColumns = @JoinColumn(name = "workflow_id"))
   @MapKeyColumn(name = "context_key")
   @Column(name = "context_value")
-  private Map<String, String> initialContext;
+  @Convert(converter = JsonNodeConverter.class, attributeName = "value")
+  private Map<String, JsonNode> initialContext;
 
   public Workflow() {
     super();
     active = false;
     nodes = new ArrayList<Node>();
-    initialContext = new HashMap<String, String>();
+    initialContext = new HashMap<String, JsonNode>();
     historyTimeToLive = 0;
   }
 
@@ -134,11 +138,11 @@ public class Workflow extends AbstractBaseEntity {
     this.nodes = nodes;
   }
 
-  public Map<String, String> getInitialContext() {
+  public Map<String, JsonNode> getInitialContext() {
     return initialContext;
   }
 
-  public void setInitialContext(Map<String, String> initialContext) {
+  public void setInitialContext(Map<String, JsonNode> initialContext) {
     this.initialContext = initialContext;
   }
 

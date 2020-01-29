@@ -8,10 +8,10 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 
-import org.folio.rest.workflow.model.components.Task;
+import org.folio.rest.workflow.model.components.DelegateTask;
 
 @Entity
-public class ProcessorTask extends Node implements Task {
+public class ProcessorTask extends Node implements DelegateTask {
 
   @Embedded
   private EmbeddedProcessor processor;

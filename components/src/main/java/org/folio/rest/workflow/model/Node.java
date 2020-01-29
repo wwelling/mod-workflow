@@ -30,13 +30,13 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
     @JsonSubTypes.Type(value = MoveToNode.class, name = "MoveToNode"),
 
-    @JsonSubTypes.Type(value = ProcessorTask.class, name = "ProcessorTask"),
-
     @JsonSubTypes.Type(value = RequestTask.class, name = "RequestTask"),
 
     @JsonSubTypes.Type(value = DirectoryTask.class, name = "DirectoryTask"),
 
     @JsonSubTypes.Type(value = ReceiveTask.class, name = "ReceiveTask"),
+
+    @JsonSubTypes.Type(value = ScriptTask.class, name = "ScriptTask"),
 
     @JsonSubTypes.Type(value = StreamRequestToDirectoryTask.class, name = "StreamRequestToDirectoryTask"),
 
