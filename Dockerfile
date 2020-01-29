@@ -25,7 +25,7 @@ FROM openjdk:8u171-jre-alpine
 WORKDIR /mod-workflow
 
 # copy over the built artifact from the maven image
-COPY --from=maven /service/target/service*.jar ./mod-workflow.jar
+COPY --from=maven /service/target/workflow-service*.jar ./mod-workflow.jar
 
 # settings
 ENV LOGGING_LEVEL_FOLIO='INFO'
@@ -52,10 +52,10 @@ RUN mkdir -p activemq-data
 
 # set the startup command to run your binary
 CMD java -jar ./mod-workflow.jar \
-    --logging.level.org.folio=${LOGGING_LEVEL_FOLIO} --server.port=${SERVER_PORT} --spring.activemq.broker-url=${SPRING_ACTIVEMQ_BROKER_URL} \
-    --spring.datasource.platform=${SPRING_DATASOURCE_PLATFORM} --spring.datasource.url=${SPRING_DATASOURCE_URL} \
-    --spring.datasource.driverClassName=${SPRING_DATASOURCE_DRIVERCLASSNAME} --spring.datasource.username=${SPRING_DATASOURCE_USERNAME} \
-    --spring.datasource.password=${SPRING_DATASOURCE_PASSWORD} --spring.h2.console.enabled=${SPRING_H2_CONSOLE_ENABLED} \
-    --spring.jpa.database-platform=${SPRING_JPA_DATABASE_PLATFORM} --event.queue.name=${EVENT_QUEUE_NAME} \
-    --tenant.default-tenant=${TENANT_DEFAULT_TENANT} --tenant.initialize-default-tenant=${TENANT_INITIALIZE_DEFAULT_TENANT} \
-    --okapi.location=${OKAPI_LOCATION} --spring.h2.console.settings.web-allow-others=${SPRING_H2_WEBALLOW}
+  --logging.level.org.folio=${LOGGING_LEVEL_FOLIO} --server.port=${SERVER_PORT} --spring.activemq.broker-url=${SPRING_ACTIVEMQ_BROKER_URL} \
+  --spring.datasource.platform=${SPRING_DATASOURCE_PLATFORM} --spring.datasource.url=${SPRING_DATASOURCE_URL} \
+  --spring.datasource.driverClassName=${SPRING_DATASOURCE_DRIVERCLASSNAME} --spring.datasource.username=${SPRING_DATASOURCE_USERNAME} \
+  --spring.datasource.password=${SPRING_DATASOURCE_PASSWORD} --spring.h2.console.enabled=${SPRING_H2_CONSOLE_ENABLED} \
+  --spring.jpa.database-platform=${SPRING_JPA_DATABASE_PLATFORM} --event.queue.name=${EVENT_QUEUE_NAME} \
+  --tenant.default-tenant=${TENANT_DEFAULT_TENANT} --tenant.initialize-default-tenant=${TENANT_INITIALIZE_DEFAULT_TENANT} \
+  --okapi.location=${OKAPI_LOCATION} --spring.h2.console.settings.web-allow-others=${SPRING_H2_WEBALLOW}
