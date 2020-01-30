@@ -24,9 +24,13 @@ public class EmbeddedVariable {
   @Column(nullable = true)
   private boolean spin;
 
+  @Column(nullable = true)
+  private Boolean asJson;
+
   public EmbeddedVariable() {
     type = VariableType.PROCESS;
     spin = false;
+    asJson = false;
   }
 
   public Optional<String> getKey() {
@@ -51,6 +55,14 @@ public class EmbeddedVariable {
 
   public void setSpin(boolean spin) {
     this.spin = spin;
+  }
+
+  public Boolean getAsJson() {
+    return asJson;
+  }
+
+  public void setAsJson(Boolean asJson) {
+    this.asJson = asJson;
   }
 
 }
