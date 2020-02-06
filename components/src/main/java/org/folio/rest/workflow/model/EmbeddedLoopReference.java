@@ -21,11 +21,11 @@ public class EmbeddedLoopReference {
 
   @NotNull
   @Column(nullable = true)
-  private boolean sequential;
+  private boolean parallel;
 
   public EmbeddedLoopReference() {
     super();
-    sequential = true;
+    parallel = false;
   }
 
   public String getCardinalityExpression() {
@@ -72,12 +72,12 @@ public class EmbeddedLoopReference {
     return completeConditionExpression != null;
   }
 
-  public boolean isSequential() {
-    return sequential;
+  public boolean isParallel() {
+    return parallel;
   }
 
-  public void setSequential(boolean sequential) {
-    this.sequential = sequential;
+  public void setParallel(boolean parallel) {
+    this.parallel = parallel;
   }
 
 }
