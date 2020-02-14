@@ -17,17 +17,15 @@
       "minLength" : 4,
       "maxLength" : 256
     },
-    "type" : {
+    "pathPattern" : {
       "type" : "string",
-      "enum" : [ "PROCESS_START", "TASK_COMPLETE", "MESSAGE_CORRELATE" ]
+      "minLength" : 2,
+      "maxLength" : 256
     },
     "method" : {
       "type" : "string",
       "enum" : [ "GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "TRACE" ]
-    },
-    "pathPattern" : {
-      "type" : "string"
     }
   },
-  "required" : [ "name", "description", "type", "method", "pathPattern" ]
+  "required" : [ "name", "description", "pathPattern", "method" ]
 }

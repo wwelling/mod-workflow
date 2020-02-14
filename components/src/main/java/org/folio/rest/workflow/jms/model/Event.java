@@ -15,8 +15,6 @@ public class Event implements Serializable {
 
   private String triggerId;
 
-  private TriggerType triggerType;
-
   private String pathPattern;
 
   private String method;
@@ -40,7 +38,6 @@ public class Event implements Serializable {
   // @formatter:off
   public Event(
     String triggerId,
-    TriggerType triggerType,
     String pathPattern,
     String method,
     String tenant,
@@ -49,7 +46,6 @@ public class Event implements Serializable {
   // @formatter:on
     this();
     this.triggerId = triggerId;
-    this.triggerType = triggerType;
     this.pathPattern = pathPattern;
     this.tenant = tenant;
     this.path = path;
@@ -63,7 +59,6 @@ public class Event implements Serializable {
   // @formatter:off
   public Event(
     String triggerId,
-    TriggerType triggerType,
     String pathPattern,
     String method,
     String tenant,
@@ -71,14 +66,13 @@ public class Event implements Serializable {
     Map<String, String> headers
   ) {
   // @formatter:on
-    this(triggerId, triggerType, pathPattern, method, tenant, path);
+    this(triggerId, pathPattern, method, tenant, path);
     this.headers = headers;
   }
 
   // @formatter:off
   public Event(
     String triggerId,
-    TriggerType triggerType,
     String pathPattern,
     String method,
     String tenant,
@@ -87,7 +81,7 @@ public class Event implements Serializable {
     JsonNode payload
   ) {
   // @formatter:on
-    this(triggerId, triggerType, pathPattern, method, tenant, path, headers);
+    this(triggerId, pathPattern, method, tenant, path, headers);
     this.payload = payload;
   }
 
@@ -97,14 +91,6 @@ public class Event implements Serializable {
 
   public void setTriggerId(String triggerId) {
     this.triggerId = triggerId;
-  }
-
-  public TriggerType getTriggerType() {
-    return triggerType;
-  }
-
-  public void setTriggerType(TriggerType triggerType) {
-    this.triggerType = triggerType;
   }
 
   public String getPathPattern() {
