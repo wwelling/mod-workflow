@@ -42,7 +42,7 @@ ENV SPRING_JPA_DATABASE_PLATFORM='org.hibernate.dialect.H2Dialect'
 ENV EVENT_QUEUE_NAME='event.queue'
 ENV TENANT_DEFAULT_TENANT='tern'
 ENV TENANT_INITIALIZE_DEFAULT_TENANT='false'
-ENV OKAPI_LOCATION='http://localhost:9130'
+ENV OKAPI_URL='http://localhost:9130'
 
 # expose ports
 EXPOSE ${SERVER_PORT}
@@ -55,7 +55,7 @@ CMD java -jar ./mod-workflow.jar \
   --logging.level.org.folio=${LOGGING_LEVEL_FOLIO} --server.port=${SERVER_PORT} --spring.activemq.broker-url=${SPRING_ACTIVEMQ_BROKER_URL} \
   --spring.datasource.platform=${SPRING_DATASOURCE_PLATFORM} --spring.datasource.url=${SPRING_DATASOURCE_URL} \
   --spring.datasource.driverClassName=${SPRING_DATASOURCE_DRIVERCLASSNAME} --spring.datasource.username=${SPRING_DATASOURCE_USERNAME} \
-  --spring.datasource.password=${SPRING_DATASOURCE_PASSWORD} --spring.h2.console.enabled=${SPRING_H2_CONSOLE_ENABLED} \
-  --spring.jpa.database-platform=${SPRING_JPA_DATABASE_PLATFORM} --event.queue.name=${EVENT_QUEUE_NAME} \
-  --tenant.default-tenant=${TENANT_DEFAULT_TENANT} --tenant.initialize-default-tenant=${TENANT_INITIALIZE_DEFAULT_TENANT} \
-  --okapi.location=${OKAPI_LOCATION} --spring.h2.console.settings.web-allow-others=${SPRING_H2_WEBALLOW}
+  --spring.datasource.password=${SPRING_DATASOURCE_PASSWORD} --spring.jpa.database-platform=${SPRING_JPA_DATABASE_PLATFORM} \
+  --spring.h2.console.enabled=${SPRING_H2_CONSOLE_ENABLED} --spring.h2.console.settings.web-allow-others=${SPRING_H2_WEBALLOW} \
+  --event.queue.name=${EVENT_QUEUE_NAME} --tenant.default-tenant=${TENANT_DEFAULT_TENANT} \
+  --tenant.initialize-default-tenant=${TENANT_INITIALIZE_DEFAULT_TENANT} --okapi.url=${OKAPI_URL}
