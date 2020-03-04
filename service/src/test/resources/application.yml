@@ -23,7 +23,7 @@ spring:
     username: folio
     password: folio
   h2:
-    console: 
+    console:
       enabled: true
       path: /h2console
   jpa:
@@ -49,4 +49,4 @@ tenant:
   domain-packages:
   schema-scripts:
 
-okapi.location: http://localhost:9130
+okapi.url: http://localhost:9130

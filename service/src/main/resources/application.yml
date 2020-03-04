@@ -63,4 +63,4 @@ tenant:
     - org.folio.rest.workflow.model
   schema-scripts:
 
-okapi.location: http://localhost:9130
+okapi.url: http://localhost:9130

@@ -30,8 +30,8 @@ public class WorkflowEngineService {
   @Value("${okapi.auth.tokenHeaderName:X-Okapi-Token}")
   private String tokenHeaderName;
 
-  @Value("${okapi.location}")
-  private String okapiLocation;
+  @Value("${okapi.url}")
+  private String okapiUrl;
 
   @Autowired
   private WorkflowRepo workflowRepo;
@@ -62,7 +62,7 @@ public class WorkflowEngineService {
 
     HttpEntity<Workflow> workflowHttpEntity = new HttpEntity<>(workflow, requestHeaders);
 
-    String url = String.format(requestPath, okapiLocation);
+    String url = String.format(requestPath, okapiUrl);
     ResponseEntity<Workflow> response = exchange(url, HttpMethod.POST, workflowHttpEntity, Workflow.class);
 
     if (response.getStatusCode() == HttpStatus.OK) {
