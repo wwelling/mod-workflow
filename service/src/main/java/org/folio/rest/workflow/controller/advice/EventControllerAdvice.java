@@ -1,7 +1,7 @@
 package org.folio.rest.workflow.controller.advice;
 
 import org.folio.rest.workflow.exception.EventPublishException;
-import org.folio.spring.model.response.Errors;
+import org.folio.spring.model.response.ResponseErrors;
 import org.folio.spring.utility.ErrorUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +17,7 @@ public class EventControllerAdvice {
 
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   @ExceptionHandler(EventPublishException.class)
-  public Errors handleEventPublishException(EventPublishException exception) {
+  public ResponseErrors handleEventPublishException(EventPublishException exception) {
     logger.debug(exception.getMessage(), exception);
     return ErrorUtility.buildError(exception, HttpStatus.INTERNAL_SERVER_ERROR);
   }

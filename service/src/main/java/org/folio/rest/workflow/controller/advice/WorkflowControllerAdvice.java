@@ -4,7 +4,7 @@ import org.folio.rest.workflow.exception.WorkflowAlreadyActiveException;
 import org.folio.rest.workflow.exception.WorkflowDeploymentException;
 import org.folio.rest.workflow.exception.WorkflowEngineServiceException;
 import org.folio.rest.workflow.exception.WorkflowNotFoundException;
-import org.folio.spring.model.response.Errors;
+import org.folio.spring.model.response.ResponseErrors;
 import org.folio.spring.utility.ErrorUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,28 +20,28 @@ public class WorkflowControllerAdvice {
 
   @ResponseStatus(HttpStatus.NOT_FOUND)
   @ExceptionHandler(WorkflowNotFoundException.class)
-  public Errors handleWorkflowNotFoundException(WorkflowNotFoundException exception) {
+  public ResponseErrors handleWorkflowNotFoundException(WorkflowNotFoundException exception) {
     logger.debug(exception.getMessage(), exception);
     return ErrorUtility.buildError(exception, HttpStatus.NOT_FOUND);
   }
 
   @ResponseStatus(HttpStatus.FORBIDDEN)
   @ExceptionHandler(WorkflowAlreadyActiveException.class)
-  public Errors handleWorkflowAlreadyActivrException(WorkflowAlreadyActiveException exception) {
+  public ResponseErrors handleWorkflowAlreadyActivrException(WorkflowAlreadyActiveException exception) {
     logger.debug(exception.getMessage(), exception);
     return ErrorUtility.buildError(exception, HttpStatus.FORBIDDEN);
   }
 
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   @ExceptionHandler(WorkflowDeploymentException.class)
-  public Errors handleWorkflowDeploymentException(WorkflowDeploymentException exception) {
+  public ResponseErrors handleWorkflowDeploymentException(WorkflowDeploymentException exception) {
     logger.debug(exception.getMessage(), exception);
     return ErrorUtility.buildError(exception, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   @ExceptionHandler(WorkflowEngineServiceException.class)
-  public Errors handleWorkflowEngineServiceException(WorkflowEngineServiceException exception) {
+  public ResponseErrors handleWorkflowEngineServiceException(WorkflowEngineServiceException exception) {
     logger.debug(exception.getMessage(), exception);
     return ErrorUtility.buildError(exception, HttpStatus.INTERNAL_SERVER_ERROR);
   }
