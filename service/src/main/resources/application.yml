@@ -64,3 +64,10 @@ tenant:
   schema-scripts:
 
 okapi.url: http://localhost:9130
+
+info:
+  build:
+    artifact: "@project.artifactId@"
+    name: "@project.name@"
+    description: "@project.description@"
+    version: "@project.version@"
