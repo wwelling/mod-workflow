@@ -16,24 +16,6 @@ public class EmailTask extends Node implements DelegateTask {
   @ElementCollection
   private Set<EmbeddedVariable> inputVariables;
 
-  @Column(nullable = false)
-  private String to;
-
-  @Column(nullable = true)
-  private String cc;
-
-  @Column(nullable = true)
-  private String bcc;
-
-  @Column(nullable = false)
-  private String from;
-
-  @Column(nullable = false)
-  private String subject;
-
-  @Column(columnDefinition = "TEXT", nullable = false)
-  private String text;
-
   @Embedded
   private EmbeddedVariable outputVariable;
 
@@ -42,6 +24,24 @@ public class EmailTask extends Node implements DelegateTask {
 
   @Column(nullable = false)
   private boolean asyncAfter;
+
+  @Column(nullable = false)
+  private String mailTo;
+
+  @Column(nullable = true)
+  private String mailCc;
+
+  @Column(nullable = true)
+  private String mailBcc;
+
+  @Column(nullable = false)
+  private String mailFrom;
+
+  @Column(nullable = false)
+  private String mailSubject;
+
+  @Column(nullable = false)
+  private String mailText;
 
   public EmailTask() {
     super();
@@ -56,54 +56,6 @@ public class EmailTask extends Node implements DelegateTask {
 
   public void setInputVariables(Set<EmbeddedVariable> inputVariables) {
     this.inputVariables = inputVariables;
-  }
-
-  public String getTo() {
-    return to;
-  }
-
-  public void setTo(String to) {
-    this.to = to;
-  }
-
-  public String getCc() {
-    return cc;
-  }
-
-  public void setCc(String cc) {
-    this.cc = cc;
-  }
-
-  public String getBcc() {
-    return bcc;
-  }
-
-  public void setBcc(String bcc) {
-    this.bcc = bcc;
-  }
-
-  public String getFrom() {
-    return from;
-  }
-
-  public void setFrom(String from) {
-    this.from = from;
-  }
-
-  public String getSubject() {
-    return subject;
-  }
-
-  public void setSubject(String subject) {
-    this.subject = subject;
-  }
-
-  public String getText() {
-    return text;
-  }
-
-  public void setText(String text) {
-    this.text = text;
   }
 
   public EmbeddedVariable getOutputVariable() {
@@ -128,6 +80,54 @@ public class EmailTask extends Node implements DelegateTask {
 
   public void setAsyncAfter(boolean asyncAfter) {
     this.asyncAfter = asyncAfter;
+  }
+
+  public String getMailTo() {
+    return mailTo;
+  }
+
+  public void setMailTo(String mailTo) {
+    this.mailTo = mailTo;
+  }
+
+  public String getMailCc() {
+    return mailCc;
+  }
+
+  public void setMailCc(String mailCc) {
+    this.mailCc = mailCc;
+  }
+
+  public String getMailBcc() {
+    return mailBcc;
+  }
+
+  public void setMailBcc(String mailBcc) {
+    this.mailBcc = mailBcc;
+  }
+
+  public String getMailFrom() {
+    return mailFrom;
+  }
+
+  public void setMailFrom(String mailFrom) {
+    this.mailFrom = mailFrom;
+  }
+
+  public String getMailSubject() {
+    return mailSubject;
+  }
+
+  public void setMailSubject(String mailSubject) {
+    this.mailSubject = mailSubject;
+  }
+
+  public String getMailText() {
+    return mailText;
+  }
+
+  public void setMailText(String mailText) {
+    this.mailText = mailText;
   }
 
 }

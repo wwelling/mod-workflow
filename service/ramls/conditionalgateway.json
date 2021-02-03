@@ -415,24 +415,6 @@
             "$ref" : "#/definitions/EmbeddedVariable"
           }
         },
-        "to" : {
-          "type" : "string"
-        },
-        "cc" : {
-          "type" : "string"
-        },
-        "bcc" : {
-          "type" : "string"
-        },
-        "from" : {
-          "type" : "string"
-        },
-        "subject" : {
-          "type" : "string"
-        },
-        "text" : {
-          "type" : "string"
-        },
         "outputVariable" : {
           "$ref" : "#/definitions/EmbeddedVariable"
         },
@@ -441,6 +423,24 @@
         },
         "asyncAfter" : {
           "type" : "boolean"
+        },
+        "mailTo" : {
+          "type" : "string"
+        },
+        "mailCc" : {
+          "type" : "string"
+        },
+        "mailBcc" : {
+          "type" : "string"
+        },
+        "mailFrom" : {
+          "type" : "string"
+        },
+        "mailSubject" : {
+          "type" : "string"
+        },
+        "mailText" : {
+          "type" : "string"
         },
         "identifier" : {
           "type" : "string"
