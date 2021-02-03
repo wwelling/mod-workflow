@@ -60,7 +60,8 @@ tenant:
     - org.folio.rest.workflow.model
   schema-scripts:
 
-okapi.url: http://localhost:9130
+# set to go directly to mod-camunda for development
+okapi.url: http://localhost:9000
 
 info:
   build:
