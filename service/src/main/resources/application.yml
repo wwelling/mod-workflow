@@ -21,10 +21,10 @@ spring:
     driverClassName: org.h2.Driver
     # platform: postgres
     # driverClassName: org.postgresql.Driver
-    # url: jdbc:postgresql://localhost:5432/mod-workflow
+    # url: jdbc:postgresql://localhost:5432/mod_workflow
 
-    username: folio
-    password: folio
+    username: folio_admin
+    password: folio_admin
   devtools:
     add-properties: false
     restart:
