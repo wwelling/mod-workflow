@@ -25,7 +25,7 @@ public class DatabaseQueryTask extends Node implements DelegateTask {
   private boolean asyncAfter;
 
   @Column(nullable = false)
-  private String identifier;
+  private String designation;
 
   @Column(nullable = false)
   private String query;
@@ -68,12 +68,12 @@ public class DatabaseQueryTask extends Node implements DelegateTask {
     this.asyncAfter = asyncAfter;
   }
 
-  public String getIdentifier() {
-    return identifier;
+  public String getDesignation() {
+    return designation;
   }
 
-  public void setIdentifier(String identifier) {
-    this.identifier = identifier;
+  public void setDesignation(String designation) {
+    this.designation = designation;
   }
 
   public String getQuery() {
