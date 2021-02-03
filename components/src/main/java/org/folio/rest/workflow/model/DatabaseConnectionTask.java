@@ -1,6 +1,5 @@
 package org.folio.rest.workflow.model;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -11,7 +10,7 @@ import javax.persistence.Entity;
 import org.folio.rest.workflow.model.components.DelegateTask;
 
 @Entity
-public class EmailTask extends Node implements DelegateTask {
+public class DatabaseConnectionTask extends Node implements DelegateTask {
 
   @ElementCollection
   private Set<EmbeddedVariable> inputVariables;
@@ -26,26 +25,19 @@ public class EmailTask extends Node implements DelegateTask {
   private boolean asyncAfter;
 
   @Column(nullable = false)
-  private String mailTo;
-
-  @Column(nullable = true)
-  private String mailCc;
-
-  @Column(nullable = true)
-  private String mailBcc;
+  private String designation;
 
   @Column(nullable = false)
-  private String mailFrom;
+  private String url;
 
-  @Column(nullable = false)
-  private String mailSubject;
+  @Column(nullable = true)
+  private String user;
 
-  @Column(columnDefinition = "TEXT", nullable = false)
-  private String mailText;
+  @Column(nullable = true)
+  private String password;
 
-  public EmailTask() {
+  public DatabaseConnectionTask() {
     super();
-    inputVariables = new HashSet<EmbeddedVariable>();
     asyncBefore = false;
     asyncAfter = false;
   }
@@ -82,52 +74,36 @@ public class EmailTask extends Node implements DelegateTask {
     this.asyncAfter = asyncAfter;
   }
 
-  public String getMailTo() {
-    return mailTo;
+  public String getDesignation() {
+    return designation;
   }
 
-  public void setMailTo(String mailTo) {
-    this.mailTo = mailTo;
+  public void setDesignation(String designation) {
+    this.designation = designation;
   }
 
-  public String getMailCc() {
-    return mailCc;
+  public String getUrl() {
+    return url;
   }
 
-  public void setMailCc(String mailCc) {
-    this.mailCc = mailCc;
+  public void setUrl(String url) {
+    this.url = url;
   }
 
-  public String getMailBcc() {
-    return mailBcc;
+  public String getUser() {
+    return user;
   }
 
-  public void setMailBcc(String mailBcc) {
-    this.mailBcc = mailBcc;
+  public void setUser(String user) {
+    this.user = user;
   }
 
-  public String getMailFrom() {
-    return mailFrom;
+  public String getPassword() {
+    return password;
   }
 
-  public void setMailFrom(String mailFrom) {
-    this.mailFrom = mailFrom;
-  }
-
-  public String getMailSubject() {
-    return mailSubject;
-  }
-
-  public void setMailSubject(String mailSubject) {
-    this.mailSubject = mailSubject;
-  }
-
-  public String getMailText() {
-    return mailText;
-  }
-
-  public void setMailText(String mailText) {
-    this.mailText = mailText;
+  public void setPassword(String password) {
+    this.password = password;
   }
 
 }

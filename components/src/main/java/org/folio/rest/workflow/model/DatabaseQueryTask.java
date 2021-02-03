@@ -1,6 +1,5 @@
 package org.folio.rest.workflow.model;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -11,7 +10,7 @@ import javax.persistence.Entity;
 import org.folio.rest.workflow.model.components.DelegateTask;
 
 @Entity
-public class EmailTask extends Node implements DelegateTask {
+public class DatabaseQueryTask extends Node implements DelegateTask {
 
   @ElementCollection
   private Set<EmbeddedVariable> inputVariables;
@@ -26,26 +25,13 @@ public class EmailTask extends Node implements DelegateTask {
   private boolean asyncAfter;
 
   @Column(nullable = false)
-  private String mailTo;
-
-  @Column(nullable = true)
-  private String mailCc;
-
-  @Column(nullable = true)
-  private String mailBcc;
-
-  @Column(nullable = false)
-  private String mailFrom;
-
-  @Column(nullable = false)
-  private String mailSubject;
+  private String designation;
 
   @Column(columnDefinition = "TEXT", nullable = false)
-  private String mailText;
+  private String query;
 
-  public EmailTask() {
+  public DatabaseQueryTask() {
     super();
-    inputVariables = new HashSet<EmbeddedVariable>();
     asyncBefore = false;
     asyncAfter = false;
   }
@@ -82,52 +68,20 @@ public class EmailTask extends Node implements DelegateTask {
     this.asyncAfter = asyncAfter;
   }
 
-  public String getMailTo() {
-    return mailTo;
+  public String getDesignation() {
+    return designation;
   }
 
-  public void setMailTo(String mailTo) {
-    this.mailTo = mailTo;
+  public void setDesignation(String designation) {
+    this.designation = designation;
   }
 
-  public String getMailCc() {
-    return mailCc;
+  public String getQuery() {
+    return query;
   }
 
-  public void setMailCc(String mailCc) {
-    this.mailCc = mailCc;
-  }
-
-  public String getMailBcc() {
-    return mailBcc;
-  }
-
-  public void setMailBcc(String mailBcc) {
-    this.mailBcc = mailBcc;
-  }
-
-  public String getMailFrom() {
-    return mailFrom;
-  }
-
-  public void setMailFrom(String mailFrom) {
-    this.mailFrom = mailFrom;
-  }
-
-  public String getMailSubject() {
-    return mailSubject;
-  }
-
-  public void setMailSubject(String mailSubject) {
-    this.mailSubject = mailSubject;
-  }
-
-  public String getMailText() {
-    return mailText;
-  }
-
-  public void setMailText(String mailText) {
-    this.mailText = mailText;
+  public void setQuery(String query) {
+    this.query = query;
   }
 
 }
