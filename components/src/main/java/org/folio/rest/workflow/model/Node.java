@@ -7,11 +7,11 @@ import javax.persistence.InheritanceType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.folio.spring.domain.model.AbstractBaseEntity;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+import org.folio.spring.domain.model.AbstractBaseEntity;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -30,11 +30,15 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
     @JsonSubTypes.Type(value = MoveToNode.class, name = "MoveToNode"),
 
+    @JsonSubTypes.Type(value = EmailTask.class, name = "EmailTask"),
+
     @JsonSubTypes.Type(value = RequestTask.class, name = "RequestTask"),
 
     @JsonSubTypes.Type(value = DirectoryTask.class, name = "DirectoryTask"),
 
     @JsonSubTypes.Type(value = ReceiveTask.class, name = "ReceiveTask"),
+
+    @JsonSubTypes.Type(value = ProcessorTask.class, name = "ProcessorTask"),
 
     @JsonSubTypes.Type(value = ScriptTask.class, name = "ScriptTask"),
 
