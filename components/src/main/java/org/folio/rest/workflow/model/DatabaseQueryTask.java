@@ -27,7 +27,7 @@ public class DatabaseQueryTask extends Node implements DelegateTask {
   @Column(nullable = false)
   private String designation;
 
-  @Column(nullable = false)
+  @Column(columnDefinition = "TEXT", nullable = false)
   private String query;
 
   public DatabaseQueryTask() {

@@ -40,7 +40,7 @@ public class EmailTask extends Node implements DelegateTask {
   @Column(nullable = false)
   private String mailSubject;
 
-  @Column(nullable = false)
+  @Column(columnDefinition = "TEXT", nullable = false)
   private String mailText;
 
   public EmailTask() {
