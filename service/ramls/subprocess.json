@@ -49,6 +49,8 @@
         }, {
           "$ref" : "#/definitions/EmailTask"
         }, {
+          "$ref" : "#/definitions/FileTask"
+        }, {
           "$ref" : "#/definitions/RequestTask"
         }, {
           "$ref" : "#/definitions/DirectoryTask"
@@ -213,6 +215,8 @@
             }, {
               "$ref" : "#/definitions/EmailTask"
             }, {
+              "$ref" : "#/definitions/FileTask"
+            }, {
               "$ref" : "#/definitions/RequestTask"
             }, {
               "$ref" : "#/definitions/DirectoryTask"
@@ -280,6 +284,8 @@
               "$ref" : "#/definitions/DatabaseQueryTask"
             }, {
               "$ref" : "#/definitions/EmailTask"
+            }, {
+              "$ref" : "#/definitions/FileTask"
             }, {
               "$ref" : "#/definitions/RequestTask"
             }, {
@@ -382,6 +388,8 @@
               "$ref" : "#/definitions/DatabaseQueryTask"
             }, {
               "$ref" : "#/definitions/EmailTask"
+            }, {
+              "$ref" : "#/definitions/FileTask"
             }, {
               "$ref" : "#/definitions/RequestTask"
             }, {
@@ -637,6 +645,56 @@
         }
       },
       "title" : "EmailTask",
+      "required" : [ "deserializeAs", "name", "asyncBefore", "asyncAfter" ]
+    },
+    "FileTask" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "deserializeAs" : {
+          "type" : "string",
+          "enum" : [ "FileTask" ],
+          "default" : "FileTask"
+        },
+        "id" : {
+          "type" : "string"
+        },
+        "name" : {
+          "type" : "string",
+          "minLength" : 3,
+          "maxLength" : 64
+        },
+        "description" : {
+          "type" : "string",
+          "maxLength" : 512
+        },
+        "inputVariables" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/EmbeddedVariable"
+          }
+        },
+        "outputVariable" : {
+          "$ref" : "#/definitions/EmbeddedVariable"
+        },
+        "asyncBefore" : {
+          "type" : "boolean"
+        },
+        "asyncAfter" : {
+          "type" : "boolean"
+        },
+        "path" : {
+          "type" : "string"
+        },
+        "op" : {
+          "type" : "string",
+          "enum" : [ "READ", "WRITE", "DELETE" ]
+        },
+        "identifier" : {
+          "type" : "string"
+        }
+      },
+      "title" : "FileTask",
       "required" : [ "deserializeAs", "name", "asyncBefore", "asyncAfter" ]
     },
     "RequestTask" : {
@@ -978,6 +1036,8 @@
             }, {
               "$ref" : "#/definitions/EmailTask"
             }, {
+              "$ref" : "#/definitions/FileTask"
+            }, {
               "$ref" : "#/definitions/RequestTask"
             }, {
               "$ref" : "#/definitions/DirectoryTask"
@@ -1057,6 +1117,8 @@
               "$ref" : "#/definitions/DatabaseQueryTask"
             }, {
               "$ref" : "#/definitions/EmailTask"
+            }, {
+              "$ref" : "#/definitions/FileTask"
             }, {
               "$ref" : "#/definitions/RequestTask"
             }, {

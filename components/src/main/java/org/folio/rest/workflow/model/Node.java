@@ -38,6 +38,8 @@ import org.folio.spring.domain.model.AbstractBaseEntity;
 
     @JsonSubTypes.Type(value = EmailTask.class, name = "EmailTask"),
 
+    @JsonSubTypes.Type(value = FileTask.class, name = "FileTask"),
+
     @JsonSubTypes.Type(value = RequestTask.class, name = "RequestTask"),
 
     @JsonSubTypes.Type(value = DirectoryTask.class, name = "DirectoryTask"),
