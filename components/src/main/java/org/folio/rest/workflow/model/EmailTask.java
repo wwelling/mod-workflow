@@ -43,6 +43,9 @@ public class EmailTask extends Node implements DelegateTask {
   @Column(columnDefinition = "TEXT", nullable = false)
   private String mailText;
 
+  @Column(nullable = true)
+  private String attachmentPath;
+
   public EmailTask() {
     super();
     inputVariables = new HashSet<EmbeddedVariable>();
@@ -128,6 +131,14 @@ public class EmailTask extends Node implements DelegateTask {
 
   public void setMailText(String mailText) {
     this.mailText = mailText;
+  }
+
+  public String getAttachmentPath() {
+    return attachmentPath;
+  }
+
+  public void setAttachmentPath(String attachmentPath) {
+    this.attachmentPath = attachmentPath;
   }
 
 }
