@@ -48,10 +48,6 @@ import org.folio.spring.domain.model.AbstractBaseEntity;
 
     @JsonSubTypes.Type(value = ScriptTask.class, name = "ScriptTask"),
 
-    @JsonSubTypes.Type(value = StreamRequestToDirectoryTask.class, name = "StreamRequestToDirectoryTask"),
-
-    @JsonSubTypes.Type(value = StreamingExtractTransformLoadTask.class, name = "StreamingExtractTransformLoadTask"),
-
     @JsonSubTypes.Type(value = Subprocess.class, name = "Subprocess"),
 
     @JsonSubTypes.Type(value = EventSubprocess.class, name = "EventSubprocess")
