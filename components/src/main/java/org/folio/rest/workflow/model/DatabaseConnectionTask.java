@@ -31,7 +31,7 @@ public class DatabaseConnectionTask extends Node implements DelegateTask {
   private String url;
 
   @Column(nullable = true)
-  private String user;
+  private String username;
 
   @Column(nullable = true)
   private String password;
@@ -90,12 +90,12 @@ public class DatabaseConnectionTask extends Node implements DelegateTask {
     this.url = url;
   }
 
-  public String getUser() {
-    return user;
+  public String getUsername() {
+    return username;
   }
 
-  public void setUser(String user) {
-    this.user = user;
+  public void setUsername(String username) {
+    this.username = username;
   }
 
   public String getPassword() {

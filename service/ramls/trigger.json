@@ -26,5 +26,5 @@
       "enum" : [ "GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "TRACE" ]
     }
   },
-  "required" : [ "name", "description", "pathPattern", "method" ]
+  "required" : [ "name", "pathPattern", "method" ]
 }

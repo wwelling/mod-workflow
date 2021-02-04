@@ -18,7 +18,6 @@ public class Trigger extends AbstractBaseEntity {
   @Column(unique = true)
   private String name;
 
-  @NotNull
   @Size(min = 0, max = 256)
   @Column(nullable = true)
   private String description;
