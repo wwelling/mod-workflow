@@ -6,6 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 import org.folio.rest.workflow.model.components.DelegateTask;
 
@@ -30,10 +32,18 @@ public class DatabaseQueryTask extends Node implements DelegateTask {
   @Column(columnDefinition = "TEXT", nullable = false)
   private String query;
 
+  @Column(nullable = true)
+  private String outputPath;
+
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = true)
+  private DatabaseResultType resultType;
+
   public DatabaseQueryTask() {
     super();
     asyncBefore = false;
     asyncAfter = false;
+    resultType = DatabaseResultType.TSV;
   }
 
   public Set<EmbeddedVariable> getInputVariables() {
@@ -82,6 +92,22 @@ public class DatabaseQueryTask extends Node implements DelegateTask {
 
   public void setQuery(String query) {
     this.query = query;
+  }
+
+  public String getOutputPath() {
+    return outputPath;
+  }
+
+  public void setOutputPath(String outputPath) {
+    this.outputPath = outputPath;
+  }
+
+  public DatabaseResultType getResultType() {
+    return resultType;
+  }
+
+  public void setResultType(DatabaseResultType resultType) {
+    this.resultType = resultType;
   }
 
 }

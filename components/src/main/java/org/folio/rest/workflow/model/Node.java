@@ -38,6 +38,8 @@ import org.folio.spring.domain.model.AbstractBaseEntity;
 
     @JsonSubTypes.Type(value = EmailTask.class, name = "EmailTask"),
 
+    @JsonSubTypes.Type(value = FileTask.class, name = "FileTask"),
+
     @JsonSubTypes.Type(value = RequestTask.class, name = "RequestTask"),
 
     @JsonSubTypes.Type(value = DirectoryTask.class, name = "DirectoryTask"),
@@ -47,10 +49,6 @@ import org.folio.spring.domain.model.AbstractBaseEntity;
     @JsonSubTypes.Type(value = ProcessorTask.class, name = "ProcessorTask"),
 
     @JsonSubTypes.Type(value = ScriptTask.class, name = "ScriptTask"),
-
-    @JsonSubTypes.Type(value = StreamRequestToDirectoryTask.class, name = "StreamRequestToDirectoryTask"),
-
-    @JsonSubTypes.Type(value = StreamingExtractTransformLoadTask.class, name = "StreamingExtractTransformLoadTask"),
 
     @JsonSubTypes.Type(value = Subprocess.class, name = "Subprocess"),
 

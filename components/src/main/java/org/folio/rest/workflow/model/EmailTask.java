@@ -7,8 +7,10 @@ import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.validation.constraints.Size;
 
 import org.folio.rest.workflow.model.components.DelegateTask;
+import org.springframework.lang.NonNull;
 
 @Entity
 public class EmailTask extends Node implements DelegateTask {
@@ -25,6 +27,8 @@ public class EmailTask extends Node implements DelegateTask {
   @Column(nullable = false)
   private boolean asyncAfter;
 
+  @NonNull
+  @Size(min = 3, max = 256)
   @Column(nullable = false)
   private String mailTo;
 
@@ -34,14 +38,23 @@ public class EmailTask extends Node implements DelegateTask {
   @Column(nullable = true)
   private String mailBcc;
 
+  @NonNull
+  @Size(min = 3, max = 256)
   @Column(nullable = false)
   private String mailFrom;
 
+  @NonNull
+  @Size(min = 2, max = 256)
   @Column(nullable = false)
   private String mailSubject;
 
+  @NonNull
+  @Size(min = 2)
   @Column(columnDefinition = "TEXT", nullable = false)
   private String mailText;
+
+  @Column(nullable = true)
+  private String attachmentPath;
 
   public EmailTask() {
     super();
@@ -128,6 +141,14 @@ public class EmailTask extends Node implements DelegateTask {
 
   public void setMailText(String mailText) {
     this.mailText = mailText;
+  }
+
+  public String getAttachmentPath() {
+    return attachmentPath;
+  }
+
+  public void setAttachmentPath(String attachmentPath) {
+    this.attachmentPath = attachmentPath;
   }
 
 }

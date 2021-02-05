@@ -1,28 +1,19 @@
 package org.folio.rest.workflow.model;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 import org.folio.rest.workflow.model.components.DelegateTask;
 
 @Entity
-public class StreamingExtractTransformLoadTask extends Node implements DelegateTask {
-
-  @ElementCollection
-  private List<EmbeddedExtractor> extractors;
-
-  @ElementCollection
-  private List<EmbeddedProcessor> processors;
-
-  @ElementCollection
-  private List<EmbeddedRequest> requests;
+public class FileTask extends Node implements DelegateTask {
 
   @ElementCollection
   private Set<EmbeddedVariable> inputVariables;
@@ -36,37 +27,18 @@ public class StreamingExtractTransformLoadTask extends Node implements DelegateT
   @Column(nullable = false)
   private boolean asyncAfter;
 
-  public StreamingExtractTransformLoadTask() {
-    extractors = new ArrayList<EmbeddedExtractor>();
-    processors = new ArrayList<EmbeddedProcessor>();
-    requests = new ArrayList<EmbeddedRequest>();
+  @Column(nullable = false)
+  private String path;
+
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private FileOp op;
+
+  public FileTask() {
+    super();
     inputVariables = new HashSet<EmbeddedVariable>();
     asyncBefore = false;
     asyncAfter = false;
-  }
-
-  public List<EmbeddedExtractor> getExtractors() {
-    return extractors;
-  }
-
-  public void setExtractors(List<EmbeddedExtractor> extractors) {
-    this.extractors = extractors;
-  }
-
-  public List<EmbeddedProcessor> getProcessors() {
-    return processors;
-  }
-
-  public void setProcessors(List<EmbeddedProcessor> scripts) {
-    this.processors = scripts;
-  }
-
-  public List<EmbeddedRequest> getRequests() {
-    return requests;
-  }
-
-  public void setRequests(List<EmbeddedRequest> requests) {
-    this.requests = requests;
   }
 
   public Set<EmbeddedVariable> getInputVariables() {
@@ -99,6 +71,22 @@ public class StreamingExtractTransformLoadTask extends Node implements DelegateT
 
   public void setAsyncAfter(boolean asyncAfter) {
     this.asyncAfter = asyncAfter;
+  }
+
+  public String getPath() {
+    return path;
+  }
+
+  public void setPath(String path) {
+    this.path = path;
+  }
+
+  public FileOp getOp() {
+    return op;
+  }
+
+  public void setOp(FileOp op) {
+    this.op = op;
   }
 
 }
