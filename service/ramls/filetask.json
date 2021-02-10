@@ -1,13 +1,13 @@
 {
   "$schema" : "http://json-schema.org/draft-04/schema#",
-  "title" : "EmailTask",
+  "title" : "FileTask",
   "type" : "object",
   "additionalProperties" : false,
   "properties" : {
     "deserializeAs" : {
       "type" : "string",
-      "enum" : [ "EmailTask" ],
-      "default" : "EmailTask"
+      "enum" : [ "FileTask" ],
+      "default" : "FileTask"
     },
     "id" : {
       "type" : "string"
@@ -36,33 +36,12 @@
     "asyncAfter" : {
       "type" : "boolean"
     },
-    "mailTo" : {
-      "type" : "string",
-      "minLength" : 3,
-      "maxLength" : 256
-    },
-    "mailCc" : {
+    "path" : {
       "type" : "string"
     },
-    "mailBcc" : {
-      "type" : "string"
-    },
-    "mailFrom" : {
+    "op" : {
       "type" : "string",
-      "minLength" : 3,
-      "maxLength" : 256
-    },
-    "mailSubject" : {
-      "type" : "string",
-      "minLength" : 2,
-      "maxLength" : 256
-    },
-    "mailText" : {
-      "type" : "string",
-      "minLength" : 2
-    },
-    "attachmentPath" : {
-      "type" : "string"
+      "enum" : [ "READ", "WRITE", "DELETE" ]
     },
     "identifier" : {
       "type" : "string"
