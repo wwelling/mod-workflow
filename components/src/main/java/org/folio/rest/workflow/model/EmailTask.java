@@ -61,6 +61,10 @@ public class EmailTask extends Node implements DelegateTask {
     inputVariables = new HashSet<EmbeddedVariable>();
     asyncBefore = false;
     asyncAfter = false;
+    mailTo = "";
+    mailFrom = "";
+    mailSubject = "";
+    mailText = "";
   }
 
   public Set<EmbeddedVariable> getInputVariables() {
