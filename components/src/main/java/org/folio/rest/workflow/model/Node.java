@@ -7,11 +7,11 @@ import javax.persistence.InheritanceType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.folio.spring.domain.model.AbstractBaseEntity;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+import org.folio.spring.domain.model.AbstractBaseEntity;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -30,17 +30,25 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
     @JsonSubTypes.Type(value = MoveToNode.class, name = "MoveToNode"),
 
+    @JsonSubTypes.Type(value = DatabaseConnectionTask.class, name = "DatabaseConnectionTask"),
+
+    @JsonSubTypes.Type(value = DatabaseDisconnectTask.class, name = "DatabaseDisconnectTask"),
+
+    @JsonSubTypes.Type(value = DatabaseQueryTask.class, name = "DatabaseQueryTask"),
+
+    @JsonSubTypes.Type(value = EmailTask.class, name = "EmailTask"),
+
+    @JsonSubTypes.Type(value = FileTask.class, name = "FileTask"),
+
     @JsonSubTypes.Type(value = RequestTask.class, name = "RequestTask"),
 
     @JsonSubTypes.Type(value = DirectoryTask.class, name = "DirectoryTask"),
 
     @JsonSubTypes.Type(value = ReceiveTask.class, name = "ReceiveTask"),
 
+    @JsonSubTypes.Type(value = ProcessorTask.class, name = "ProcessorTask"),
+
     @JsonSubTypes.Type(value = ScriptTask.class, name = "ScriptTask"),
-
-    @JsonSubTypes.Type(value = StreamRequestToDirectoryTask.class, name = "StreamRequestToDirectoryTask"),
-
-    @JsonSubTypes.Type(value = StreamingExtractTransformLoadTask.class, name = "StreamingExtractTransformLoadTask"),
 
     @JsonSubTypes.Type(value = Subprocess.class, name = "Subprocess"),
 

@@ -1,13 +1,13 @@
 {
   "$schema" : "http://json-schema.org/draft-04/schema#",
-  "title" : "EmailTask",
+  "title" : "DatabaseConnectionTask",
   "type" : "object",
   "additionalProperties" : false,
   "properties" : {
     "deserializeAs" : {
       "type" : "string",
-      "enum" : [ "EmailTask" ],
-      "default" : "EmailTask"
+      "enum" : [ "DatabaseConnectionTask" ],
+      "default" : "DatabaseConnectionTask"
     },
     "id" : {
       "type" : "string"
@@ -36,32 +36,16 @@
     "asyncAfter" : {
       "type" : "boolean"
     },
-    "mailTo" : {
-      "type" : "string",
-      "minLength" : 3,
-      "maxLength" : 256
-    },
-    "mailCc" : {
+    "designation" : {
       "type" : "string"
     },
-    "mailBcc" : {
+    "url" : {
       "type" : "string"
     },
-    "mailFrom" : {
-      "type" : "string",
-      "minLength" : 3,
-      "maxLength" : 256
+    "username" : {
+      "type" : "string"
     },
-    "mailSubject" : {
-      "type" : "string",
-      "minLength" : 2,
-      "maxLength" : 256
-    },
-    "mailText" : {
-      "type" : "string",
-      "minLength" : 2
-    },
-    "attachmentPath" : {
+    "password" : {
       "type" : "string"
     },
     "identifier" : {

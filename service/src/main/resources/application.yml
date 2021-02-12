@@ -21,21 +21,18 @@ spring:
     driverClassName: org.h2.Driver
     # platform: postgres
     # driverClassName: org.postgresql.Driver
-    # url: jdbc:postgresql://localhost:5432/mod-workflow
+    # url: jdbc:postgresql://localhost:5432/mod_workflow
 
-    username: folio
-    password: folio
-  devtools:
-    add-properties: false
-    restart:
-      enabled: false
-      exclude: target
+    username: folio_admin
+    password: folio_admin
+
   h2:
     console:
       enabled: true
       path: /h2console
       settings:
         web-allow-others: true
+
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     # database-platform: org.hibernate.dialect.PostgreSQLDialect
