@@ -43,9 +43,8 @@ public class Workflow extends AbstractBaseEntity {
   @Column(nullable = false)
   private Integer historyTimeToLive;
 
-  @NotNull
-  @Size(min = 4, max = 512)
-  @Column(nullable = false)
+  @Size(min = 0, max = 512)
+  @Column(nullable = true)
   private String description;
 
   @Column(nullable = false)
