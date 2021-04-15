@@ -5,7 +5,7 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>mod-workflow</artifactId>
+  <artifactId>workflow-service</artifactId>
 
   <name>Workflow Service</name>
 
