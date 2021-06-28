@@ -26,16 +26,10 @@ public class FtpTask extends Node implements DelegateTask {
   private boolean asyncAfter;
 
   @Column(nullable = false)
-  private String source;
+  private String originPath;
 
   @Column(nullable = false)
-  private String target;
-
-  @Column(nullable = true)
-  private String username;
-
-  @Column(nullable = true)
-  private String password;
+  private String destinationUri;
 
   public FtpTask() {
     super();
@@ -76,36 +70,20 @@ public class FtpTask extends Node implements DelegateTask {
     this.asyncAfter = asyncAfter;
   }
 
-  public String getSource() {
-    return source;
+  public String getOriginPath() {
+    return originPath;
   }
 
-  public void setSource(String source) {
-    this.source = source;
+  public void setOriginPath(String originPath) {
+    this.originPath = originPath;
   }
 
-  public String getTarget() {
-    return target;
+  public String getDestinationUri() {
+    return destinationUri;
   }
 
-  public void setTarget(String target) {
-    this.target = target;
-  }
-
-  public String getUsername() {
-    return username;
-  }
-
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
+  public void setDestinationUri(String destinationUri) {
+    this.destinationUri = destinationUri;
   }
 
 }
