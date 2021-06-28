@@ -758,16 +758,10 @@
         "asyncAfter" : {
           "type" : "boolean"
         },
-        "source" : {
+        "originPath" : {
           "type" : "string"
         },
-        "target" : {
-          "type" : "string"
-        },
-        "username" : {
-          "type" : "string"
-        },
-        "password" : {
+        "destinationUri" : {
           "type" : "string"
         },
         "identifier" : {
