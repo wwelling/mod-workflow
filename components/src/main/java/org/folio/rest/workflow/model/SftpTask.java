@@ -7,11 +7,13 @@ import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 import org.folio.rest.workflow.model.components.DelegateTask;
 
 @Entity
-public class FtpTask extends Node implements DelegateTask {
+public class SftpTask extends Node implements DelegateTask {
 
   @ElementCollection
   private Set<EmbeddedVariable> inputVariables;
@@ -29,9 +31,25 @@ public class FtpTask extends Node implements DelegateTask {
   private String originPath;
 
   @Column(nullable = false)
-  private String destinationUri;
+  private String destinationPath;
 
-  public FtpTask() {
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private SftpOp op;
+
+  @Column(nullable = false)
+  private String host;
+
+  @Column(nullable = false)
+  private int port;
+
+  @Column(nullable = false)
+  private String username;
+
+  @Column(nullable = false)
+  private String password;
+
+  public SftpTask() {
     super();
     inputVariables = new HashSet<EmbeddedVariable>();
     asyncBefore = false;
@@ -78,12 +96,52 @@ public class FtpTask extends Node implements DelegateTask {
     this.originPath = originPath;
   }
 
-  public String getDestinationUri() {
-    return destinationUri;
+  public String getDestinationPath() {
+    return destinationPath;
   }
 
-  public void setDestinationUri(String destinationUri) {
-    this.destinationUri = destinationUri;
+  public void setDestinationPath(String destinationPath) {
+    this.destinationPath = destinationPath;
+  }
+
+  public SftpOp getOp() {
+    return op;
+  }
+
+  public void setOp(SftpOp op) {
+    this.op = op;
+  }
+
+  public String getHost() {
+    return host;
+  }
+
+  public void setHost(String host) {
+    this.host = host;
+  }
+
+  public int getPort() {
+    return port;
+  }
+
+  public void setPort(int port) {
+    this.port = port;
+  }
+
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
   }
 
 }
