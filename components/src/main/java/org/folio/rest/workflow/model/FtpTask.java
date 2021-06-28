@@ -13,7 +13,7 @@ import javax.persistence.Enumerated;
 import org.folio.rest.workflow.model.components.DelegateTask;
 
 @Entity
-public class SftpTask extends Node implements DelegateTask {
+public class FtpTask extends Node implements DelegateTask {
 
   @ElementCollection
   private Set<EmbeddedVariable> inputVariables;
@@ -38,18 +38,21 @@ public class SftpTask extends Node implements DelegateTask {
   private SftpOp op;
 
   @Column(nullable = false)
+  private String scheme;
+
+  @Column(nullable = false)
   private String host;
 
   @Column(nullable = false)
   private int port;
 
-  @Column(nullable = false)
+  @Column(nullable = true)
   private String username;
 
-  @Column(nullable = false)
+  @Column(nullable = true)
   private String password;
 
-  public SftpTask() {
+  public FtpTask() {
     super();
     inputVariables = new HashSet<EmbeddedVariable>();
     asyncBefore = false;
@@ -110,6 +113,14 @@ public class SftpTask extends Node implements DelegateTask {
 
   public void setOp(SftpOp op) {
     this.op = op;
+  }
+
+  public String getScheme() {
+    return scheme;
+  }
+
+  public void setScheme(String scheme) {
+    this.scheme = scheme;
   }
 
   public String getHost() {
