@@ -40,7 +40,7 @@ import org.folio.spring.domain.model.AbstractBaseEntity;
 
     @JsonSubTypes.Type(value = FileTask.class, name = "FileTask"),
 
-    @JsonSubTypes.Type(value = FtpTask.class, name = "SftpTask"),
+    @JsonSubTypes.Type(value = FtpTask.class, name = "FtpTask"),
 
     @JsonSubTypes.Type(value = RequestTask.class, name = "RequestTask"),
 
