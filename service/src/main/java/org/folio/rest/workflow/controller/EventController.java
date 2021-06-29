@@ -73,7 +73,7 @@ public class EventController {
   // @formatter:on
 
     ObjectNode body = objectMapper.createObjectNode();
-    body.put("path", filePath);
+    body.put("inputFilePath", filePath);
 
     File file = new File(filePath);
 
