@@ -75,6 +75,14 @@ public class EventController {
     ObjectNode body = objectMapper.createObjectNode();
     body.put("inputFilePath", filePath);
 
+    Collections.list(request.getParameterNames())
+      .stream()
+      .filter(name -> !name.equals("file"))
+      .filter(name -> !name.equals("path"))
+      .forEach(name -> {
+        body.put(name, request.getParameter(name));
+      });
+
     File file = new File(filePath);
 
     try (InputStream is = multipartFile.getInputStream()) {
