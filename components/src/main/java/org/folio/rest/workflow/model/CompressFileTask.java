@@ -7,6 +7,8 @@ import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 import org.folio.rest.workflow.model.components.DelegateTask;
 
@@ -31,8 +33,13 @@ public class CompressFileTask extends Node implements DelegateTask {
   @Column(nullable = false)
   private String destination;
 
+  @Enumerated(EnumType.STRING)
   @Column(nullable = false)
-  private String format;
+  private CompressFileFormat format;
+
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private CompressFileContainer container;
 
   public CompressFileTask() {
     super();
@@ -89,12 +96,20 @@ public class CompressFileTask extends Node implements DelegateTask {
     this.destination = destination;
   }
 
-  public String getFormat() {
+  public CompressFileFormat getFormat() {
     return format;
   }
 
-  public void setFormat(String format) {
+  public void setFormat(CompressFileFormat format) {
     this.format = format;
+  }
+
+  public CompressFileContainer getContainer() {
+    return container;
+  }
+
+  public void setContainer(CompressFileContainer container) {
+    this.container = container;
   }
 
 }
