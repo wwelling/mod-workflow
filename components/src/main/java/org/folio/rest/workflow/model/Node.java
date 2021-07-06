@@ -30,6 +30,8 @@ import org.folio.spring.domain.model.AbstractBaseEntity;
 
     @JsonSubTypes.Type(value = MoveToNode.class, name = "MoveToNode"),
 
+    @JsonSubTypes.Type(value = CompressFileTask.class, name = "CompressFileTask"),
+
     @JsonSubTypes.Type(value = DatabaseConnectionTask.class, name = "DatabaseConnectionTask"),
 
     @JsonSubTypes.Type(value = DatabaseDisconnectTask.class, name = "DatabaseDisconnectTask"),
