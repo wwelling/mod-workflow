@@ -27,10 +27,14 @@ public class EmbeddedVariable {
   @Column(nullable = true)
   private Boolean asJson;
 
+  @Column(nullable = true)
+  private Boolean asTransient;
+
   public EmbeddedVariable() {
     type = VariableType.PROCESS;
     spin = false;
     asJson = false;
+    asTransient = false;
   }
 
   public Optional<String> getKey() {
@@ -63,6 +67,14 @@ public class EmbeddedVariable {
 
   public void setAsJson(Boolean asJson) {
     this.asJson = asJson;
+  }
+
+  public Boolean getAsTransient() {
+    return asTransient;
+  }
+
+  public void setAsTransient(Boolean asTransient) {
+    this.asTransient = asTransient;
   }
 
 }

@@ -1,30 +1,39 @@
 package org.folio.rest.workflow.controller;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.jms.JMSException;
 import javax.servlet.http.HttpServletRequest;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import org.folio.rest.workflow.exception.EventPublishException;
 import org.folio.rest.workflow.jms.EventProducer;
 import org.folio.rest.workflow.jms.model.Event;
 import org.folio.rest.workflow.model.Trigger;
 import org.folio.rest.workflow.model.repo.TriggerRepo;
-import org.folio.spring.tenant.annotation.TenantHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.util.PathMatcher;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.HandlerMapping;
-
-import com.fasterxml.jackson.databind.JsonNode;
 
 @RestController
 @RequestMapping("/events")
@@ -41,43 +50,81 @@ public class EventController {
   @Autowired
   private PathMatcher pathMatcher;
 
+  @Autowired
+  private ObjectMapper objectMapper;
+
   // @formatter:off
-  @RequestMapping("/**")
+  @PostMapping(value = "/**", consumes = "application/json")
   public JsonNode postHandleEvents(
-    @TenantHeader String tenant,
     @RequestBody(required = false) JsonNode body,
-    @RequestHeader HttpHeaders headers,
-    HttpServletRequest request,
-    HttpServletRequest response
+    HttpServletRequest request
   ) throws EventPublishException {
   // @formatter:on
-    String path = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
+    return processRequest(request, body);
+  }
+
+  // @formatter:off
+  @PostMapping(value = "/**", consumes = "multipart/form-data")
+  public JsonNode postHandleEventsWithFile(
+    @RequestParam("file") MultipartFile multipartFile,
+    @RequestParam("path") String filePath,
+    HttpServletRequest request
+  ) throws EventPublishException, IOException {
+  // @formatter:on
+
+    ObjectNode body = objectMapper.createObjectNode();
+    body.put("inputFilePath", filePath);
+
+    Collections.list(request.getParameterNames())
+      .stream()
+      .filter(name -> !name.equals("file"))
+      .filter(name -> !name.equals("path"))
+      .forEach(name -> {
+        body.put(name, request.getParameter(name));
+      });
+
+    File file = new File(filePath);
+
+    try (InputStream is = multipartFile.getInputStream()) {
+      Files.copy(is, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    return processRequest(request, body);
+  }
+
+  private JsonNode processRequest(
+    HttpServletRequest request,
+    JsonNode body
+  ) throws EventPublishException {
+    String tenant = request.getHeader("X-Okapi-Tenant");
+
+    String requestPath = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
     HttpMethod method = HttpMethod.valueOf(request.getMethod());
+
+    Map<String, String> headers = Collections.list(request.getHeaderNames())
+      .stream()
+      .collect(Collectors.toMap(h -> h, request::getHeader));
+
     logger.debug("Tenant: {}", tenant);
-    logger.debug("Request path: {}", path);
+    logger.debug("Request path: {}", requestPath);
     logger.debug("Request method: {}", method);
     logger.debug("Request headers: {}", headers);
     logger.debug("Request body: {}", body);
-    Optional<Trigger> trigger = checkTrigger(method, path);
+
+    Optional<Trigger> trigger = checkTrigger(method, requestPath);
     if (trigger.isPresent()) {
-      logger.debug("Publishing event: {}: {}", trigger.get().getName(), trigger.get().getDescription());
-      try {
-        // @formatter:off
-        eventProducer.send(
-          new Event(
-            trigger.get().getId(),
-            trigger.get().getPathPattern(),
-            trigger.get().getMethod().toString(),
-            tenant,
-            path,
-            headers.toSingleValueMap(),
-            body
-          )
-        );
-        // @formatter:on
-      } catch (JMSException | IOException e) {
-        throw new EventPublishException("Unable to publish event!", e);
-      }
+      processEvent(
+        trigger.get(),
+        new Event(
+          trigger.get().getId(),
+          trigger.get().getPathPattern(),
+          trigger.get().getMethod().toString(),
+          tenant,
+          requestPath,
+          headers,
+          body
+        )
+      );
     }
     return body;
   }
@@ -86,6 +133,15 @@ public class EventController {
     return triggerRepo.findAll().stream().filter(t -> {
       return method.equals(t.getMethod()) && pathMatcher.match(t.getPathPattern(), path);
     }).findAny();
+  }
+
+  private void processEvent(Trigger trigger, Event event) throws EventPublishException {
+    logger.debug("Publishing event: {}: {}", trigger.getName(), trigger.getDescription());
+    try {
+      eventProducer.send(event);
+    } catch (JMSException | IOException e) {
+      throw new EventPublishException("Unable to publish event!", e);
+    }
   }
 
 }
