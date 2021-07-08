@@ -53,6 +53,9 @@ public class EmailTask extends Node implements DelegateTask {
   @Column(columnDefinition = "TEXT", nullable = false)
   private String mailText;
 
+  @Column(columnDefinition = "TEXT", nullable = true)
+  private String mailMarkup;
+
   @Column(nullable = true)
   private String attachmentPath;
 
@@ -145,6 +148,14 @@ public class EmailTask extends Node implements DelegateTask {
 
   public void setMailText(String mailText) {
     this.mailText = mailText;
+  }
+
+  public String getMailMarkup() {
+    return mailMarkup;
+  }
+
+  public void setMailMarkup(String mailMarkup) {
+    this.mailMarkup = mailMarkup;
   }
 
   public String getAttachmentPath() {

@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import org.apache.commons.lang3.StringUtils;
 import org.folio.rest.workflow.exception.EventPublishException;
 import org.folio.rest.workflow.jms.EventProducer;
 import org.folio.rest.workflow.jms.model.Event;
@@ -67,12 +68,13 @@ public class EventController {
   @PostMapping(value = "/**", consumes = "multipart/form-data")
   public JsonNode postHandleEventsWithFile(
     @RequestParam("file") MultipartFile multipartFile,
-    @RequestParam("path") String filePath,
+    @RequestParam("path") String directoryPath,
     HttpServletRequest request
   ) throws EventPublishException, IOException {
   // @formatter:on
 
     ObjectNode body = objectMapper.createObjectNode();
+    String filePath = StringUtils.appendIfMissing(directoryPath, File.separator) + multipartFile.getOriginalFilename();
     body.put("inputFilePath", filePath);
 
     Collections.list(request.getParameterNames())
@@ -84,6 +86,8 @@ public class EventController {
       });
 
     File file = new File(filePath);
+
+    file.mkdirs();
 
     try (InputStream is = multipartFile.getInputStream()) {
       Files.copy(is, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
