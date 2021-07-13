@@ -30,6 +30,8 @@ import org.folio.spring.domain.model.AbstractBaseEntity;
 
     @JsonSubTypes.Type(value = MoveToNode.class, name = "MoveToNode"),
 
+    @JsonSubTypes.Type(value = CompressFileTask.class, name = "CompressFileTask"),
+
     @JsonSubTypes.Type(value = DatabaseConnectionTask.class, name = "DatabaseConnectionTask"),
 
     @JsonSubTypes.Type(value = DatabaseDisconnectTask.class, name = "DatabaseDisconnectTask"),
@@ -39,6 +41,8 @@ import org.folio.spring.domain.model.AbstractBaseEntity;
     @JsonSubTypes.Type(value = EmailTask.class, name = "EmailTask"),
 
     @JsonSubTypes.Type(value = FileTask.class, name = "FileTask"),
+
+    @JsonSubTypes.Type(value = FtpTask.class, name = "FtpTask"),
 
     @JsonSubTypes.Type(value = RequestTask.class, name = "RequestTask"),
 
