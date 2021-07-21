@@ -23,7 +23,7 @@ public abstract class AbstractGateway extends Node implements Gateway {
   @OrderColumn
   private List<Node> nodes;
 
-  public AbstractGateway() {
+  AbstractGateway() {
     super();
     direction = Direction.UNSPECIFIED;
     nodes = new ArrayList<Node>();

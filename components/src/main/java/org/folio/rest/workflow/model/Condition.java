@@ -13,7 +13,7 @@ public class Condition extends Node implements Conditional {
   @NotNull
   @Size(min = 4, max = 128)
   @Column(nullable = false)
-  private String condition;
+  private String expression;
 
   @NotNull
   @Size(min = 2, max = 64)
@@ -24,12 +24,12 @@ public class Condition extends Node implements Conditional {
     super();
   }
 
-  public String getCondition() {
-    return condition;
+  public String getExpression() {
+    return expression;
   }
 
-  public void setCondition(String condition) {
-    this.condition = condition;
+  public void setExpression(String expression) {
+    this.expression = expression;
   }
 
   public String getAnswer() {

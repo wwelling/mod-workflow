@@ -2,9 +2,9 @@ package org.folio.rest.workflow.model.components;
 
 public interface Conditional {
 
-  public String getCondition();
+  public String getExpression();
 
-  public void setCondition(String condition);
+  public void setExpression(String expression);
 
   public String getAnswer();
 
