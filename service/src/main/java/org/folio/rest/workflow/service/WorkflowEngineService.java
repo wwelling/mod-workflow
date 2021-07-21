@@ -73,7 +73,7 @@ public class WorkflowEngineService {
     String definitionsUrl = String.format("%s/camunda/process-definition?deploymentId=%s", okapiUrl, deploymentId);
     ResponseEntity<ArrayNode> response = this.restTemplate.getForEntity(definitionsUrl, ArrayNode.class);
 
-    if (response.getStatusCode() == HttpStatus.OK && !response.getBody().isEmpty()) {
+    if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null && !response.getBody().isEmpty()) {
       logger.debug("Response body: {}", response.getBody());
 
       try {
@@ -94,7 +94,7 @@ public class WorkflowEngineService {
     String url = String.format(requestPath, okapiUrl);
     ResponseEntity<Workflow> response = exchange(url, HttpMethod.POST, workflowHttpEntity, Workflow.class);
 
-    if (response.getStatusCode() == HttpStatus.OK) {
+    if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
       logger.debug("Response body: {}", response.getBody());
 
       try {
