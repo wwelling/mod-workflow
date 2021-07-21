@@ -22,13 +22,23 @@ import org.folio.spring.domain.model.AbstractBaseEntity;
 
     @JsonSubTypes.Type(value = EndEvent.class, name = "EndEvent"),
 
-    @JsonSubTypes.Type(value = ConditionalGateway.class, name = "ConditionalGateway"),
+    @JsonSubTypes.Type(value = ExclusiveGateway.class, name = "ExclusiveGateway"),
+
+    @JsonSubTypes.Type(value = InclusiveGateway.class, name = "InclusiveGateway"),
+
+    @JsonSubTypes.Type(value = MoveToLastGateway.class, name = "MoveToLastGateway"),
 
     @JsonSubTypes.Type(value = ParallelGateway.class, name = "ParallelGateway"),
+
+    @JsonSubTypes.Type(value = Condition.class, name = "Condition"),
 
     @JsonSubTypes.Type(value = ConnectTo.class, name = "ConnectTo"),
 
     @JsonSubTypes.Type(value = MoveToNode.class, name = "MoveToNode"),
+
+    @JsonSubTypes.Type(value = Subprocess.class, name = "Subprocess"),
+
+    @JsonSubTypes.Type(value = EventSubprocess.class, name = "EventSubprocess"),
 
     @JsonSubTypes.Type(value = CompressFileTask.class, name = "CompressFileTask"),
 
@@ -52,11 +62,7 @@ import org.folio.spring.domain.model.AbstractBaseEntity;
 
     @JsonSubTypes.Type(value = ProcessorTask.class, name = "ProcessorTask"),
 
-    @JsonSubTypes.Type(value = ScriptTask.class, name = "ScriptTask"),
-
-    @JsonSubTypes.Type(value = Subprocess.class, name = "Subprocess"),
-
-    @JsonSubTypes.Type(value = EventSubprocess.class, name = "EventSubprocess")
+    @JsonSubTypes.Type(value = ScriptTask.class, name = "ScriptTask")
 
 })
 public abstract class Node extends AbstractBaseEntity {

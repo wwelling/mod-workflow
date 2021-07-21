@@ -32,7 +32,7 @@ public class WorkflowController {
     @TenantHeader String tenant,
     @TokenHeader String token
   ) throws WorkflowEngineServiceException {
-    logger.info("Activating: " + id);
+    logger.info("Activating: {}", id);
     return workflowEngineService.activate(id, tenant, token);
   }
 
@@ -42,7 +42,7 @@ public class WorkflowController {
     @TenantHeader String tenant,
     @TokenHeader String token
   ) throws WorkflowEngineServiceException {
-    logger.info("Deactivating: " + id);
+    logger.info("Deactivating: {}", id);
     return workflowEngineService.deactivate(id, tenant, token);
   }
 
@@ -53,7 +53,7 @@ public class WorkflowController {
     @TokenHeader String token,
     @RequestBody JsonNode context
   ) throws WorkflowEngineServiceException {
-    logger.info("Starting: " + id);
+    logger.info("Starting: {} with context {}", id, context);
     return workflowEngineService.start(id, tenant, token, context);
   }
 
