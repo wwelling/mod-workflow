@@ -85,7 +85,7 @@ public class WorkflowEngineService {
     if (response.getStatusCode() == HttpStatus.OK && definitions != null && !definitions.isEmpty()) {
       logger.debug("Response body: {}", definitions);
 
-      return response.getBody().get(0);
+      return definitions.get(0);
     }
 
     throw new WorkflowEngineServiceException("Unable to get workflow process definition from workflow engine!");
