@@ -1,5 +1,8 @@
 package org.folio.rest.workflow.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+
 import org.folio.rest.workflow.exception.WorkflowEngineServiceException;
 import org.folio.rest.workflow.model.Workflow;
 import org.folio.rest.workflow.model.repo.WorkflowRepo;
@@ -42,43 +45,78 @@ public class WorkflowEngineService {
     this.restTemplate = restTemplateBuilder.build();
   }
 
-  public Workflow activate(String workflowId, String tenant, String token) throws WorkflowEngineServiceException {
+  public Workflow activate(String workflowId, String tenant, String token)
+      throws WorkflowEngineServiceException {
     Workflow workflow = workflowRepo.getOne(workflowId);
     return sendRequest(workflow, WORKFLOW_ENGINE_ACTIVATE_URL_TEMPLATE, tenant, token);
   }
 
-  public Workflow deactivate(String workflowId, String tenant, String token) throws WorkflowEngineServiceException {
+  public Workflow deactivate(String workflowId, String tenant, String token)
+      throws WorkflowEngineServiceException {
     Workflow workflow = workflowRepo.getOne(workflowId);
     return sendRequest(workflow, WORKFLOW_ENGINE_DEACTIVATE_URL_TEMPLATE, tenant, token);
+  }
+
+  public JsonNode start(String workflowId, String tenant, String token, JsonNode context)
+      throws WorkflowEngineServiceException {
+
+    Workflow workflow = workflowRepo.getOne(workflowId);
+
+    JsonNode definition = fetchDefinition(workflow.getDeploymentId(), tenant, token);
+    String definitionId = definition.get("id").asText();
+
+    HttpEntity<JsonNode> contextHttpEntity = new HttpEntity<>(context, headers(tenant, token));
+
+    String url = String.format("%s/camunda/process-definition/%s/start", okapiUrl, definitionId);
+    ResponseEntity<JsonNode> response = exchange(url, HttpMethod.POST, contextHttpEntity, JsonNode.class);
+
+    return response.getBody();
+  }
+
+  private JsonNode fetchDefinition(String deploymentId, String tenant, String token)
+      throws WorkflowEngineServiceException {
+
+    HttpEntity<Void> definitionEntity = new HttpEntity<>(headers(tenant, token));
+
+    String definitionsUrl = String.format("%s/camunda/process-definition?deploymentId=%s", okapiUrl, deploymentId);
+    ResponseEntity<ArrayNode> response = exchange(definitionsUrl, HttpMethod.GET, definitionEntity, ArrayNode.class);
+
+    ArrayNode definitions = response.getBody();
+    if (response.getStatusCode() == HttpStatus.OK && definitions != null && !definitions.isEmpty()) {
+      logger.debug("Response body: {}", definitions);
+
+      return definitions.get(0);
+    }
+
+    throw new WorkflowEngineServiceException("Unable to get workflow process definition from workflow engine!");
   }
 
   private Workflow sendRequest(Workflow workflow, String requestPath, String tenant, String token)
       throws WorkflowEngineServiceException {
 
-    HttpHeaders requestHeaders = new HttpHeaders();
-    requestHeaders.add(tenantHeaderName, tenant);
-    requestHeaders.add(tokenHeaderName, token);
-    requestHeaders.add("Content-Type", "application/json");
-
-    HttpEntity<Workflow> workflowHttpEntity = new HttpEntity<>(workflow, requestHeaders);
+    HttpEntity<Workflow> workflowHttpEntity = new HttpEntity<>(workflow, headers(tenant, token));
 
     String url = String.format(requestPath, okapiUrl);
     ResponseEntity<Workflow> response = exchange(url, HttpMethod.POST, workflowHttpEntity, Workflow.class);
 
-    if (response.getStatusCode() == HttpStatus.OK) {
-      logger.debug("Response body: {}", response.getBody());
+    Workflow responseWorkflow = response.getBody();
+    if (response.getStatusCode() == HttpStatus.OK && responseWorkflow != null) {
+      logger.debug("Response body: {}", responseWorkflow);
 
-      try {
-        Workflow responseWorkflow = response.getBody();
-        String deploymentId = responseWorkflow.getDeploymentId();
-        logger.info("Workflow is actvie = {}, deploymentID = {}", responseWorkflow.isActive(), deploymentId);
-        return workflowRepo.save(responseWorkflow);
-      } catch (Exception e) {
-        throw new WorkflowEngineServiceException("Unable to get updated workflow from workflow engine!");
-      }
+      String deploymentId = responseWorkflow.getDeploymentId();
+      logger.info("Workflow is actvie = {}, deploymentID = {}", responseWorkflow.isActive(), deploymentId);
+      return workflowRepo.save(responseWorkflow);
     }
 
-    throw new WorkflowEngineServiceException(response.getStatusCodeValue());
+    throw new WorkflowEngineServiceException("Unable to get updated workflow from workflow engine!");
+  }
+
+  private HttpHeaders headers(String tenant, String token) {
+    HttpHeaders requestHeaders = new HttpHeaders();
+    requestHeaders.add(tenantHeaderName, tenant);
+    requestHeaders.add(tokenHeaderName, token);
+    requestHeaders.add("Content-Type", "application/json");
+    return requestHeaders;
   }
 
   private <T> ResponseEntity<T> exchange(String url, HttpMethod method, HttpEntity<?> request, Class<T> responseType) {

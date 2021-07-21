@@ -3,9 +3,9 @@ package org.folio.rest.workflow.model;
 import javax.persistence.Entity;
 
 @Entity
-public class ParallelGateway extends AbstractGateway {
+public class MoveToLastGateway extends AbstractGateway {
 
-  public ParallelGateway() {
+  public MoveToLastGateway() {
     super();
   }
 
