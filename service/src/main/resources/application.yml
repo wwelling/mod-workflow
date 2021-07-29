@@ -62,7 +62,11 @@ tenant:
     - org.folio.rest.workflow.model
   schema-scripts:
 
-okapi.url: http://localhost:9000/mod-camunda
+okapi:
+  url: http://localhost:9000
+  camunda:
+    base-path: /mod-camunda
+    rest-path: /mod-camunda/rest
 
 info:
   build:
