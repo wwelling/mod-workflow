@@ -1,6 +1,9 @@
 logging:
   file: logs/mod-workflow.log
   level:
+    com:
+      zaxxer:
+        hikari: INFO
     org:
       folio: INFO
       hibernate: INFO
@@ -18,6 +21,12 @@ spring:
     returnBodyOnCreate: true
     returnBodyOnUpdate: true
   datasource:
+    hikari:
+      leakDetectionThreshold: 5000
+      connectionTimeout: 30000
+      idleTimeout: 600000
+      maxLifetime: 1800000
+      maximumPoolSize: 16
     platform: h2
     url: jdbc:h2:./target/mod-workflow;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     driverClassName: org.h2.Driver
