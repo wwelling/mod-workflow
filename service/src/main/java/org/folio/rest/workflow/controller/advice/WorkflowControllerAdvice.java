@@ -1,5 +1,7 @@
 package org.folio.rest.workflow.controller.advice;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.folio.rest.workflow.exception.WorkflowAlreadyActiveException;
 import org.folio.rest.workflow.exception.WorkflowDeploymentException;
 import org.folio.rest.workflow.exception.WorkflowEngineServiceException;
@@ -21,6 +23,13 @@ public class WorkflowControllerAdvice {
   @ResponseStatus(HttpStatus.NOT_FOUND)
   @ExceptionHandler(WorkflowNotFoundException.class)
   public ResponseErrors handleWorkflowNotFoundException(WorkflowNotFoundException exception) {
+    logger.debug(exception.getMessage(), exception);
+    return ErrorUtility.buildError(exception, HttpStatus.NOT_FOUND);
+  }
+
+  @ResponseStatus(HttpStatus.NOT_FOUND)
+  @ExceptionHandler(EntityNotFoundException.class)
+  public ResponseErrors handleEntityNotFoundException(EntityNotFoundException exception) {
     logger.debug(exception.getMessage(), exception);
     return ErrorUtility.buildError(exception, HttpStatus.NOT_FOUND);
   }
