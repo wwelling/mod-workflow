@@ -447,7 +447,7 @@
   ],
   "requires": [ ],
   "launchDescriptor": {
-    "dockerImage": "mod-workflow:1.0.0-SNAPSHOT",
+    "dockerImage": "mod-workflow:1.1.0",
     "dockerArgs": {
       "HostConfig": { "PortBindings": { "8081/tcp":  [{ "HostPort": "%p" }] } }
     },
