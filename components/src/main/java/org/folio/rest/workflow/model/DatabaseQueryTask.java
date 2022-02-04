@@ -114,7 +114,7 @@ public class DatabaseQueryTask extends Node implements DelegateTask {
     this.resultType = resultType;
   }
 
-  public Boolean isIncludeHeader() {
+  public Boolean getIncludeHeader() {
     return includeHeader;
   }
 
