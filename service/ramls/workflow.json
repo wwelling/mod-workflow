@@ -1073,6 +1073,9 @@
           "type" : "string",
           "enum" : [ "CSV", "TSV", "JSON" ]
         },
+        "includeHeader" : {
+          "type" : "boolean"
+        },
         "identifier" : {
           "type" : "string"
         }

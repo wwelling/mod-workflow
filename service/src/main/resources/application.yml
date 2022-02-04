@@ -27,9 +27,6 @@ spring:
       idleTimeout: 600000
       maxLifetime: 1800000
       maximumPoolSize: 16
-    #platform: h2
-    #url: jdbc:h2:./target/mod-workflow;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    #driverClassName: org.h2.Driver
     platform: postgres
     driverClassName: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/mod_workflow
@@ -37,15 +34,7 @@ spring:
     username: folio_admin
     password: folio_admin
 
-  # h2:
-  #   console:
-  #     enabled: true
-  #     path: /h2console
-  #     settings:
-  #       web-allow-others: true
-
   jpa:
-    #database-platform: org.hibernate.dialect.H2Dialect
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
     properties.hibernate.jdbc.lob.non_contextual_creation: true
@@ -64,7 +53,7 @@ event.queue.name: event.queue
 tenant:
   header-name: X-Okapi-Tenant
   force-tenant: false
-  default-tenant: tamu
+  default-tenant: diku
   initialize-default-tenant: true
   domain-packages:
     - org.folio.rest.workflow.components
