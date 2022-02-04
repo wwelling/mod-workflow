@@ -40,7 +40,7 @@ public class DatabaseQueryTask extends Node implements DelegateTask {
   private DatabaseResultType resultType;
 
   @Column(nullable = false)
-  private boolean includeHeader;
+  private Boolean includeHeader;
 
   public DatabaseQueryTask() {
     super();
@@ -114,11 +114,11 @@ public class DatabaseQueryTask extends Node implements DelegateTask {
     this.resultType = resultType;
   }
 
-  public boolean isIncludeHeader() {
+  public Boolean isIncludeHeader() {
     return includeHeader;
   }
 
-  public void setIncludeHeader(boolean includeHeader) {
+  public void setIncludeHeader(Boolean includeHeader) {
     this.includeHeader = includeHeader;
   }
 
