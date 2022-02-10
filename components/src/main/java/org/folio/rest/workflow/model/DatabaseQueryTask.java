@@ -39,11 +39,15 @@ public class DatabaseQueryTask extends Node implements DelegateTask {
   @Column(nullable = true)
   private DatabaseResultType resultType;
 
+  @Column(nullable = false)
+  private Boolean includeHeader;
+
   public DatabaseQueryTask() {
     super();
     asyncBefore = false;
     asyncAfter = false;
     resultType = DatabaseResultType.TSV;
+    includeHeader = false;
   }
 
   public Set<EmbeddedVariable> getInputVariables() {
@@ -108,6 +112,14 @@ public class DatabaseQueryTask extends Node implements DelegateTask {
 
   public void setResultType(DatabaseResultType resultType) {
     this.resultType = resultType;
+  }
+
+  public Boolean getIncludeHeader() {
+    return includeHeader;
+  }
+
+  public void setIncludeHeader(Boolean includeHeader) {
+    this.includeHeader = includeHeader;
   }
 
 }
