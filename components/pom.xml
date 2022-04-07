@@ -14,7 +14,7 @@
   <parent>
     <groupId>org.folio</groupId>
     <artifactId>workflow-parent</artifactId>
-    <version>1.1.1-SNAPSHOT</version>
+    <version>1.1.1-RC1</version>
   </parent>
 
   <dependencies>
@@ -22,7 +22,7 @@
     <dependency>
       <groupId>org.folio</groupId>
       <artifactId>spring-domain</artifactId>
-      <version>1.1.0</version>
+      <version>1.1.1-RC1</version>
     </dependency>
 
     <dependency>
@@ -34,7 +34,6 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-activemq</artifactId>
     </dependency>
-
 
   </dependencies>
 
