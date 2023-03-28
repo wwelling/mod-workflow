@@ -3,29 +3,29 @@ package org.folio.rest.workflow.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.FileSystemException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.jms.JMSException;
 import javax.servlet.http.HttpServletRequest;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
-import org.apache.commons.lang3.StringUtils;
 import org.folio.rest.workflow.exception.EventPublishException;
 import org.folio.rest.workflow.jms.EventProducer;
 import org.folio.rest.workflow.jms.model.Event;
 import org.folio.rest.workflow.model.Trigger;
 import org.folio.rest.workflow.model.repo.TriggerRepo;
+import org.folio.spring.tenant.annotation.TenantHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.util.PathMatcher;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,11 +36,22 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.HandlerMapping;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 @RestController
 @RequestMapping("/events")
 public class EventController {
 
   private static final Logger logger = LoggerFactory.getLogger(EventController.class);
+  private static final Pattern TENANT_PATTERN = Pattern.compile("^[a-z0-9_-]+$");
+
+  @Value("${tenant.headerName:X-Okapi-Tenant}")
+  private String tenantHeaderName;
+
+  @Value("${event.uploads.path}")
+  private String eventUploadsDirectory;
 
   @Autowired
   private EventProducer eventProducer;
@@ -69,13 +80,34 @@ public class EventController {
   public JsonNode postHandleEventsWithFile(
     @RequestParam("file") MultipartFile multipartFile,
     @RequestParam("path") String directoryPath,
+    @TenantHeader String tenant,
     HttpServletRequest request
   ) throws EventPublishException, IOException {
   // @formatter:on
 
+    if (! TENANT_PATTERN.matcher(tenant).matches()) {
+      throw new FileSystemException("Invalid tenant directory name");
+    }
+
     ObjectNode body = objectMapper.createObjectNode();
-    String filePath = StringUtils.appendIfMissing(directoryPath, File.separator) + multipartFile.getOriginalFilename();
-    body.put("inputFilePath", filePath);
+
+    Path tenantPath = Path.of(eventUploadsDirectory)
+      .resolve(tenant)
+      .normalize();
+
+    Path filePath = tenantPath.resolve(directoryPath)
+      .resolve(multipartFile.getOriginalFilename())
+      .normalize();
+
+    if (!filePath.startsWith(tenantPath)) {
+      throw new FileSystemException("Path/directory traversal attack");
+    }
+
+    File file = filePath.toFile();
+
+    file.mkdirs();
+
+    body.put("inputFilePath", tenantPath.relativize(filePath).toString());
 
     Collections.list(request.getParameterNames())
       .stream()
@@ -85,12 +117,8 @@ public class EventController {
         body.put(name, request.getParameter(name));
       });
 
-    File file = new File(filePath);
-
-    file.mkdirs();
-
     try (InputStream is = multipartFile.getInputStream()) {
-      Files.copy(is, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+      Files.copy(is, filePath, StandardCopyOption.REPLACE_EXISTING);
     }
 
     return processRequest(request, body);
@@ -100,7 +128,7 @@ public class EventController {
     HttpServletRequest request,
     JsonNode body
   ) throws EventPublishException {
-    String tenant = request.getHeader("X-Okapi-Tenant");
+    String tenant = request.getHeader(tenantHeaderName);
 
     String requestPath = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
     HttpMethod method = HttpMethod.valueOf(request.getMethod());
