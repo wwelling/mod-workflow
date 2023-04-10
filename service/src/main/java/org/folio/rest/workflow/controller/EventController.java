@@ -107,7 +107,10 @@ public class EventController {
 
     file.mkdirs();
 
-    body.put("inputFilePath", tenantPath.relativize(filePath).toString());
+    logger.info("old filePath: {}", tenantPath.relativize(filePath).toString());
+    logger.info("new filePath: {}", filePath.toString());
+    
+    body.put("inputFilePath", filePath.toString());
 
     Collections.list(request.getParameterNames())
       .stream()
