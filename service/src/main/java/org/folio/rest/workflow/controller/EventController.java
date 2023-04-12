@@ -106,9 +106,6 @@ public class EventController {
     File file = filePath.toFile();
 
     file.mkdirs();
-
-    logger.info("old filePath: {}", tenantPath.relativize(filePath).toString());
-    logger.info("new filePath: {}", filePath.toString());
     
     body.put("inputFilePath", filePath.toString());
 
