@@ -106,7 +106,7 @@ public class EventController {
     File file = filePath.toFile();
 
     file.mkdirs();
-    
+
     body.put("inputFilePath", filePath.toString());
 
     Collections.list(request.getParameterNames())
