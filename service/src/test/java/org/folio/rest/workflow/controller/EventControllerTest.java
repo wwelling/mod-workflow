@@ -57,7 +57,6 @@ class EventControllerTest {
   @ParameterizedTest
   @MethodSource
   void upload(String tenant, String dir, String file, String expectedPath) throws Exception {
-    String expectedInputFilePath = expectedPath.replaceFirst("[^/]+/[^/]+/", "");
     mockMvc.perform(upload(tenant, dir, file))
         .andExpectAll(status().isOk(), jsonPath("inputFilePath").value(expectedPath));
     assertThat(readFile(expectedPath)).isEqualTo("This is the file content");
