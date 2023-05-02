@@ -169,7 +169,7 @@ public class EmailTask extends Node implements DelegateTask {
     this.attachmentPath = attachmentPath;
   }
 
-  public String isIncludeAttachment() {
+  public String getIncludeAttachment() {
     return includeAttachment;
   }
 
