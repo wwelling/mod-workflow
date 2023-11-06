@@ -1,46 +1,18 @@
-# build base image
-FROM maven:3-openjdk-11-slim as maven
+FROM folioci/alpine-jre-openjdk17:latest
 
-# copy pom.xml
-COPY ./pom.xml ./pom.xml
+# Install latest patch versions of packages: https://pythonspeed.com/articles/security-updates-in-docker/
+USER root
+RUN apk upgrade --no-cache
+USER folio
 
-# copy components
-COPY ./components ./components
+ENV VERTICLE_FILE workflow-service-fat.jar
 
-# copy service
-COPY ./service ./service
+# Set the location of the verticles
+ENV VERTICLE_HOME /usr/verticles
 
-# install reactor modules
-RUN mvn install
+# Copy your fat jar to the container
+COPY service/target/${VERTICLE_FILE} ${VERTICLE_HOME}/${VERTICLE_FILE}
 
-WORKDIR /service
-
-# build service
-RUN mvn package
-
-# final base image
-FROM openjdk:11-jre-slim
-
-# Upgrade to latest patch versions of packages: https://pythonspeed.com/articles/security-updates-in-docker/
-RUN apt-get update \
- && apt-get upgrade -y \
- && apt-get clean \
- && rm -rf /var/lib/apt/lists/*
-
-# set deployment directory
-WORKDIR /mod-workflow
-
-# copy over the built artifact from the maven image
-COPY --from=maven /service/target/workflow-service*.jar ./mod-workflow.jar
-
-# environment
-ENV SERVER_PORT='9000'
-
-# expose ports
-EXPOSE ${SERVER_PORT}
+# Expose this port locally in the container.
+EXPOSE 9000
 EXPOSE 61616
-
-RUN mkdir -p activemq-data
-
-# run java command
-CMD java -jar ./mod-workflow.jar
