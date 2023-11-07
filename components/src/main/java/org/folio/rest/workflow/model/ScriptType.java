@@ -16,7 +16,5 @@ public enum ScriptType {
   public String getExtension() {
     return extension;
   }
-  
-  
 
 }
