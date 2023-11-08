@@ -1,5 +1,5 @@
 {
-  "id": "@project.artifactId@-@project.version@",
+  "id": "mod-workflow-${project.version}",
   "name": "Workflow Module",
   "provides": [
     {
@@ -447,10 +447,15 @@
   ],
   "requires": [ ],
   "launchDescriptor": {
-    "dockerImage": "mod-workflow:1.1.0",
+    "dockerImage": "mod-workflow:${project.version}",
+    "dockerPull" : false,
     "dockerArgs": {
       "HostConfig": { "PortBindings": { "8081/tcp":  [{ "HostPort": "%p" }] } }
     },
-    "dockerPull" : false
+    "env": [
+      { "name": "JAVA_OPTIONS",
+        "value": "-XX:MaxRAMPercentage=66.0"
+      }
+    ]
   }
 }
