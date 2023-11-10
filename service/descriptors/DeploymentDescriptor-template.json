@@ -1,0 +1,7 @@
+{
+  "srvcId": "mod-workflow-${project.version}",
+  "nodeId": "localhost",
+  "descriptor": {
+    "exec": "java -Dport=%p -jar ../mod-workflow/service/target/${project.artifactId}-${project.version}.jar -Dspring.config.location=classpath:/ -Dhttp.port=%p --server.port=%p"
+  }
+}
