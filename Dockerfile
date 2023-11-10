@@ -14,5 +14,5 @@ ENV VERTICLE_HOME /usr/verticles
 COPY service/target/workflow-service*.jar ${VERTICLE_HOME}/${VERTICLE_FILE}
 
 # Expose this port locally in the container.
-EXPOSE 9001
+EXPOSE 8081
 EXPOSE 61616
