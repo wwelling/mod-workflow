@@ -24,7 +24,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
-        <version>1.6.0</version>
+        <version>3.1.0</version>
         <executions>
           <execution>
             <phase>compile</phase>
@@ -48,6 +48,57 @@
             </goals>
             <configuration>
               <mainClass>org.folio.rest.workflow.SpringOkapiModule</mainClass>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>filter-descriptor-inputs</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${basedir}/descriptors</directory>
+                  <include>*Descriptor*-template.json</include>
+                  <filtering>true</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>com.coderplus.maven.plugins</groupId>
+        <artifactId>copy-rename-maven-plugin</artifactId>
+        <version>1.0.1</version>
+        <executions>
+          <execution>
+            <id>rename-descriptor-outputs</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>rename</goal>
+            </goals>
+            <configuration>
+              <fileSets>
+                <fileSet>
+                  <sourceFile>${project.build.directory}/ModuleDescriptor-template.json</sourceFile>
+                  <destinationFile>${project.build.directory}/ModuleDescriptor.json</destinationFile>
+                </fileSet>
+                <fileSet>
+                  <sourceFile>${project.build.directory}/DeploymentDescriptor-template.json</sourceFile>
+                  <destinationFile>${project.build.directory}/DeploymentDescriptor.json</destinationFile>
+                </fileSet>
+              </fileSets>
             </configuration>
           </execution>
         </executions>
@@ -87,24 +138,6 @@
         <directory>src/main/resources</directory>
         <includes>
           <include>application.yml</include>
-        </includes>
-      </resource>
-      <resource>
-        <filtering>true</filtering>
-        <directory>src/main/resources/descriptors</directory>
-        <targetPath>descriptors</targetPath>
-        <includes>
-          <include>DeploymentDescriptor.json</include>
-          <include>ModuleDescriptor.json</include>
-        </includes>
-      </resource>
-      <resource>
-        <filtering>true</filtering>
-        <directory>src/main/resources/descriptors</directory>
-        <targetPath>../descriptors</targetPath>
-        <includes>
-          <include>DeploymentDescriptor.json</include>
-          <include>ModuleDescriptor.json</include>
         </includes>
       </resource>
     </resources>
@@ -154,6 +187,11 @@
     <dependency>
       <groupId>org.springframework.data</groupId>
       <artifactId>spring-data-rest-hal-explorer</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
     </dependency>
 
     <dependency>
