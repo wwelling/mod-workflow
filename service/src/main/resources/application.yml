@@ -13,7 +13,7 @@ logging:
 
 server:
   servlet:
-    context-path: /mod-workflow
+    context-path: /
   port: 9001
 
 spring:
