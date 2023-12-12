@@ -74,8 +74,8 @@ tenant:
 okapi:
   url: ${OKAPI_URL:http://localhost:9130}
   camunda:
-    base-path: /mod-camunda
-    rest-path: /mod-camunda/rest
+    base-path: /
+    rest-path: /rest
 
 management:
   endpoints:
