@@ -10,7 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
-
+import org.folio.rest.workflow.enums.DirectoryAction;
 import org.folio.rest.workflow.model.components.DelegateTask;
 
 @Entity

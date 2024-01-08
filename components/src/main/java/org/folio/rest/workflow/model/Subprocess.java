@@ -11,7 +11,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.validation.constraints.NotNull;
-
+import org.folio.rest.workflow.enums.SubprocessType;
 import org.folio.rest.workflow.model.components.Branch;
 import org.folio.rest.workflow.model.components.MultiInstance;
 

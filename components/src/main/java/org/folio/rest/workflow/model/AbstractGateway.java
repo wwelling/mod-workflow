@@ -9,7 +9,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
-
+import org.folio.rest.workflow.enums.Direction;
 import org.folio.rest.workflow.model.components.Gateway;
 
 @MappedSuperclass

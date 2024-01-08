@@ -6,7 +6,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
+import org.folio.rest.workflow.enums.StartEventType;
 import org.folio.rest.workflow.model.components.Event;
 
 @Entity

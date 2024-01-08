@@ -9,7 +9,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-
+import org.folio.rest.workflow.enums.FileOp;
 import org.folio.rest.workflow.model.components.DelegateTask;
 
 @Entity

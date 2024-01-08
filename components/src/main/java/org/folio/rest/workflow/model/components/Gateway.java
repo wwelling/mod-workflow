@@ -1,6 +1,6 @@
 package org.folio.rest.workflow.model.components;
 
-import org.folio.rest.workflow.model.Direction;
+import org.folio.rest.workflow.enums.Direction;
 
 public interface Gateway extends Branch {
 
