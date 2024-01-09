@@ -22,6 +22,7 @@ import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.folio.rest.workflow.model.converter.JsonNodeConverter;
+import org.folio.rest.workflow.model.has.HasDeploymentId;
 import org.folio.rest.workflow.model.has.HasId;
 import org.folio.rest.workflow.model.has.HasInformational;
 import org.folio.rest.workflow.model.has.HasName;
@@ -32,7 +33,7 @@ import org.folio.spring.domain.model.AbstractBaseEntity;
 
 @Entity
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class Workflow extends AbstractBaseEntity implements HasId, HasInformational, HasName, HasNodes, HasVersionTag, HasWorkflowCommon {
+public class Workflow extends AbstractBaseEntity implements HasDeploymentId, HasId, HasInformational, HasName, HasNodes, HasVersionTag, HasWorkflowCommon {
 
   @Getter
   @Setter

@@ -6,4 +6,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource
 public interface WorkflowRepo extends JpaRepository<Workflow, String> {
+
+  public <T> T getViewById(String id, Class<T> type);
 }

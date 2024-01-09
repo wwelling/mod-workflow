@@ -4,7 +4,7 @@ import java.util.List;
 import org.folio.rest.workflow.model.Node;
 
 /**
- * This interface provides methods associated with Nodes.
+ * This interface provides methods associated with {@link org.folio.rest.workflow.model.Node Nodes}.
  */
 public interface HasNodes {
 

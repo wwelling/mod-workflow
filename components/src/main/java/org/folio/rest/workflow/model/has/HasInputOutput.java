@@ -4,7 +4,7 @@ import java.util.Set;
 import org.folio.rest.workflow.model.EmbeddedVariable;
 
 /**
- * This interface provides methods associated with Nodes.
+ * This interface provides methods associated with {@link org.folio.rest.workflow.model.EmbeddedVariable EmbeddedVariables}.
  */
 public interface HasInputOutput {
 
