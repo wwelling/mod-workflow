@@ -11,5 +11,4 @@ public interface MultiInstance {
   public default boolean isMultiInstance() {
     return getLoopRef() != null && (getLoopRef().hasCardinalityExpression() || getLoopRef().hasDataInput());
   }
-
 }

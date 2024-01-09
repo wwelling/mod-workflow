@@ -1,13 +1,8 @@
 package org.folio.rest.workflow.model.components;
 
-public interface Conditional {
+import org.folio.rest.workflow.model.has.HasAnswer;
+import org.folio.rest.workflow.model.has.HasExpression;
 
-  public String getExpression();
-
-  public void setExpression(String expression);
-
-  public String getAnswer();
-
-  public void setAnswer(String answer);
+public interface Conditional extends HasAnswer, HasExpression {
 
 }

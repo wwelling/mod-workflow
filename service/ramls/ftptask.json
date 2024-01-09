@@ -61,6 +61,9 @@
     "password" : {
       "type" : "string"
     },
+    "basePath" : {
+      "type" : "string"
+    },
     "identifier" : {
       "type" : "string"
     }
