@@ -1,13 +1,7 @@
 package org.folio.rest.workflow.model.components;
 
-public interface Task {
+import org.folio.rest.workflow.model.has.HasAsync;
 
-  public boolean isAsyncBefore();
-
-  public void setAsyncBefore(boolean asyncBefore);
-
-  public boolean isAsyncAfter();
-
-  public void setAsyncAfter(boolean asyncAfter);
+public interface Task extends HasAsync {
 
 }

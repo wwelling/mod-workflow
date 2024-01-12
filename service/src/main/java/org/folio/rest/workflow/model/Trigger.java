@@ -6,27 +6,41 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
+import lombok.Getter;
+import lombok.Setter;
+import org.folio.rest.workflow.model.has.HasId;
+import org.folio.rest.workflow.model.has.HasInformational;
+import org.folio.rest.workflow.model.has.HasMethod;
+import org.folio.rest.workflow.model.has.HasName;
+import org.folio.rest.workflow.model.has.HasPathPattern;
 import org.folio.spring.domain.model.AbstractBaseEntity;
 import org.springframework.http.HttpMethod;
 
 @Entity
-public class Trigger extends AbstractBaseEntity {
+public class Trigger extends AbstractBaseEntity implements HasId, HasInformational, HasMethod, HasName, HasPathPattern {
 
+  @Getter
+  @Setter
   @NotNull
   @Size(min = 4, max = 64)
   @Column(unique = true)
   private String name;
 
+  @Getter
+  @Setter
   @Size(min = 0, max = 256)
   @Column(nullable = true)
   private String description;
 
+  @Getter
+  @Setter
   @NotNull
   @Size(min = 2, max = 256)
   @Column(nullable = false)
   private String pathPattern;
 
+  @Getter
+  @Setter
   @NotNull
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
@@ -34,38 +48,6 @@ public class Trigger extends AbstractBaseEntity {
 
   public Trigger() {
     super();
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public String getPathPattern() {
-    return pathPattern;
-  }
-
-  public void setPathPattern(String pathPattern) {
-    this.pathPattern = pathPattern;
-  }
-
-  public HttpMethod getMethod() {
-    return method;
-  }
-
-  public void setMethod(HttpMethod method) {
-    this.method = method;
   }
 
 }
