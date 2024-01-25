@@ -5,20 +5,30 @@ import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
-
+import lombok.Getter;
+import lombok.Setter;
+import org.folio.rest.workflow.has.common.HasActionCommon;
+import org.folio.rest.workflow.model.has.HasMethod;
+import org.folio.rest.workflow.model.has.HasPathPattern;
 import org.springframework.http.HttpMethod;
 
 @Embeddable
-public class Action {
+public class Action implements HasActionCommon, HasMethod, HasPathPattern {
 
+  @Getter
+  @Setter
   @NotNull
   @Column(nullable = false)
   private String interfaceName;
 
+  @Getter
+  @Setter
   @NotNull
   @Column(nullable = false)
   private String pathPattern;
 
+  @Getter
+  @Setter
   @NotNull
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
@@ -30,33 +40,9 @@ public class Action {
 
   public Action(String interfaceName, String pathPattern, HttpMethod method) {
     this();
+
     this.interfaceName = interfaceName;
     this.pathPattern = pathPattern;
-    this.method = method;
-
-  }
-
-  public String getInterfaceName() {
-    return interfaceName;
-  }
-
-  public void setInterfaceName(String interfaceName) {
-    this.interfaceName = interfaceName;
-  }
-
-  public String getPathPattern() {
-    return pathPattern;
-  }
-
-  public void setPathPattern(String pathPattern) {
-    this.pathPattern = pathPattern;
-  }
-
-  public HttpMethod getMethod() {
-    return method;
-  }
-
-  public void setMethod(HttpMethod method) {
     this.method = method;
   }
 

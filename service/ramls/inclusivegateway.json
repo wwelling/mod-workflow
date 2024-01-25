@@ -759,6 +759,12 @@
           "type" : "string",
           "maxLength" : 512
         },
+        "asyncBefore" : {
+          "type" : "boolean"
+        },
+        "asyncAfter" : {
+          "type" : "boolean"
+        },
         "nodes" : {
           "type" : "array",
           "items" : {
@@ -816,7 +822,7 @@
         }
       },
       "title" : "EventSubprocess",
-      "required" : [ "deserializeAs", "name" ]
+      "required" : [ "deserializeAs", "name", "asyncBefore", "asyncAfter" ]
     },
     "CompressFileTask" : {
       "type" : "object",
@@ -1254,6 +1260,9 @@
         "password" : {
           "type" : "string"
         },
+        "basePath" : {
+          "type" : "string"
+        },
         "identifier" : {
           "type" : "string"
         }
@@ -1282,9 +1291,6 @@
           "type" : "string",
           "maxLength" : 512
         },
-        "request" : {
-          "$ref" : "#/definitions/EmbeddedRequest"
-        },
         "inputVariables" : {
           "type" : "array",
           "items" : {
@@ -1305,6 +1311,9 @@
         },
         "asyncAfter" : {
           "type" : "boolean"
+        },
+        "request" : {
+          "$ref" : "#/definitions/EmbeddedRequest"
         },
         "identifier" : {
           "type" : "string"
@@ -1366,16 +1375,6 @@
           "type" : "string",
           "maxLength" : 512
         },
-        "path" : {
-          "type" : "string"
-        },
-        "workflow" : {
-          "type" : "string"
-        },
-        "action" : {
-          "type" : "string",
-          "enum" : [ "READ_NEXT", "DELETE_NEXT", "LIST", "WRITE" ]
-        },
         "inputVariables" : {
           "type" : "array",
           "items" : {
@@ -1391,12 +1390,22 @@
         "asyncAfter" : {
           "type" : "boolean"
         },
+        "path" : {
+          "type" : "string"
+        },
+        "workflow" : {
+          "type" : "string"
+        },
+        "action" : {
+          "type" : "string",
+          "enum" : [ "READ_NEXT", "DELETE_NEXT", "LIST", "WRITE" ]
+        },
         "identifier" : {
           "type" : "string"
         }
       },
       "title" : "DirectoryTask",
-      "required" : [ "deserializeAs", "name", "path", "workflow", "action", "asyncBefore", "asyncAfter" ]
+      "required" : [ "deserializeAs", "name", "asyncBefore", "asyncAfter", "path", "workflow", "action" ]
     },
     "ReceiveTask" : {
       "type" : "object",
@@ -1458,9 +1467,6 @@
           "type" : "string",
           "maxLength" : 512
         },
-        "processor" : {
-          "$ref" : "#/definitions/EmbeddedProcessor"
-        },
         "inputVariables" : {
           "type" : "array",
           "items" : {
@@ -1475,6 +1481,9 @@
         },
         "asyncAfter" : {
           "type" : "boolean"
+        },
+        "processor" : {
+          "$ref" : "#/definitions/EmbeddedProcessor"
         },
         "identifier" : {
           "type" : "string"

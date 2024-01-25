@@ -1,11 +1,12 @@
 package org.folio.rest.workflow.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.folio.rest.workflow.model.Action;
 import org.folio.rest.workflow.model.Handler;
 import org.folio.spring.service.HttpService;
@@ -19,9 +20,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class OkapiDiscoveryService {

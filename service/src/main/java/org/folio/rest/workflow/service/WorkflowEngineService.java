@@ -1,5 +1,11 @@
 package org.folio.rest.workflow.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.folio.rest.workflow.dto.WorkflowDto;
+import org.folio.rest.workflow.dto.WorkflowOperationalDto;
 import org.folio.rest.workflow.exception.WorkflowEngineServiceException;
 import org.folio.rest.workflow.model.Workflow;
 import org.folio.rest.workflow.model.repo.WorkflowRepo;
@@ -15,11 +21,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @Service
 public class WorkflowEngineService {
@@ -64,20 +65,22 @@ public class WorkflowEngineService {
 
   public Workflow activate(String workflowId, String tenant, String token)
       throws WorkflowEngineServiceException {
-    Workflow workflow = workflowRepo.getReferenceById(workflowId);
+
+    WorkflowDto workflow = workflowRepo.getViewById(workflowId, WorkflowDto.class);
     return sendWorkflowRequest(workflow, WORKFLOW_ENGINE_ACTIVATE_URL_TEMPLATE, tenant, token);
   }
 
   public Workflow deactivate(String workflowId, String tenant, String token)
       throws WorkflowEngineServiceException {
-    Workflow workflow = workflowRepo.getReferenceById(workflowId);
+
+    WorkflowDto workflow = workflowRepo.getViewById(workflowId, WorkflowDto.class);
     return sendWorkflowRequest(workflow, WORKFLOW_ENGINE_DEACTIVATE_URL_TEMPLATE, tenant, token);
   }
 
   public JsonNode start(String workflowId, String tenant, String token, JsonNode context)
       throws WorkflowEngineServiceException {
 
-    Workflow workflow = workflowRepo.getReferenceById(workflowId);
+    WorkflowOperationalDto workflow = workflowRepo.getViewById(workflowId, WorkflowOperationalDto.class);
     String id = workflow.getDeploymentId();
     String version = workflow.getVersionTag();
 
@@ -93,7 +96,7 @@ public class WorkflowEngineService {
   }
 
   public JsonNode history(String workflowId, String tenant, String token) throws WorkflowEngineServiceException {
-    Workflow workflow = workflowRepo.getReferenceById(workflowId);
+    WorkflowOperationalDto workflow = workflowRepo.getViewById(workflowId, WorkflowOperationalDto.class);
     String deploymentId = workflow.getDeploymentId();
     String version = workflow.getVersionTag();
 
@@ -171,10 +174,10 @@ public class WorkflowEngineService {
     return incidents;
   }
 
-  private Workflow sendWorkflowRequest(Workflow workflow, String requestPath, String tenant, String token)
+  private Workflow sendWorkflowRequest(WorkflowDto workflow, String requestPath, String tenant, String token)
       throws WorkflowEngineServiceException {
 
-    HttpEntity<Workflow> workflowHttpEntity = new HttpEntity<>(workflow, headers(tenant, token));
+    HttpEntity<WorkflowDto> workflowHttpEntity = new HttpEntity<>(workflow, headers(tenant, token));
 
     String url = String.format(requestPath, okapiUrl, basePath);
     ResponseEntity<Workflow> response = exchange(url, HttpMethod.POST, workflowHttpEntity, Workflow.class);

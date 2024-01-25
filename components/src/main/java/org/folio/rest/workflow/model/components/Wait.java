@@ -1,9 +1,7 @@
 package org.folio.rest.workflow.model.components;
 
-public interface Wait extends Task {
+import org.folio.rest.workflow.model.has.HasMessage;
 
-  public String getMessage();
-
-  public void setMessage(String mesasge);
+public interface Wait extends HasMessage, Task {
 
 }

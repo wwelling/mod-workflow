@@ -2,36 +2,28 @@ package org.folio.rest.workflow.model;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import lombok.Getter;
+import lombok.Setter;
+import org.folio.rest.workflow.model.has.HasAsync;
 
 @Embeddable
-public class Setup {
+public class Setup implements HasAsync {
 
+  @Getter
+  @Setter
   @Column(nullable = false)
   private boolean asyncBefore;
 
+  @Getter
+  @Setter
   @Column(nullable = false)
   private boolean asyncAfter;
 
   public Setup() {
     super();
+
     asyncBefore = false;
     asyncAfter = false;
-  }
-
-  public boolean isAsyncBefore() {
-    return asyncBefore;
-  }
-
-  public void setAsyncBefore(boolean asyncBefore) {
-    this.asyncBefore = asyncBefore;
-  }
-
-  public boolean isAsyncAfter() {
-    return asyncAfter;
-  }
-
-  public void setAsyncAfter(boolean asyncAfter) {
-    this.asyncAfter = asyncAfter;
   }
 
 }
