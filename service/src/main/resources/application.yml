@@ -25,6 +25,7 @@ spring:
 
   sql:
     init:
+      #platform: h2
       platform: postgres
 
   datasource:
@@ -34,14 +35,25 @@ spring:
       idleTimeout: 600000
       maxLifetime: 1800000
       maximumPoolSize: ${DB_MAXPOOLSIZE:16}
-    platform: postgres
+    #driverClassName: org.h2.Driver
+    #url: jdbc:h2:./target/mod-workflow;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    #platform: h2
     driverClassName: org.postgresql.Driver
     url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_DATABASE:mod_workflow}
+    platform: postgres
 
     username: ${DB_USERNAME:folio_admin}
     password: ${DB_PASSWORD:folio_admin}
 
+  h2:
+    console:
+      enabled: false
+      path: /h2console
+      settings:
+        web-allow-others: true
+
   jpa:
+    #database-platform: org.hibernate.dialect.H2Dialect
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
     properties.hibernate.jdbc.lob.non_contextual_creation: true

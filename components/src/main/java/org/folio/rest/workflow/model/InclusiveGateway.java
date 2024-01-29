@@ -1,6 +1,6 @@
 package org.folio.rest.workflow.model;
 
-import javax.persistence.Entity;
+import jakarta.persistence.Entity;
 
 @Entity
 public class InclusiveGateway extends AbstractGateway {

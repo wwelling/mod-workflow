@@ -1,7 +1,6 @@
 package org.folio.rest.workflow.dto;
 
-import javax.validation.constraints.NotNull;
-
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 

@@ -1,12 +1,9 @@
 package org.folio.rest.workflow.model.converter;
 
-import java.util.List;
-
-import javax.persistence.Converter;
-
-import org.folio.rest.workflow.dto.Comparison;
-
 import com.fasterxml.jackson.core.type.TypeReference;
+import jakarta.persistence.Converter;
+import java.util.List;
+import org.folio.rest.workflow.dto.Comparison;
 
 @Converter
 public class ComparisonListConverter extends AbstractConverter<List<Comparison>> {

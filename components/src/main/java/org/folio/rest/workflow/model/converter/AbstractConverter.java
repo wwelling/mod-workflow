@@ -1,10 +1,9 @@
 package org.folio.rest.workflow.model.converter;
 
-import javax.persistence.AttributeConverter;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.AttributeConverter;
 
 public abstract class AbstractConverter<T> implements AttributeConverter<T, String> {
 
