@@ -8,8 +8,16 @@ public class WorkflowEngineServiceException extends Exception {
     super(message);
   }
 
+  public WorkflowEngineServiceException(String message, Exception e) {
+    super(message, e);
+  }
+
   public WorkflowEngineServiceException(int code) {
     super(Integer.toString(code));
+  }
+
+  public WorkflowEngineServiceException(int code, Exception e) {
+    super(Integer.toString(code), e);
   }
 
 }
