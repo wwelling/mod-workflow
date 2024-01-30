@@ -3,11 +3,11 @@ package org.folio.rest.workflow.model;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.validation.constraints.Size;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.validation.constraints.Size;
 
 import org.folio.rest.workflow.model.components.DelegateTask;
 import org.springframework.lang.NonNull;

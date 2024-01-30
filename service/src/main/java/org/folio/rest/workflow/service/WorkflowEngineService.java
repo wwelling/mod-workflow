@@ -64,20 +64,20 @@ public class WorkflowEngineService {
 
   public Workflow activate(String workflowId, String tenant, String token)
       throws WorkflowEngineServiceException {
-    Workflow workflow = workflowRepo.getOne(workflowId);
+    Workflow workflow = workflowRepo.getReferenceById(workflowId);
     return sendWorkflowRequest(workflow, WORKFLOW_ENGINE_ACTIVATE_URL_TEMPLATE, tenant, token);
   }
 
   public Workflow deactivate(String workflowId, String tenant, String token)
       throws WorkflowEngineServiceException {
-    Workflow workflow = workflowRepo.getOne(workflowId);
+    Workflow workflow = workflowRepo.getReferenceById(workflowId);
     return sendWorkflowRequest(workflow, WORKFLOW_ENGINE_DEACTIVATE_URL_TEMPLATE, tenant, token);
   }
 
   public JsonNode start(String workflowId, String tenant, String token, JsonNode context)
       throws WorkflowEngineServiceException {
 
-    Workflow workflow = workflowRepo.getOne(workflowId);
+    Workflow workflow = workflowRepo.getReferenceById(workflowId);
     String id = workflow.getDeploymentId();
     String version = workflow.getVersionTag();
 
@@ -93,7 +93,7 @@ public class WorkflowEngineService {
   }
 
   public JsonNode history(String workflowId, String tenant, String token) throws WorkflowEngineServiceException {
-    Workflow workflow = workflowRepo.getOne(workflowId);
+    Workflow workflow = workflowRepo.getReferenceById(workflowId);
     String deploymentId = workflow.getDeploymentId();
     String version = workflow.getVersionTag();
 

@@ -2,15 +2,15 @@ package org.folio.rest.workflow.jms;
 
 import java.io.IOException;
 
-import javax.jms.JMSException;
-import javax.jms.Queue;
-
-import org.folio.rest.workflow.jms.model.Event;
+import org.folio.spring.model.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsMessagingTemplate;
 import org.springframework.stereotype.Service;
+
+import jakarta.jms.JMSException;
+import jakarta.jms.Queue;
 
 @Service
 public class EventProducer {

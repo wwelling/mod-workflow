@@ -1,6 +1,6 @@
 package org.folio.rest.workflow.model.converter;
 
-import javax.persistence.Converter;
+import jakarta.persistence.Converter;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;

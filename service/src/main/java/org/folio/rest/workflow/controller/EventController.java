@@ -13,20 +13,17 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import javax.jms.JMSException;
-import javax.servlet.http.HttpServletRequest;
-
 import org.folio.rest.workflow.exception.EventPublishException;
 import org.folio.rest.workflow.jms.EventProducer;
-import org.folio.rest.workflow.jms.model.Event;
 import org.folio.rest.workflow.model.Trigger;
+import org.folio.rest.workflow.model.enums.HttpMethod;
 import org.folio.rest.workflow.model.repo.TriggerRepo;
+import org.folio.spring.model.Event;
 import org.folio.spring.tenant.annotation.TenantHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpMethod;
 import org.springframework.util.PathMatcher;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,6 +36,9 @@ import org.springframework.web.servlet.HandlerMapping;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import jakarta.jms.JMSException;
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/events")

@@ -1,6 +1,6 @@
 package org.folio.rest.workflow.controller.advice;
 
-import javax.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 
 import org.folio.rest.workflow.exception.WorkflowAlreadyActiveException;
 import org.folio.rest.workflow.exception.WorkflowDeploymentException;

@@ -1,6 +1,6 @@
 package org.folio.rest.workflow.model.converter;
 
-import javax.persistence.Converter;
+import jakarta.persistence.Converter;
 
 import org.folio.rest.workflow.dto.Request;
 

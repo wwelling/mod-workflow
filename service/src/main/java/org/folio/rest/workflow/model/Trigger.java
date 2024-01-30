@@ -1,14 +1,14 @@
 package org.folio.rest.workflow.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
+import org.folio.rest.workflow.model.enums.HttpMethod;
 import org.folio.spring.domain.model.AbstractBaseEntity;
-import org.springframework.http.HttpMethod;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Trigger extends AbstractBaseEntity {

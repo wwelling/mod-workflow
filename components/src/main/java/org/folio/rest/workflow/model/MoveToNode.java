@@ -3,11 +3,11 @@ package org.folio.rest.workflow.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderColumn;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderColumn;
+import jakarta.validation.constraints.NotNull;
 
 import org.folio.rest.workflow.model.components.Branch;
 

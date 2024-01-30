@@ -2,7 +2,7 @@ package org.folio.rest.workflow.model.converter;
 
 import java.util.List;
 
-import javax.persistence.Converter;
+import jakarta.persistence.Converter;
 
 import org.folio.rest.workflow.dto.Mapping;
 

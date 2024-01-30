@@ -2,19 +2,19 @@ package org.folio.rest.workflow.model;
 
 import java.util.Optional;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Embeddable
 public class EmbeddedVariable {
 
   @NotNull
   @Size(min = 4, max = 64)
-  @Column(nullable = true)
+  @Column(name = "vkey", nullable = true)
   private String key;
 
   @Column(nullable = true)

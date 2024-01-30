@@ -3,7 +3,7 @@ package org.folio.rest.workflow.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.http.HttpMethod;
+import org.folio.rest.workflow.model.enums.HttpMethod;
 
 public class Handler {
 

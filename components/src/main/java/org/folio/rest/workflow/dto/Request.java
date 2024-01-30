@@ -1,9 +1,9 @@
 package org.folio.rest.workflow.dto;
 
-import javax.validation.constraints.NotNull;
-
-import org.springframework.http.HttpMethod;
+import org.folio.rest.workflow.model.enums.HttpMethod;
 import org.springframework.http.MediaType;
+
+import jakarta.validation.constraints.NotNull;
 
 public class Request {
 
