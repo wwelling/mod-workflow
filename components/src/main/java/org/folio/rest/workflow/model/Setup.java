@@ -1,7 +1,7 @@
 package org.folio.rest.workflow.model;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 import lombok.Getter;
 import lombok.Setter;
 import org.folio.rest.workflow.model.has.HasAsync;
