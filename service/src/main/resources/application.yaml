@@ -1,7 +1,7 @@
 logging:
   file:
     path: logs
-    name: mod-workflow.log
+    name: ${logging.file.path}/mod-workflow.log
   level:
     com:
       zaxxer:
@@ -12,9 +12,12 @@ logging:
       springframework: INFO
 
 server:
+  port: 9001
   servlet:
     context-path: /
-  port: 9001
+    encoding:
+      charset: UTF-8
+      enabled: true
 
 spring:
   activemq.broker-url: tcp://localhost:61616
@@ -22,6 +25,12 @@ spring:
   data.rest:
     returnBodyOnCreate: true
     returnBodyOnUpdate: true
+
+  main:
+    allow-bean-definition-overriding: false
+    allow-circular-references: false
+    banner-mode: console
+    log-startup-info: true
 
   sql:
     init:
@@ -45,6 +54,10 @@ spring:
     username: ${DB_USERNAME:folio_admin}
     password: ${DB_PASSWORD:folio_admin}
 
+  flyway:
+    enabled: true
+    encoding: UTF-8
+
   h2:
     console:
       enabled: false
@@ -66,6 +79,16 @@ spring:
   thymeleaf:
     mode: TEXT
     suffix: .sql
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /api-docs
+  show-actuator: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui
+  writer-with-default-pretty-printer: true
 
 event:
   uploads:
@@ -89,17 +112,32 @@ okapi:
     base-path: /
     rest-path: /rest
 
+# https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html
 management:
   endpoints:
+    enabled-by-default: false
     web:
-      exposure:
-        include: health
       base-path: /admin
+      exposure:
+        include: flyway,health,info
+  endpoint:
+    flyway:
+      enabled: true
+    health:
+      enabled: true
+      show-details: always
+      show-components: always
+    info:
+      enabled: true
   health:
     defaults:
       enabled: true
     readinessstate:
       enabled: true
+  info:
+    env.enabled: true
+    java.enabled: true
+    os.enabled: true
 
 info:
   build:

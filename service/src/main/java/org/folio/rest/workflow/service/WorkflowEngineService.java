@@ -102,6 +102,7 @@ public class WorkflowEngineService {
   }
 
   public JsonNode history(String workflowId, String tenant, String token) throws WorkflowEngineServiceException {
+
     WorkflowOperationalDto workflow = workflowRepo.getViewById(workflowId, WorkflowOperationalDto.class);
     String deploymentId = workflow.getDeploymentId();
     String version = workflow.getVersionTag();

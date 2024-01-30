@@ -7,8 +7,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import org.folio.rest.workflow.enums.HttpMethod;
 import org.folio.rest.workflow.has.common.HasActionCommon;
+import org.folio.rest.workflow.enums.HttpMethod;
 import org.folio.rest.workflow.model.has.HasMethod;
 import org.folio.rest.workflow.model.has.HasPathPattern;
 

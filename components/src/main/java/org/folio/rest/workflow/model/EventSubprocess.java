@@ -11,6 +11,7 @@ import lombok.Setter;
 import org.folio.rest.workflow.model.has.HasAsync;
 import org.folio.rest.workflow.model.has.HasNodes;
 
+
 @Entity
 public class EventSubprocess extends Node implements HasAsync, HasNodes {
 

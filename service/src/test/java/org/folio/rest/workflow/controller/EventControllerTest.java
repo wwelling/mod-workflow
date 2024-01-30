@@ -1,5 +1,7 @@
 package org.folio.rest.workflow.controller;
 
+import static java.io.File.separator;
+import static java.lang.String.join;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
@@ -64,9 +66,17 @@ class EventControllerTest {
 
   static Stream<Arguments> upload() {
     return Stream.of(
-        arguments("diku", "d1/d2/d3", "filename.txt", "events/diku/d1/d2/d3/filename.txt"),
-        arguments("diku", "", "baz.txt", "events/diku/baz.txt"),
-        arguments("foo", "a/../b", "c/d/../e/f.txt", "events/foo/b/c/e/f.txt"));
+        arguments("diku",
+          join(separator, "d1", "d2", "d3"), "filename.txt",
+          join(separator, "events", "diku", "d1", "d2", "d3", "filename.txt")),
+        arguments("diku",
+          "",
+          "baz.txt",
+          join(separator, "events", "diku", "baz.txt")),
+        arguments("foo",
+          join(separator, "a", "..", "b"),
+          join(separator,"c", "d", "..", "e", "f.txt"),
+          join(separator, "events", "foo", "b", "c", "e", "f.txt")));
   }
 
   @ParameterizedTest
@@ -78,13 +88,13 @@ class EventControllerTest {
 
   static Stream<Arguments> uploadRejected() {
     return Stream.of(
-        arguments("diku/../x", "a", "a.txt"),
-        arguments("diku/../../x", "a", "a.txt"),
-        arguments("diku", "a/../../x", "a.txt"),
-        arguments("diku", "../x", "a.txt"),
-        arguments("diku", "a", "../../x.txt"),
-        arguments("diku", "a", "../../../x.txt"),
-        arguments("diku", "a", "../../../../x.txt"));
+        arguments(join(separator, "diku", "..", "x"), "a", "a.txt"),
+        arguments(join(separator, "diku", "..", "..", "x"), "a", "a.txt"),
+        arguments("diku", join(separator, "a", "..", "..", "x"), "a.txt"),
+        arguments("diku", join(separator, "..", "x"), "a.txt"),
+        arguments("diku", "a", join(separator,"..", "..", "x.txt")),
+        arguments("diku", "a", join(separator,"..", "..", "..", "x.txt")),
+        arguments("diku", "a", join(separator,"..", "..", "..", "..", "x.txt")));
   }
 
   MockHttpServletRequestBuilder upload(String tenant, String dir, String file) throws Exception {
