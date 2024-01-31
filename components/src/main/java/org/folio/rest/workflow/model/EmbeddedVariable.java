@@ -18,7 +18,7 @@ public class EmbeddedVariable implements HasEmbeddedVariableCommon {
   @Setter
   @NotNull
   @Size(min = 4, max = 64)
-  @Column(nullable = true)
+  @Column(name = "vkey", nullable = true)
   private String key;
 
   @Getter
