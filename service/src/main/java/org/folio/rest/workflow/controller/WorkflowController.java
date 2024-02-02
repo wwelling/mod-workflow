@@ -1,10 +1,11 @@
 package org.folio.rest.workflow.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.folio.rest.workflow.exception.WorkflowEngineServiceException;
 import org.folio.rest.workflow.model.Workflow;
 import org.folio.rest.workflow.service.WorkflowEngineService;
-import org.folio.spring.annotation.TokenHeader;
 import org.folio.spring.tenant.annotation.TenantHeader;
+import org.folio.spring.web.annotation.TokenHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.fasterxml.jackson.databind.JsonNode;
 
 @RestController
 @RequestMapping("/workflows")

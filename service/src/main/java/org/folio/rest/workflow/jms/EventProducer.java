@@ -3,8 +3,7 @@ package org.folio.rest.workflow.jms;
 import jakarta.jms.JMSException;
 import jakarta.jms.Queue;
 import java.io.IOException;
-
-import org.folio.rest.workflow.jms.model.Event;
+import org.folio.spring.messaging.model.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
