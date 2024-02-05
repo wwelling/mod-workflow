@@ -54,18 +54,11 @@ spring:
       enabled: false
       path: /h2console
       settings:
-        web-allow-others: true
+        web-allow-others: false
 
   flyway:
     enabled: false
     encoding: UTF-8
-
-  h2:
-    console:
-      enabled: false
-      path: /h2console
-      settings:
-        web-allow-others: false
 
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
