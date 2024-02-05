@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/workflows")
+@RequestMapping({"/workflows", "/workflows/"})
 public class WorkflowController {
 
   private static final Logger logger = LoggerFactory.getLogger(WorkflowEngineService.class);
@@ -26,7 +26,7 @@ public class WorkflowController {
   @Autowired
   private WorkflowEngineService workflowEngineService;
 
-  @PutMapping("/{id}/activate")
+  @PutMapping({"/{id}/activate", "/{id}/activate/"})
   public Workflow activateWorkflow(
     @PathVariable String id,
     @TenantHeader String tenant,
@@ -36,7 +36,7 @@ public class WorkflowController {
     return workflowEngineService.activate(id, tenant, token);
   }
 
-  @PutMapping("/{id}/deactivate")
+  @PutMapping({"/{id}/deactivate", "/{id}/deactivate/"})
   public Workflow deactivateWorkflow(
     @PathVariable String id,
     @TenantHeader String tenant,
@@ -46,7 +46,7 @@ public class WorkflowController {
     return workflowEngineService.deactivate(id, tenant, token);
   }
 
-  @PostMapping("/{id}/start")
+  @PostMapping({"/{id}/start", "/{id}/start/"})
   public JsonNode startWorkflow(
     @PathVariable String id,
     @TenantHeader String tenant,
@@ -57,7 +57,7 @@ public class WorkflowController {
     return workflowEngineService.start(id, tenant, token, context);
   }
 
-  @GetMapping("/{id}/history")
+  @GetMapping({"/{id}/history", "/{id}/history/"})
   public JsonNode workflowHistory(
     @PathVariable String id,
     @TenantHeader String tenant,

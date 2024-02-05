@@ -38,7 +38,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.HandlerMapping;
 
 @RestController
-@RequestMapping("/events")
+@RequestMapping({"/events", "/events/"})
 public class EventController {
 
   private static final Logger logger = LoggerFactory.getLogger(EventController.class);
