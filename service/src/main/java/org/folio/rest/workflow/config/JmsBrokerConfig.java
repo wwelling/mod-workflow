@@ -1,6 +1,7 @@
 package org.folio.rest.workflow.config;
 
 import jakarta.jms.Queue;
+
 import org.apache.activemq.broker.BrokerService;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.springframework.beans.factory.annotation.Value;

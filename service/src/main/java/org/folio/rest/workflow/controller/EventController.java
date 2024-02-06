@@ -18,16 +18,16 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.folio.rest.workflow.dto.TriggerDto;
+import org.folio.rest.workflow.enums.HttpMethod;
 import org.folio.rest.workflow.exception.EventPublishException;
 import org.folio.rest.workflow.jms.EventProducer;
-import org.folio.rest.workflow.jms.model.Event;
 import org.folio.rest.workflow.model.repo.TriggerRepo;
+import org.folio.spring.messaging.model.Event;
 import org.folio.spring.tenant.annotation.TenantHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpMethod;
 import org.springframework.util.PathMatcher;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,7 +38,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.HandlerMapping;
 
 @RestController
-@RequestMapping("/events")
+@RequestMapping({"/events", "/events/"})
 public class EventController {
 
   private static final Logger logger = LoggerFactory.getLogger(EventController.class);

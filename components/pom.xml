@@ -3,25 +3,18 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>workflow-components</artifactId>
-
-  <name>Workflow Components</name>
-
-  <description>Okapi workflow components</description>
-
   <parent>
     <groupId>org.folio</groupId>
     <artifactId>workflow-parent</artifactId>
-    <version>1.1.8-SNAPSHOT</version>
+    <version>1.2.0-SNAPSHOT</version>
   </parent>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.apache.activemq</groupId>
-      <artifactId>activemq-client</artifactId>
-      <version>${activemq.version}</version>
-    </dependency>
+  <artifactId>workflow-components</artifactId>
 
+  <name>Workflow Components</name>
+  <description>Okapi workflow components</description>
+
+  <dependencies>
     <dependency>
       <groupId>org.folio</groupId>
       <artifactId>spring-domain</artifactId>
@@ -31,19 +24,6 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-rest</artifactId>
-      <version>${spring-boot.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-activemq</artifactId>
-      <version>${spring-boot.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.apache.activemq</groupId>
-          <artifactId>activemq-client-jakarta</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <dependency>
@@ -51,7 +31,32 @@
       <artifactId>lombok</artifactId>
       <scope>provided</scope>
     </dependency>
-
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <configuration>
+          <skip>false</skip>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.graalvm.buildtools</groupId>
+        <artifactId>native-maven-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>
