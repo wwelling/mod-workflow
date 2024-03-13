@@ -18,6 +18,7 @@
 
   <properties>
     <openapi.server.port>9000</openapi.server.port>
+    <folio-spring.version>8.1.0</folio-spring.version>
   </properties>
 
   <dependencies>
@@ -37,6 +38,13 @@
       <groupId>org.folio</groupId>
       <artifactId>spring-web</artifactId>
       <version>${spring-module-core.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.folio</groupId>
+      <artifactId>spring-test</artifactId>
+      <version>${spring-module-core.version}</version>
+      <scope>test</scope>
     </dependency>
 
     <dependency>
@@ -77,8 +85,26 @@
     </dependency>
 
     <dependency>
+      <groupId>org.folio</groupId>
+      <artifactId>folio-spring-base</artifactId>
+      <version>${folio-spring.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.folio</groupId>
+      <artifactId>folio-spring-cql</artifactId>
+      <version>${folio-spring.version}</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-logging</artifactId>
+        </exclusion>
+      </exclusions>
       <scope>test</scope>
     </dependency>
 
@@ -161,7 +187,6 @@
         <directory>src/main/resources</directory>
         <excludes>
           <exclude>application.yaml</exclude>
-          <exclude>application-test.yaml</exclude>
           <exclude>descriptors/**</exclude>
         </excludes>
       </resource>
@@ -170,7 +195,6 @@
         <directory>src/main/resources</directory>
         <includes>
           <include>application.yaml</include>
-          <include>application-test.yaml</include>
         </includes>
       </resource>
       <resource>
