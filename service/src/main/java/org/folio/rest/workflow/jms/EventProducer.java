@@ -15,11 +15,15 @@ public class EventProducer {
 
   private static final Logger logger = LoggerFactory.getLogger(EventProducer.class);
 
-  @Autowired
   private JmsMessagingTemplate jmsMessagingTemplate;
 
-  @Autowired
   private Queue queue;
+
+  @Autowired
+  public EventProducer(JmsMessagingTemplate jmsMessagingTemplate, Queue queue) {
+    this.jmsMessagingTemplate = jmsMessagingTemplate;
+    this.queue = queue;
+  }
 
   public void send(Event event) throws JMSException, IOException {
     // CAUTION: payload not allowed in logs

@@ -43,11 +43,15 @@ public class OkapiDiscoveryService {
   @Value("${okapi.camunda.base-path}")
   private String basePath;
 
-  @Autowired
   private HttpService httpService;
 
-  @Autowired
   private ObjectMapper objectMapper;
+
+  @Autowired
+  public OkapiDiscoveryService(HttpService httpService, ObjectMapper objectMapper) {
+    this.httpService = httpService;
+    this.objectMapper = objectMapper;
+  }
 
   public List<Action> getActionsByTenant(String tenant) throws IOException {
     List<Action> actions = new ArrayList<>();

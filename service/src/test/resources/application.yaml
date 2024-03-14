@@ -11,6 +11,9 @@ logging:
       hibernate: INFO
       springframework: INFO
 
+      # Uncomment to enable MockMvc unit test logging.
+      #springframework.test.web.servlet.result: DEBUG
+
 server:
   port: 9101
   servlet:
@@ -62,7 +65,6 @@ spring:
 
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
-
     properties.hibernate.jdbc.lob.non_contextual_creation: true
     generate-ddl: false
     hibernate.ddl-auto: none
