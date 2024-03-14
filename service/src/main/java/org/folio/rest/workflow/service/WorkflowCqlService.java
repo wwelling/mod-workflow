@@ -1,5 +1,6 @@
 package org.folio.rest.workflow.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.lang3.StringUtils;
 import org.folio.rest.workflow.model.Workflow;
@@ -12,8 +13,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class WorkflowCqlService extends AbstractCqlService<Workflow> {
 
-  @Autowired
   private WorkflowRepo repo;
+
+  @Autowired
+  public WorkflowCqlService(ObjectMapper mapper, WorkflowRepo repo) {
+    this.mapper = mapper;
+    this.repo = repo;
+  }
 
   @Override
   protected String getTypeName() {

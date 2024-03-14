@@ -1,10 +1,9 @@
 package org.folio.rest.workflow.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.List;
-import java.util.stream.Collector;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Provide common CQL-specific service functionality.
@@ -18,7 +17,9 @@ public abstract class AbstractCqlService<T> {
    */
   public static final String TOTAL_RECORDS = "TotalRecords";
 
-  @Autowired
+  /**
+   * The object mapper, which must be initialized in the extending class' constructor.
+   */
   protected ObjectMapper mapper;
 
   /**
@@ -30,14 +31,14 @@ public abstract class AbstractCqlService<T> {
    *
    * @return Paginated Workflow results.
    */
-  abstract public ObjectNode findByCql(String query, Long offset, Integer limit);
+  public abstract ObjectNode findByCql(String query, Long offset, Integer limit);
 
   /**
    * Get the type name to be used in the json string (should have the 's', such as 'workflows').
    *
    * @return The string used to represent the type when generating the JSON.
    */
-  abstract protected String getTypeName();
+  protected abstract String getTypeName();
 
   /**
    * Convert the list and the total into the JSON structured response.
@@ -49,13 +50,9 @@ public abstract class AbstractCqlService<T> {
    */
   protected ObjectNode toJson(List<T> list, long total) {
     final ObjectNode root = mapper.createObjectNode();
+    final ArrayNode array = root.putArray(getTypeName());
 
-    list.stream().collect(Collector.of(
-      () -> root.putArray(getTypeName()),
-      (l1, item) -> l1.addPOJO(item),
-      (l1, l2) -> l1.addAll(l2),
-      Collector.Characteristics.IDENTITY_FINISH
-    ));
+    list.forEach((T item) -> array.addPOJO(item));
 
     root.put(TOTAL_RECORDS, total);
 

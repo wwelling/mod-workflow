@@ -52,13 +52,17 @@ public class WorkflowEngineService {
   @Value("${okapi.camunda.rest-path}")
   private String restPath;
 
-  @Autowired
   private WorkflowRepo workflowRepo;
 
-  @Autowired
-  ObjectMapper mapper;
+  private ObjectMapper mapper;
 
   private RestTemplate restTemplate;
+
+  @Autowired
+  public WorkflowEngineService(WorkflowRepo workflowRepo, ObjectMapper mapper) {
+    this.workflowRepo = workflowRepo;
+    this.mapper = mapper;
+  }
 
   public WorkflowEngineService(RestTemplateBuilder restTemplateBuilder) {
     this.restTemplate = restTemplateBuilder.build();
@@ -96,7 +100,6 @@ public class WorkflowEngineService {
 
       return response.getBody();
     } catch (Exception e) {
-      logger.error(e.getMessage(), e);
       throw new WorkflowEngineServiceException(String.format("Failed to start workflow: %s!", e.getMessage()), e);
     }
   }
@@ -144,7 +147,6 @@ public class WorkflowEngineService {
 
       throw new WorkflowEngineServiceException("Unable to get workflow process definition from workflow engine!");
     } catch (Exception e) {
-      logger.error(e.getMessage(), e);
       throw new WorkflowEngineServiceException(String.format("Failed to deployment definition: %s!", e.getMessage()), e);
     }
   }
@@ -169,7 +171,6 @@ public class WorkflowEngineService {
 
       throw new WorkflowEngineServiceException("Unable to get workflow process instance history from workflow engine!");
     } catch (Exception e) {
-      logger.error(e.getMessage(), e);
       throw new WorkflowEngineServiceException(String.format("Failed to fetch process instance history: %s!", e.getMessage()), e);
     }
   }
@@ -196,7 +197,6 @@ public class WorkflowEngineService {
 
       return incidents;
     } catch (Exception e) {
-      logger.error(e.getMessage(), e);
       throw new WorkflowEngineServiceException(String.format("Failed to fetch incident history: %s!", e.getMessage()), e);
     }
   }
@@ -219,7 +219,6 @@ public class WorkflowEngineService {
         return workflowRepo.save(responseWorkflow);
       }
     } catch (Exception e) {
-      logger.error(e.getMessage(), e);
       throw new WorkflowEngineServiceException(String.format("Failed to send workflow request: %s!", e.getMessage()), e);
     }
 
