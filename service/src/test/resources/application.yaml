@@ -65,7 +65,6 @@ spring:
 
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
-    properties.hibernate.dialect: org.hibernate.dialect.H2Dialect
     properties.hibernate.jdbc.lob.non_contextual_creation: true
     generate-ddl: false
     hibernate.ddl-auto: none
@@ -95,7 +94,7 @@ tenant:
   header-name: X-Okapi-Tenant
   force-tenant: false
   default-tenant: diku
-  initialize-default-tenant: false
+  initialize-default-tenant: true
   domain-packages:
     - org.folio.rest.workflow.components
     - org.folio.rest.workflow.model
