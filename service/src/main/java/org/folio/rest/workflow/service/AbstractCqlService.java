@@ -52,7 +52,7 @@ public abstract class AbstractCqlService<T> {
     final ObjectNode root = mapper.createObjectNode();
     final ArrayNode array = root.putArray(getTypeName());
 
-    list.forEach((T item) -> array.addPOJO(item));
+    list.forEach(array::addPOJO);
 
     root.put(TOTAL_RECORDS, total);
 
