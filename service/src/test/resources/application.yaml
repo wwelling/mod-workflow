@@ -136,7 +136,7 @@ management:
 
 info:
   build:
-    artifact: "workflow-service"
-    name: "Workflow Service"
-    description: "Okapi workflow module using Spring Boot"
-    version: "0.0.0"
+    artifact: "@project.artifactId@"
+    name: "@project.name@"
+    description: "@project.description@"
+    version: "@project.version@"

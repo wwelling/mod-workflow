@@ -216,6 +216,23 @@
         </includes>
       </resource>
     </resources>
+
+    <testResources>
+      <testResource>
+        <filtering>false</filtering>
+        <directory>src/test/resources</directory>
+        <excludes>
+          <exclude>application.yaml</exclude>
+        </excludes>
+      </testResource>
+      <testResource>
+        <filtering>true</filtering>
+        <directory>src/test/resources</directory>
+        <includes>
+          <include>application.yaml</include>
+        </includes>
+      </testResource>
+    </testResources>
   </build>
 
   <profiles>
