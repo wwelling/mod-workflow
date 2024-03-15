@@ -116,12 +116,6 @@
         },
         {
           "methods": ["GET"],
-          "pathPattern": "/workflows/search",
-          "permissionsRequired": ["workflow.workflows.collection.get"],
-          "permissionsDesired": ["workflow.workflows.domain.*", "workflow.domain.all"]
-        },
-        {
-          "methods": ["GET"],
           "pathPattern": "/workflows/{id}",
           "permissionsRequired": ["workflow.workflows.item.get"],
           "permissionsDesired": ["workflow.workflows.domain.*", "workflow.workflows.domain.all"]
