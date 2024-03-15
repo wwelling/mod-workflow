@@ -295,7 +295,7 @@
                 <id>rename-descriptor-outputs</id>
                 <phase>generate-resources</phase>
                 <goals>
-                  <goal>rename</goal>
+                  <goal>copy</goal>
                 </goals>
                 <configuration>
                   <fileSets>
@@ -304,8 +304,16 @@
                       <destinationFile>${project.build.directory}/ModuleDescriptor.json</destinationFile>
                     </fileSet>
                     <fileSet>
+                      <sourceFile>${project.build.directory}/ModuleDescriptor-template.json</sourceFile>
+                      <destinationFile>${project.build.directory}/../../target/ModuleDescriptor.json</destinationFile>
+                    </fileSet>
+                    <fileSet>
                       <sourceFile>${project.build.directory}/DeploymentDescriptor-template.json</sourceFile>
                       <destinationFile>${project.build.directory}/DeploymentDescriptor.json</destinationFile>
+                    </fileSet>
+                    <fileSet>
+                      <sourceFile>${project.build.directory}/DeploymentDescriptor-template.json</sourceFile>
+                      <destinationFile>${project.build.directory}/../../target/DeploymentDescriptor.json</destinationFile>
                     </fileSet>
                   </fileSets>
                 </configuration>
