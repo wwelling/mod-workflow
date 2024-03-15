@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import org.folio.rest.workflow.model.Action;
 import org.folio.rest.workflow.model.Handler;
-import org.folio.spring.service.HttpService;
+import org.folio.spring.web.service.HttpService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,11 +43,15 @@ public class OkapiDiscoveryService {
   @Value("${okapi.camunda.base-path}")
   private String basePath;
 
-  @Autowired
   private HttpService httpService;
 
-  @Autowired
   private ObjectMapper objectMapper;
+
+  @Autowired
+  public OkapiDiscoveryService(HttpService httpService, ObjectMapper objectMapper) {
+    this.httpService = httpService;
+    this.objectMapper = objectMapper;
+  }
 
   public List<Action> getActionsByTenant(String tenant) throws IOException {
     List<Action> actions = new ArrayList<>();

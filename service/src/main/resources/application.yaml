@@ -1,7 +1,7 @@
 logging:
   file:
     path: logs
-    name: mod-workflow.log
+    name: ${logging.file.path}/mod-workflow.log
   level:
     com:
       zaxxer:
@@ -12,9 +12,12 @@ logging:
       springframework: INFO
 
 server:
+  port: 9001
   servlet:
     context-path: /
-  port: 9001
+    encoding:
+      charset: UTF-8
+      enabled: true
 
 spring:
   activemq.broker-url: tcp://localhost:61616
@@ -23,8 +26,15 @@ spring:
     returnBodyOnCreate: true
     returnBodyOnUpdate: true
 
+  main:
+    allow-bean-definition-overriding: false
+    allow-circular-references: false
+    banner-mode: console
+    log-startup-info: true
+
   sql:
     init:
+      #platform: h2
       platform: postgres
 
   datasource:
@@ -34,14 +44,27 @@ spring:
       idleTimeout: 600000
       maxLifetime: 1800000
       maximumPoolSize: ${DB_MAXPOOLSIZE:16}
-    platform: postgres
+    #driverClassName: org.h2.Driver
+    #url: jdbc:h2:./target/mod-workflow;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     driverClassName: org.postgresql.Driver
     url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_DATABASE:mod_workflow}
 
     username: ${DB_USERNAME:folio_admin}
     password: ${DB_PASSWORD:folio_admin}
 
+  flyway:
+    enabled: true
+    encoding: UTF-8
+
+  h2:
+    console:
+      enabled: false
+      path: /h2console
+      settings:
+        web-allow-others: true
+
   jpa:
+    #database-platform: org.hibernate.dialect.H2Dialect
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
     properties.hibernate.jdbc.lob.non_contextual_creation: true
@@ -54,6 +77,16 @@ spring:
   thymeleaf:
     mode: TEXT
     suffix: .sql
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /api-docs
+  show-actuator: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui
+  writer-with-default-pretty-printer: true
 
 event:
   uploads:
@@ -77,17 +110,32 @@ okapi:
     base-path: /
     rest-path: /rest
 
+# https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html
 management:
   endpoints:
+    enabled-by-default: false
     web:
-      exposure:
-        include: health
       base-path: /admin
+      exposure:
+        include: flyway,health,info
+  endpoint:
+    flyway:
+      enabled: true
+    health:
+      enabled: true
+      show-details: always
+      show-components: always
+    info:
+      enabled: true
   health:
     defaults:
       enabled: true
     readinessstate:
       enabled: true
+  info:
+    env.enabled: true
+    java.enabled: true
+    os.enabled: true
 
 info:
   build:

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.util.Iterator;
 import org.folio.rest.workflow.dto.WorkflowDto;
 import org.folio.rest.workflow.dto.WorkflowOperationalDto;
 import org.folio.rest.workflow.exception.WorkflowEngineServiceException;
@@ -51,13 +52,17 @@ public class WorkflowEngineService {
   @Value("${okapi.camunda.rest-path}")
   private String restPath;
 
-  @Autowired
   private WorkflowRepo workflowRepo;
 
-  @Autowired
-  ObjectMapper mapper;
+  private ObjectMapper mapper;
 
   private RestTemplate restTemplate;
+
+  @Autowired
+  public WorkflowEngineService(WorkflowRepo workflowRepo, ObjectMapper mapper) {
+    this.workflowRepo = workflowRepo;
+    this.mapper = mapper;
+  }
 
   public WorkflowEngineService(RestTemplateBuilder restTemplateBuilder) {
     this.restTemplate = restTemplateBuilder.build();
@@ -90,9 +95,13 @@ public class WorkflowEngineService {
     HttpEntity<JsonNode> contextHttpEntity = new HttpEntity<>(context, headers(tenant, token));
 
     String url = String.format(PROCESS_DEFINITION_START_URL_TEMPLATE, okapiUrl, restPath, definitionId);
-    ResponseEntity<JsonNode> response = exchange(url, HttpMethod.POST, contextHttpEntity, JsonNode.class);
+    try {
+      ResponseEntity<JsonNode> response = exchange(url, HttpMethod.POST, contextHttpEntity, JsonNode.class);
 
-    return response.getBody();
+      return response.getBody();
+    } catch (Exception e) {
+      throw new WorkflowEngineServiceException(String.format("Failed to start workflow: %s!", e.getMessage()), e);
+    }
   }
 
   public JsonNode history(String workflowId, String tenant, String token) throws WorkflowEngineServiceException {
@@ -105,12 +114,15 @@ public class WorkflowEngineService {
 
     ArrayNode instances = fetchProcessInstanceHistory(processDefinitionId, tenant, token);
 
-    instances.forEach(instance -> {
+    Iterator<JsonNode> iter = instances.iterator();
+
+    while (iter.hasNext()) {
+      JsonNode instance = iter.next();
       String processInstanceId = instance.get("id").asText();
 
       ((ObjectNode) instance).withArray("incidents")
         .addAll(fetchIncidentsHistory(processInstanceId, tenant, token));
-    });
+    }
 
     return instances;
   }
@@ -122,16 +134,21 @@ public class WorkflowEngineService {
 
     String arguments = String.format("?deploymentId=%s&versionTag=%s&maxResults=1", deploymentId, version);
     String url = String.format(PROCESS_DEFINITION_GET_URL_TEMPLATE, okapiUrl, restPath, arguments);
-    ResponseEntity<ArrayNode> response = exchange(url, HttpMethod.GET, httpEntity, ArrayNode.class);
 
-    ArrayNode definitions = response.getBody();
-    if (response.getStatusCode() == HttpStatus.OK && definitions != null && !definitions.isEmpty()) {
-      logger.debug("Response body: {}", definitions);
+    try {
+      ResponseEntity<ArrayNode> response = exchange(url, HttpMethod.GET, httpEntity, ArrayNode.class);
 
-      return definitions.get(0);
+      ArrayNode definitions = response.getBody();
+      if (response.getStatusCode() == HttpStatus.OK && definitions != null && !definitions.isEmpty()) {
+        logger.debug("Response body: {}", definitions);
+
+        return definitions.get(0);
+      }
+
+      throw new WorkflowEngineServiceException("Unable to get workflow process definition from workflow engine!");
+    } catch (Exception e) {
+      throw new WorkflowEngineServiceException(String.format("Failed to deployment definition: %s!", e.getMessage()), e);
     }
-
-    throw new WorkflowEngineServiceException("Unable to get workflow process definition from workflow engine!");
   }
 
   private ArrayNode fetchProcessInstanceHistory(String processDefinitionId, String tenant, String token)
@@ -141,37 +158,47 @@ public class WorkflowEngineService {
 
     String arguments = String.format("?processDefinitionId=%s&sortBy=startTime&sortOrder=asc", processDefinitionId);
     String url = String.format(HISTORY_PROCESS_INSTANCE_URL_TEMPLATE, okapiUrl, restPath, arguments);
-    ResponseEntity<ArrayNode> response = exchange(url, HttpMethod.GET, httpEntity, ArrayNode.class);
 
-    ArrayNode definitions = response.getBody();
-    if (response.getStatusCode() == HttpStatus.OK && definitions != null) {
-      logger.debug("Response body: {}", definitions);
+    try {
+      ResponseEntity<ArrayNode> response = exchange(url, HttpMethod.GET, httpEntity, ArrayNode.class);
 
-      return definitions;
+      ArrayNode definitions = response.getBody();
+      if (response.getStatusCode() == HttpStatus.OK && definitions != null) {
+        logger.debug("Response body: {}", definitions);
+
+        return definitions;
+      }
+
+      throw new WorkflowEngineServiceException("Unable to get workflow process instance history from workflow engine!");
+    } catch (Exception e) {
+      throw new WorkflowEngineServiceException(String.format("Failed to fetch process instance history: %s!", e.getMessage()), e);
     }
-
-    throw new WorkflowEngineServiceException("Unable to get workflow process instance history from workflow engine!");
   }
 
-  private ArrayNode fetchIncidentsHistory(String processInstanceId, String tenant, String token) {
+  private ArrayNode fetchIncidentsHistory(String processInstanceId, String tenant, String token) throws WorkflowEngineServiceException {
 
     HttpEntity<Void> httpEntity = new HttpEntity<>(headers(tenant, token));
 
     String arguments = String.format("?processInstanceId=%s&sortBy=createTime&sortOrder=asc", processInstanceId);
     String url = String.format(HISTORY_INCIDENT_URL_TEMPLATE, okapiUrl, restPath, arguments);
-    ResponseEntity<ArrayNode> response = exchange(url, HttpMethod.GET, httpEntity, ArrayNode.class);
 
-    ArrayNode incidents = response.getBody();
-    if (response.getStatusCode() == HttpStatus.OK && incidents != null) {
-      logger.debug("Response body: {}", incidents);
+    try {
+      ResponseEntity<ArrayNode> response = exchange(url, HttpMethod.GET, httpEntity, ArrayNode.class);
+
+      ArrayNode incidents = response.getBody();
+      if (response.getStatusCode() == HttpStatus.OK && incidents != null) {
+        logger.debug("Response body: {}", incidents);
+      }
+      else {
+        logger.debug("Unable to get workflow incidents history from workflow engine!");
+
+        incidents = mapper.createArrayNode();
+      }
+
+      return incidents;
+    } catch (Exception e) {
+      throw new WorkflowEngineServiceException(String.format("Failed to fetch incident history: %s!", e.getMessage()), e);
     }
-    else {
-      logger.debug("Unable to get workflow incidents history from workflow engine!");
-
-      incidents = mapper.createArrayNode();
-    }
-
-    return incidents;
   }
 
   private Workflow sendWorkflowRequest(WorkflowDto workflow, String requestPath, String tenant, String token)
@@ -180,15 +207,19 @@ public class WorkflowEngineService {
     HttpEntity<WorkflowDto> workflowHttpEntity = new HttpEntity<>(workflow, headers(tenant, token));
 
     String url = String.format(requestPath, okapiUrl, basePath);
-    ResponseEntity<Workflow> response = exchange(url, HttpMethod.POST, workflowHttpEntity, Workflow.class);
+    try {
+      ResponseEntity<Workflow> response = exchange(url, HttpMethod.POST, workflowHttpEntity, Workflow.class);
 
-    Workflow responseWorkflow = response.getBody();
-    if (response.getStatusCode() == HttpStatus.OK && responseWorkflow != null) {
-      logger.debug("Response body: {}", responseWorkflow);
+      Workflow responseWorkflow = response.getBody();
+      if (response.getStatusCode() == HttpStatus.OK && responseWorkflow != null) {
+        logger.debug("Response body: {}", responseWorkflow);
 
-      String deploymentId = responseWorkflow.getDeploymentId();
-      logger.info("Workflow is active = {}, deploymentID = {}", responseWorkflow.isActive(), deploymentId);
-      return workflowRepo.save(responseWorkflow);
+        String deploymentId = responseWorkflow.getDeploymentId();
+        logger.info("Workflow is active = {}, deploymentID = {}", responseWorkflow.isActive(), deploymentId);
+        return workflowRepo.save(responseWorkflow);
+      }
+    } catch (Exception e) {
+      throw new WorkflowEngineServiceException(String.format("Failed to send workflow request: %s!", e.getMessage()), e);
     }
 
     throw new WorkflowEngineServiceException("Unable to get updated workflow from workflow engine!");

@@ -1,13 +1,12 @@
 package org.folio.rest.workflow.controller.advice;
 
-import javax.persistence.EntityNotFoundException;
-
+import jakarta.persistence.EntityNotFoundException;
 import org.folio.rest.workflow.exception.WorkflowAlreadyActiveException;
 import org.folio.rest.workflow.exception.WorkflowDeploymentException;
 import org.folio.rest.workflow.exception.WorkflowEngineServiceException;
 import org.folio.rest.workflow.exception.WorkflowNotFoundException;
-import org.folio.spring.model.response.ResponseErrors;
-import org.folio.spring.utility.ErrorUtility;
+import org.folio.spring.web.model.response.ResponseErrors;
+import org.folio.spring.web.utility.ErrorUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

@@ -1,11 +1,11 @@
 package org.folio.rest.workflow.model;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.folio.rest.workflow.enums.VariableType;
@@ -18,7 +18,7 @@ public class EmbeddedVariable implements HasEmbeddedVariableCommon {
   @Setter
   @NotNull
   @Size(min = 4, max = 64)
-  @Column(nullable = true)
+  @Column(name = "vkey", nullable = true)
   private String key;
 
   @Getter
