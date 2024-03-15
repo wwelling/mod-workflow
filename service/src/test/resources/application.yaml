@@ -1,0 +1,141 @@
+logging:
+  file:
+    path: logs
+    name: ${logging.file.path}/mod-workflow-test.log
+  level:
+    com:
+      zaxxer:
+        hikari: INFO
+    org:
+      folio: INFO
+      hibernate: INFO
+      springframework: INFO
+
+      # Uncomment to enable MockMvc unit test logging.
+      #springframework.test.web.servlet.result: DEBUG
+
+server:
+  port: 9101
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+
+spring:
+  activemq.broker-url: tcp://localhost:61616
+  application.name: mod-workflow
+  data.rest:
+    returnBodyOnCreate: true
+    returnBodyOnUpdate: true
+
+  main:
+    allow-bean-definition-overriding: false
+    allow-circular-references: false
+    banner-mode: console
+    log-startup-info: true
+
+  sql:
+    init:
+      platform: h2
+
+  datasource:
+    hikari:
+      leakDetectionThreshold: 180000
+      connectionTimeout: 30000
+      idleTimeout: 600000
+      maxLifetime: 1800000
+      maximumPoolSize: 16
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:mod-workflow;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+
+    username: ${DB_USERNAME:folio_admin}
+    password: ${DB_PASSWORD:folio_admin}
+
+  h2:
+    console:
+      enabled: false
+      path: /h2console
+      settings:
+        web-allow-others: false
+
+  flyway:
+    enabled: false
+    encoding: UTF-8
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    properties.hibernate.jdbc.lob.non_contextual_creation: true
+    generate-ddl: false
+    hibernate.ddl-auto: none
+    open-in-view: true
+    show-sql: false
+
+  thymeleaf:
+    mode: TEXT
+    suffix: .sql
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /api-docs
+  show-actuator: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui
+
+event:
+  uploads:
+    path: events
+  queue:
+    name: event.queue
+
+tenant:
+  header-name: X-Okapi-Tenant
+  force-tenant: false
+  default-tenant: diku
+  initialize-default-tenant: true
+  domain-packages:
+    - org.folio.rest.workflow.components
+    - org.folio.rest.workflow.model
+  schema-scripts:
+
+okapi:
+  url: ${OKAPI_URL:http://localhost:9130}
+  camunda:
+    base-path: /
+    rest-path: /rest
+
+# https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html
+management:
+  endpoints:
+    enabled-by-default: false
+    web:
+      base-path: /admin
+      exposure:
+        include: flyway,health,info
+  endpoint:
+    flyway:
+      enabled: false
+    health:
+      enabled: false
+      show-details: always
+      show-components: always
+    info:
+      enabled: false
+  health:
+    defaults:
+      enabled: true
+    readinessstate:
+      enabled: true
+  info:
+    env.enabled: false
+    java.enabled: false
+    os.enabled: false
+
+info:
+  build:
+    artifact: "@project.artifactId@"
+    name: "@project.name@"
+    description: "@project.description@"
+    version: "@project.version@"

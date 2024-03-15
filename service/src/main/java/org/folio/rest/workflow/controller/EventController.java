@@ -50,17 +50,21 @@ public class EventController {
   @Value("${event.uploads.path}")
   private String eventUploadsDirectory;
 
-  @Autowired
   private EventProducer eventProducer;
 
-  @Autowired
   private TriggerRepo triggerRepo;
 
-  @Autowired
   private PathMatcher pathMatcher;
 
-  @Autowired
   private ObjectMapper objectMapper;
+
+  @Autowired
+  public EventController(EventProducer eventProducer, TriggerRepo triggerRepo, PathMatcher pathMatcher, ObjectMapper objectMapper) {
+    this.eventProducer = eventProducer;
+    this.triggerRepo = triggerRepo;
+    this.pathMatcher = pathMatcher;
+    this.objectMapper = objectMapper;
+  }
 
   // @formatter:off
   @PostMapping(value = "/**", consumes = "application/json")
@@ -159,9 +163,9 @@ public class EventController {
   }
 
   private Optional<TriggerDto> checkTrigger(HttpMethod method, String path) {
-    return triggerRepo.findViewAllBy(TriggerDto.class).stream().filter(t -> {
-      return method.equals(t.getMethod()) && pathMatcher.match(t.getPathPattern(), path);
-    }).findAny();
+    return triggerRepo.findViewAllBy(TriggerDto.class).stream().filter(t ->
+      method.equals(t.getMethod()) && pathMatcher.match(t.getPathPattern(), path)
+    ).findAny();
   }
 
   private void processEvent(TriggerDto trigger, Event event) throws EventPublishException {
