@@ -21,16 +21,6 @@
       "type" : "string",
       "maxLength" : 512
     },
-    "path" : {
-      "type" : "string"
-    },
-    "workflow" : {
-      "type" : "string"
-    },
-    "action" : {
-      "type" : "string",
-      "enum" : [ "READ_NEXT", "DELETE_NEXT", "LIST", "WRITE" ]
-    },
     "inputVariables" : {
       "type" : "array",
       "items" : {
@@ -46,11 +36,21 @@
     "asyncAfter" : {
       "type" : "boolean"
     },
+    "path" : {
+      "type" : "string"
+    },
+    "workflow" : {
+      "type" : "string"
+    },
+    "action" : {
+      "type" : "string",
+      "enum" : [ "READ_NEXT", "DELETE_NEXT", "LIST", "WRITE" ]
+    },
     "identifier" : {
       "type" : "string"
     }
   },
-  "required" : [ "deserializeAs", "name", "path", "workflow", "action", "asyncBefore", "asyncAfter" ],
+  "required" : [ "deserializeAs", "name", "asyncBefore", "asyncAfter", "path", "workflow", "action" ],
   "definitions" : {
     "EmbeddedVariable" : {
       "type" : "object",

@@ -12,11 +12,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/actions")
+@RequestMapping({"/actions", "/actions/"})
 public class ActionController {
 
-  @Autowired
   private OkapiDiscoveryService okapiDiscoveryService;
+
+  @Autowired
+  public ActionController(OkapiDiscoveryService okapiDiscoveryService) {
+    this.okapiDiscoveryService = okapiDiscoveryService;
+  }
 
   @GetMapping
   public List<Action> getActions(@TenantHeader String tenant) throws IOException {

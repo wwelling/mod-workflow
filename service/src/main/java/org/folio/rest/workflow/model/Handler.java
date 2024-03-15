@@ -2,53 +2,30 @@ package org.folio.rest.workflow.model;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.springframework.http.HttpMethod;
+import lombok.Getter;
+import lombok.Setter;
+import org.folio.rest.workflow.enums.HttpMethod;
 
 public class Handler {
 
+  @Getter
+  @Setter
   private List<String> methods;
 
+  @Getter
+  @Setter
   private String pathPattern;
 
+  @Getter
+  @Setter
   private List<String> permissionsRequired;
 
+  @Getter
+  @Setter
   private List<String> permissionsDesired;
 
   public Handler() {
     super();
-  }
-
-  public List<String> getMethods() {
-    return methods;
-  }
-
-  public void setMethods(List<String> methods) {
-    this.methods = methods;
-  }
-
-  public String getPathPattern() {
-    return pathPattern;
-  }
-
-  public void setPathPattern(String pathPattern) {
-    this.pathPattern = pathPattern;
-  }
-
-  public List<String> getPermissionsRequired() {
-    return permissionsRequired;
-  }
-
-  public void setPermissionsRequired(List<String> permissionsRequired) {
-    this.permissionsRequired = permissionsRequired;
-  }
-
-  public List<String> getPermissionsDesired() {
-    return permissionsDesired;
-  }
-
-  public void setPermissionsDesired(List<String> permissionsDesired) {
-    this.permissionsDesired = permissionsDesired;
   }
 
   public List<Action> getActionByInterface(String interfaceName) {

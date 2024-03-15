@@ -1,5 +1,10 @@
 package org.folio.rest.workflow.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import jakarta.jms.JMSException;
+import jakarta.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,21 +17,17 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
-import javax.jms.JMSException;
-import javax.servlet.http.HttpServletRequest;
-
+import org.folio.rest.workflow.dto.TriggerDto;
+import org.folio.rest.workflow.enums.HttpMethod;
 import org.folio.rest.workflow.exception.EventPublishException;
 import org.folio.rest.workflow.jms.EventProducer;
-import org.folio.rest.workflow.jms.model.Event;
-import org.folio.rest.workflow.model.Trigger;
 import org.folio.rest.workflow.model.repo.TriggerRepo;
+import org.folio.spring.messaging.model.Event;
 import org.folio.spring.tenant.annotation.TenantHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpMethod;
 import org.springframework.util.PathMatcher;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,12 +37,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.HandlerMapping;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
 @RestController
-@RequestMapping("/events")
+@RequestMapping({"/events", "/events/"})
 public class EventController {
 
   private static final Logger logger = LoggerFactory.getLogger(EventController.class);
@@ -53,17 +50,21 @@ public class EventController {
   @Value("${event.uploads.path}")
   private String eventUploadsDirectory;
 
-  @Autowired
   private EventProducer eventProducer;
 
-  @Autowired
   private TriggerRepo triggerRepo;
 
-  @Autowired
   private PathMatcher pathMatcher;
 
-  @Autowired
   private ObjectMapper objectMapper;
+
+  @Autowired
+  public EventController(EventProducer eventProducer, TriggerRepo triggerRepo, PathMatcher pathMatcher, ObjectMapper objectMapper) {
+    this.eventProducer = eventProducer;
+    this.triggerRepo = triggerRepo;
+    this.pathMatcher = pathMatcher;
+    this.objectMapper = objectMapper;
+  }
 
   // @formatter:off
   @PostMapping(value = "/**", consumes = "application/json")
@@ -85,7 +86,7 @@ public class EventController {
   ) throws EventPublishException, IOException {
   // @formatter:on
 
-    if (! TENANT_PATTERN.matcher(tenant).matches()) {
+    if (!TENANT_PATTERN.matcher(tenant).matches()) {
       throw new FileSystemException("Invalid tenant directory name");
     }
 
@@ -143,7 +144,7 @@ public class EventController {
     logger.debug("Request headers: {}", headers);
     logger.debug("Request body: {}", body);
 
-    Optional<Trigger> trigger = checkTrigger(method, requestPath);
+    Optional<TriggerDto> trigger = checkTrigger(method, requestPath);
     if (trigger.isPresent()) {
       processEvent(
         trigger.get(),
@@ -161,13 +162,13 @@ public class EventController {
     return body;
   }
 
-  private Optional<Trigger> checkTrigger(HttpMethod method, String path) {
-    return triggerRepo.findAll().stream().filter(t -> {
-      return method.equals(t.getMethod()) && pathMatcher.match(t.getPathPattern(), path);
-    }).findAny();
+  private Optional<TriggerDto> checkTrigger(HttpMethod method, String path) {
+    return triggerRepo.findViewAllBy(TriggerDto.class).stream().filter(t ->
+      method.equals(t.getMethod()) && pathMatcher.match(t.getPathPattern(), path)
+    ).findAny();
   }
 
-  private void processEvent(Trigger trigger, Event event) throws EventPublishException {
+  private void processEvent(TriggerDto trigger, Event event) throws EventPublishException {
     logger.debug("Publishing event: {}: {}", trigger.getName(), trigger.getDescription());
     try {
       eventProducer.send(event);

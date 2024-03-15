@@ -1,16 +1,20 @@
 package org.folio.rest.workflow.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
+import org.folio.rest.workflow.model.has.HasId;
+import org.folio.rest.workflow.model.has.HasInformational;
+import org.folio.rest.workflow.model.has.HasName;
+import org.folio.rest.workflow.model.has.common.HasNodeCommon;
 import org.folio.spring.domain.model.AbstractBaseEntity;
 
 @Entity
@@ -65,46 +69,28 @@ import org.folio.spring.domain.model.AbstractBaseEntity;
     @JsonSubTypes.Type(value = ScriptTask.class, name = "ScriptTask")
 
 })
-public abstract class Node extends AbstractBaseEntity {
+public abstract class Node extends AbstractBaseEntity implements HasId, HasInformational, HasName, HasNodeCommon {
 
+  @Getter
+  @Setter
   @NotNull
   @Size(min = 3, max = 64)
   @Column(nullable = false)
   private String name;
 
+  @Getter
+  @Setter
   @Size(min = 0, max = 512)
   @Column(nullable = true)
   private String description;
 
+  @Getter
+  @Setter
   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   private String deserializeAs = this.getClass().getSimpleName();
 
   public Node() {
     super();
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public String getDeserializeAs() {
-    return deserializeAs;
-  }
-
-  public void setDeserializeAs(String deserializeAs) {
-    this.deserializeAs = deserializeAs;
   }
 
   public String getIdentifier() {

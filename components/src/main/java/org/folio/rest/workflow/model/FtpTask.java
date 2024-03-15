@@ -1,158 +1,103 @@
 package org.folio.rest.workflow.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import java.util.HashSet;
 import java.util.Set;
-
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-
+import lombok.Getter;
+import lombok.Setter;
+import org.folio.rest.workflow.enums.SftpOp;
 import org.folio.rest.workflow.model.components.DelegateTask;
+import org.folio.rest.workflow.model.has.HasPassword;
+import org.folio.rest.workflow.model.has.HasService;
+import org.folio.rest.workflow.model.has.HasUsername;
+import org.folio.rest.workflow.model.has.common.HasFtpTaskCommon;
 
 @Entity
-public class FtpTask extends Node implements DelegateTask {
+public class FtpTask extends Node implements DelegateTask, HasFtpTaskCommon, HasPassword, HasService, HasUsername {
 
+  @Getter
+  @Setter
   @ElementCollection
   private Set<EmbeddedVariable> inputVariables;
 
+  @Getter
+  @Setter
   @Embedded
   private EmbeddedVariable outputVariable;
 
+  @Getter
+  @Setter
   @Column(nullable = false)
   private boolean asyncBefore;
 
+  @Getter
+  @Setter
   @Column(nullable = false)
   private boolean asyncAfter;
 
+  @Getter
+  @Setter
   @Column(nullable = false)
   private String originPath;
 
+  @Getter
+  @Setter
   @Column(nullable = false)
   private String destinationPath;
 
+  @Getter
+  @Setter
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   private SftpOp op;
 
+  @Getter
+  @Setter
   @Column(nullable = false)
   private String scheme;
 
+  @Getter
+  @Setter
   @Column(nullable = false)
   private String host;
 
+  @Getter
+  @Setter
   @Column(nullable = false)
   private int port;
 
+  @Getter
+  @Setter
   @Column(nullable = true)
   private String username;
 
+  @Getter
+  @Setter
   @Column(nullable = true)
   private String password;
 
   public FtpTask() {
     super();
+
     inputVariables = new HashSet<EmbeddedVariable>();
     asyncBefore = false;
     asyncAfter = false;
   }
 
-  public Set<EmbeddedVariable> getInputVariables() {
-    return inputVariables;
+  @Override
+  public String getBasePath() {
+    // This is currently not used.
+    return "";
   }
 
-  public void setInputVariables(Set<EmbeddedVariable> inputVariables) {
-    this.inputVariables = inputVariables;
-  }
-
-  public EmbeddedVariable getOutputVariable() {
-    return outputVariable;
-  }
-
-  public void setOutputVariable(EmbeddedVariable outputVariable) {
-    this.outputVariable = outputVariable;
-  }
-
-  public boolean isAsyncBefore() {
-    return asyncBefore;
-  }
-
-  public void setAsyncBefore(boolean asyncBefore) {
-    this.asyncBefore = asyncBefore;
-  }
-
-  public boolean isAsyncAfter() {
-    return asyncAfter;
-  }
-
-  public void setAsyncAfter(boolean asyncAfter) {
-    this.asyncAfter = asyncAfter;
-  }
-
-  public String getOriginPath() {
-    return originPath;
-  }
-
-  public void setOriginPath(String originPath) {
-    this.originPath = originPath;
-  }
-
-  public String getDestinationPath() {
-    return destinationPath;
-  }
-
-  public void setDestinationPath(String destinationPath) {
-    this.destinationPath = destinationPath;
-  }
-
-  public SftpOp getOp() {
-    return op;
-  }
-
-  public void setOp(SftpOp op) {
-    this.op = op;
-  }
-
-  public String getScheme() {
-    return scheme;
-  }
-
-  public void setScheme(String scheme) {
-    this.scheme = scheme;
-  }
-
-  public String getHost() {
-    return host;
-  }
-
-  public void setHost(String host) {
-    this.host = host;
-  }
-
-  public int getPort() {
-    return port;
-  }
-
-  public void setPort(int port) {
-    this.port = port;
-  }
-
-  public String getUsername() {
-    return username;
-  }
-
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
+  @Override
+  public void setBasePath(String basePath) {
+    // This is currently not used.
   }
 
 }

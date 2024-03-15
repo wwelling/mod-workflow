@@ -1,7 +1,7 @@
 package org.folio.rest.workflow.exception.handler;
 
-import org.folio.spring.model.response.ResponseErrors;
-import org.folio.spring.utility.ErrorUtility;
+import org.folio.spring.web.model.response.ResponseErrors;
+import org.folio.spring.web.utility.ErrorUtility;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.TransactionSystemException;
