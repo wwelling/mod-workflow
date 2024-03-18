@@ -52,17 +52,13 @@ public class WorkflowEngineService {
   @Value("${okapi.camunda.rest-path}")
   private String restPath;
 
+  @Autowired
   private WorkflowRepo workflowRepo;
 
+  @Autowired
   private ObjectMapper mapper;
 
   private RestTemplate restTemplate;
-
-  @Autowired
-  public WorkflowEngineService(WorkflowRepo workflowRepo, ObjectMapper mapper) {
-    this.workflowRepo = workflowRepo;
-    this.mapper = mapper;
-  }
 
   public WorkflowEngineService(RestTemplateBuilder restTemplateBuilder) {
     this.restTemplate = restTemplateBuilder.build();
