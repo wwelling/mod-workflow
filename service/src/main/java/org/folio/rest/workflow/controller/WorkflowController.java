@@ -34,7 +34,7 @@ public class WorkflowController {
     this.workflowCqlService = workflowCqlService;
   }
 
-  @PutMapping({"/{id}/activate", "/{id}/activate/"})
+  @PutMapping(value = {"/{id}/activate", "/{id}/activate/"}, produces = { MediaType.APPLICATION_JSON_VALUE })
   public Workflow activateWorkflow(
     @PathVariable String id,
     @TenantHeader String tenant,
@@ -44,7 +44,7 @@ public class WorkflowController {
     return workflowEngineService.activate(id, tenant, token);
   }
 
-  @PutMapping({"/{id}/deactivate", "/{id}/deactivate/"})
+  @PutMapping(value = {"/{id}/deactivate", "/{id}/deactivate/"}, produces = { MediaType.APPLICATION_JSON_VALUE })
   public Workflow deactivateWorkflow(
     @PathVariable String id,
     @TenantHeader String tenant,
@@ -54,7 +54,7 @@ public class WorkflowController {
     return workflowEngineService.deactivate(id, tenant, token);
   }
 
-  @PostMapping({"/{id}/start", "/{id}/start/"})
+  @PostMapping(value = {"/{id}/start", "/{id}/start/"}, produces = { MediaType.APPLICATION_JSON_VALUE })
   public JsonNode startWorkflow(
     @PathVariable String id,
     @TenantHeader String tenant,
@@ -65,7 +65,7 @@ public class WorkflowController {
     return workflowEngineService.start(id, tenant, token, context);
   }
 
-  @GetMapping({"/{id}/history", "/{id}/history/"})
+  @GetMapping(value = {"/{id}/history", "/{id}/history/"}, produces = { MediaType.APPLICATION_JSON_VALUE })
   public JsonNode workflowHistory(
     @PathVariable String id,
     @TenantHeader String tenant,
@@ -75,7 +75,7 @@ public class WorkflowController {
     return workflowEngineService.history(id, tenant, token);
   }
 
-  @GetMapping(value = "/search", produces = { MediaType.APPLICATION_JSON_VALUE })
+  @GetMapping(value = { "/search", "/search/" }, produces = { MediaType.APPLICATION_JSON_VALUE })
   public JsonNode searchWorkflows(
     @RequestParam String query,
     @RequestParam(defaultValue="0") Long offset,
