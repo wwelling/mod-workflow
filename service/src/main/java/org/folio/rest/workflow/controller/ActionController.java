@@ -7,6 +7,7 @@ import org.folio.rest.workflow.model.Action;
 import org.folio.rest.workflow.service.OkapiDiscoveryService;
 import org.folio.spring.tenant.annotation.TenantHeader;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,7 +23,7 @@ public class ActionController {
     this.okapiDiscoveryService = okapiDiscoveryService;
   }
 
-  @GetMapping
+  @GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
   public List<Action> getActions(@TenantHeader String tenant) throws IOException {
     return okapiDiscoveryService.getActionsByTenant(tenant);
   }
