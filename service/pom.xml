@@ -338,7 +338,7 @@
               </arguments>
               <systemPropertyVariables>
                 <server.port>${openapi.server.port}</server.port>
-                <!--FIXME: The reason for this failing is unknown, for now postgresql can be used.-->
+                <!--The reason for this failing is unknown, for now postgresql can be used.-->
                 <!--<spring.sql.init.platform>h2</spring.sql.init.platform>-->
                 <!--<spring.datasource.driverClassName>org.h2.Driver</spring.datasource.driverClassName>-->
                 <!--<spring.datasource.url>jdbc:h2:./target/mod-workflow;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE</spring.datasource.url>-->
