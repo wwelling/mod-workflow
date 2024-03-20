@@ -94,6 +94,9 @@ event:
   queue:
     name: event.queue
 
+folio:
+  tenant.validation: false
+
 tenant:
   header-name: X-Okapi-Tenant
   force-tenant: false

@@ -332,21 +332,23 @@
             <artifactId>spring-boot-maven-plugin</artifactId>
             <configuration>
               <skip>false</skip>
+              <jvmArguments>-Dspring.application.admin.enabled=true -Dfolio.tenant.validation=false -Dheader.validation.x-okapi-tenant.exclude.base-paths=/</jvmArguments>
               <arguments>
                 <argument>--server.port=${openapi.server.port}</argument>
               </arguments>
               <systemPropertyVariables>
                 <server.port>${openapi.server.port}</server.port>
-                <spring.sql.init.platform>h2</spring.sql.init.platform>
-                <spring.datasource.driverClassName>org.h2.Driver</spring.datasource.driverClassName>
-                <spring.datasource.url>jdbc:h2:./target/mod-workflow;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE</spring.datasource.url>
-                <spring.jpa.database-platform>org.hibernate.dialect.H2Dialect</spring.jpa.database-platform>
-                <spring.jpa.hibernate.ddl-auto>create-drop</spring.jpa.hibernate.ddl-auto>
+                <!--FIXME: The reason for this failing is unknown, for now postgresql can be used.-->
+                <!--<spring.sql.init.platform>h2</spring.sql.init.platform>-->
+                <!--<spring.datasource.driverClassName>org.h2.Driver</spring.datasource.driverClassName>-->
+                <!--<spring.datasource.url>jdbc:h2:./target/mod-workflow;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE</spring.datasource.url>-->
+                <!--<spring.jpa.database-platform>org.hibernate.dialect.H2Dialect</spring.jpa.database-platform>-->
+                <!--<spring.jpa.hibernate.ddl-auto>create-drop</spring.jpa.hibernate.ddl-auto>-->
               </systemPropertyVariables>
             </configuration>
             <executions>
               <execution>
-                <id>repackage</id>
+                <id>openapi-repackage</id>
                 <goals>
                   <goal>repackage</goal>
                 </goals>
@@ -355,13 +357,13 @@
                 </configuration>
               </execution>
               <execution>
-                <id>pre-integration-test</id>
+                <id>openapi-repackage-start</id>
                 <goals>
                   <goal>start</goal>
                 </goals>
               </execution>
               <execution>
-                <id>post-integration-test</id>
+                <id>openapi-repackage-stop</id>
                 <goals>
                   <goal>stop</goal>
                 </goals>
@@ -373,13 +375,14 @@
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-maven-plugin</artifactId>
             <configuration>
+              <skip>false</skip>
               <apiDocsUrl>http://localhost:${openapi.server.port}/api-docs.yaml</apiDocsUrl>
               <outputFileName>openapi.yaml</outputFileName>
               <outputDir>src/main/resources/</outputDir>
             </configuration>
             <executions>
               <execution>
-              <id>integration-test</id>
+              <id>openapi-generate-api</id>
               <goals>
                 <goal>generate</goal>
               </goals>
