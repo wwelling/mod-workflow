@@ -33,7 +33,7 @@ class WorkflowCqlServiceTest {
 
   private static final String QUERY_ALL = "cql.allRecords=1";
 
-  private static final String NO_RECORDS = "{\"workflows\":[],\"TotalRecords\":0}";
+  private static final String NO_RECORDS = "{\"workflows\":[],\"totalRecords\":0}";
 
   @InjectMocks
   private WorkflowCqlService workflowCqlService;
