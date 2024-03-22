@@ -15,7 +15,7 @@ public abstract class AbstractCqlService<T> {
   /**
    * String used in JSON representing the total records.
    */
-  public static final String TOTAL_RECORDS = "TotalRecords";
+  public static final String TOTAL_RECORDS = "totalRecords";
 
   /**
    * The object mapper, which must be initialized in the extending class' constructor.
