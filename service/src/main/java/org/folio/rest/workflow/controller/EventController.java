@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.util.PathMatcher;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -67,7 +68,7 @@ public class EventController {
   }
 
   // @formatter:off
-  @PostMapping(value = "/**", consumes = "application/json")
+  @PostMapping(value = "/**", consumes = "application/json", produces = { MediaType.APPLICATION_JSON_VALUE })
   public JsonNode postHandleEvents(
     @RequestBody(required = false) JsonNode body,
     HttpServletRequest request
@@ -77,7 +78,7 @@ public class EventController {
   }
 
   // @formatter:off
-  @PostMapping(value = "/**", consumes = "multipart/form-data")
+  @PostMapping(value = "/**", consumes = "multipart/form-data", produces = { MediaType.APPLICATION_JSON_VALUE })
   public JsonNode postHandleEventsWithFile(
     @RequestParam("file") MultipartFile multipartFile,
     @RequestParam("path") String directoryPath,

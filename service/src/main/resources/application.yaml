@@ -22,6 +22,7 @@ server:
 spring:
   activemq.broker-url: tcp://localhost:61616
   application.name: mod-workflow
+  liquibase.changeLog: classpath:/changelog/changelog-master.xml
   data.rest:
     returnBodyOnCreate: true
     returnBodyOnUpdate: true
@@ -93,6 +94,9 @@ event:
     path: events
   queue:
     name: event.queue
+
+folio:
+  tenant.validation: false
 
 tenant:
   header-name: X-Okapi-Tenant

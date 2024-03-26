@@ -1,5 +1,5 @@
 {
-  "id": "mod-workflow-${project.version}",
+  "id": "mod-workflow-@project.version@",
   "name": "Workflow Module",
   "provides": [
     {
@@ -111,6 +111,12 @@
         {
           "methods": ["GET"],
           "pathPattern": "/workflows",
+          "permissionsRequired": ["workflow.workflows.collection.get"],
+          "permissionsDesired": ["workflow.workflows.domain.*", "workflow.domain.all"]
+        },
+        {
+          "methods": ["GET"],
+          "pathPattern": "/workflows/search",
           "permissionsRequired": ["workflow.workflows.collection.get"],
           "permissionsDesired": ["workflow.workflows.domain.*", "workflow.domain.all"]
         },
@@ -447,7 +453,7 @@
   ],
   "requires": [ ],
   "launchDescriptor": {
-    "dockerImage": "mod-workflow:${project.version}",
+    "dockerImage": "mod-workflow:@project.version@",
     "dockerPull" : false,
     "dockerArgs": {
       "HostConfig": {
