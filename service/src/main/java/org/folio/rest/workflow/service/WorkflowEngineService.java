@@ -240,7 +240,7 @@ public class WorkflowEngineService {
   private Workflow sendWorkflowRequest(WorkflowDto workflow, String requestPath, String tenant, String token)
       throws WorkflowEngineServiceException {
 
-    HttpEntity<WorkflowDto> entity = new HttpEntity<WorkflowDto>(workflow, headers(tenant, token));
+    HttpEntity<WorkflowDto> entity = new HttpEntity<>(workflow, headers(tenant, token));
     String url = String.format(requestPath, okapiUrl, basePath);
 
     try {
