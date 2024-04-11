@@ -10,6 +10,8 @@ import org.folio.spring.tenant.annotation.TenantHeader;
 import org.folio.spring.web.annotation.TokenHeader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,6 +54,19 @@ public class WorkflowController {
   ) throws WorkflowEngineServiceException {
     log.info("Deactivating: {}", id);
     return workflowEngineService.deactivate(id, tenant, token);
+  }
+
+  @DeleteMapping(value = {"/{id}/delete", "/{id}/delete/"})
+  public ResponseEntity<?> deleteWorkflow(
+    @PathVariable String id,
+    @TenantHeader String tenant,
+    @TokenHeader String token
+  ) throws WorkflowEngineServiceException {
+    log.info("Deleting: {}", id);
+    workflowEngineService.delete(id, tenant, token);
+
+    // Ensure that a HTTP 204 is returned on success.
+    return ResponseEntity.noContent().build();
   }
 
   @PostMapping(value = {"/{id}/start", "/{id}/start/"}, produces = { MediaType.APPLICATION_JSON_VALUE })
