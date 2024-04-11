@@ -57,7 +57,7 @@ public class WorkflowController {
   }
 
   @DeleteMapping(value = {"/{id}/delete", "/{id}/delete/"})
-  public ResponseEntity deleteWorkflow(
+  public ResponseEntity<Object> deleteWorkflow(
     @PathVariable String id,
     @TenantHeader String tenant,
     @TokenHeader String token
