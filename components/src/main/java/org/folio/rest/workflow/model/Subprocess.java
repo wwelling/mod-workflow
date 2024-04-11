@@ -13,9 +13,10 @@ import java.util.List;
 import org.folio.rest.workflow.enums.SubprocessType;
 import org.folio.rest.workflow.model.components.Branch;
 import org.folio.rest.workflow.model.components.MultiInstance;
+import org.folio.rest.workflow.model.has.HasAsync;
 
 @Entity
-public class Subprocess extends Node implements Branch, MultiInstance {
+public class Subprocess extends Node implements Branch, HasAsync, MultiInstance {
 
   @NotNull
   @Column(nullable = false)

@@ -9,10 +9,11 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 import org.folio.rest.workflow.model.components.DelegateTask;
+import org.folio.rest.workflow.model.has.HasAsync;
 import org.folio.rest.workflow.model.has.common.HasRequestTaskCommon;
 
 @Entity
-public class RequestTask extends Node implements DelegateTask, HasRequestTaskCommon {
+public class RequestTask extends Node implements DelegateTask, HasAsync, HasRequestTaskCommon {
 
   @Getter
   @Setter
