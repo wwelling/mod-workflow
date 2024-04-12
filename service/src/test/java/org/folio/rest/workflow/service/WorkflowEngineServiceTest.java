@@ -4,17 +4,25 @@ import static org.folio.spring.test.mock.MockMvcConstant.OKAPI_TENANT;
 import static org.folio.spring.test.mock.MockMvcConstant.OKAPI_TOKEN;
 import static org.folio.spring.test.mock.MockMvcConstant.UUID;
 import static org.folio.spring.test.mock.MockMvcConstant.VALUE;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.folio.rest.workflow.dto.WorkflowDto;
+import org.folio.rest.workflow.dto.WorkflowOperationalDto;
 import org.folio.rest.workflow.exception.WorkflowEngineServiceException;
 import org.folio.rest.workflow.model.Workflow;
 import org.folio.rest.workflow.model.repo.WorkflowRepo;
@@ -44,21 +52,65 @@ class WorkflowEngineServiceTest {
 
   private WorkflowAsDto workflow;
 
+  private WorkflowAsOperationalDto workflowOperational;
+
   private WorkflowEngineService workflowEngineService;
+
+  private ObjectMapper mapper;
 
   @BeforeEach
   void beforeEach() {
     workflowEngineService = new WorkflowEngineService(new RestTemplateBuilder());
+    mapper = new ObjectMapper();
 
     workflow = new WorkflowAsDto();
     workflow.setId(UUID);
     workflow.setDeploymentId(UUID);
     workflow.setName(VALUE);
 
+    workflowOperational = new WorkflowAsOperationalDto();
+    workflowOperational.setId(UUID);
+    workflowOperational.setDeploymentId(UUID);
+    workflowOperational.setName(VALUE);
+    workflowOperational.setVersionTag(VALUE);
+
     setField(workflowEngineService, "workflowRepo", workflowRepo);
     setField(workflowEngineService, "restTemplate", restTemplate);
     setField(workflowEngineService, "tenantHeaderName", OKAPI_TENANT);
     setField(workflowEngineService, "tokenHeaderName", OKAPI_TOKEN);
+  }
+
+  @Test
+  void activateWorksTest() throws WorkflowEngineServiceException {
+    WorkflowDto workflowDto = (WorkflowDto) workflow;
+    ResponseEntity<Workflow> responseEntity = new ResponseEntity<>(HttpStatus.OK);
+    setField(responseEntity, "body", workflow);
+
+    when(workflowRepo.getViewById(anyString(), ArgumentMatchers.<Class<WorkflowDto>>any())).thenReturn(workflowDto);
+    when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<Workflow>>any())).thenReturn(responseEntity);
+    when(workflowRepo.save(any())).thenReturn(workflow);
+
+    workflowEngineService.activate(UUID, OKAPI_TENANT, OKAPI_TOKEN);
+
+    verify(workflowRepo).save(any());
+    verify(workflowRepo, never()).deleteById(anyString());
+  }
+
+  @Test
+  void deactivateWorksTest() throws WorkflowEngineServiceException {
+    WorkflowDto workflowDto = (WorkflowDto) workflow;
+    ResponseEntity<Workflow> responseEntity = new ResponseEntity<>(HttpStatus.OK);
+    setField(responseEntity, "body", workflow);
+
+    when(workflowRepo.existsById(anyString())).thenReturn(true);
+    when(workflowRepo.getViewById(anyString(), ArgumentMatchers.<Class<WorkflowDto>>any())).thenReturn(workflowDto);
+    when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<Workflow>>any())).thenReturn(responseEntity);
+    when(workflowRepo.save(any())).thenReturn(workflow);
+
+    workflowEngineService.deactivate(UUID, OKAPI_TENANT, OKAPI_TOKEN);
+
+    verify(workflowRepo).save(any());
+    verify(workflowRepo, never()).deleteById(anyString());
   }
 
   @Test
@@ -127,6 +179,311 @@ class WorkflowEngineServiceTest {
     verify(workflowRepo, never()).deleteById(anyString());
   }
 
+  @Test
+  void deleteThrowsExceptionFailedToSendWithNullResponseBodyTest() throws IOException, WorkflowEngineServiceException {
+    WorkflowDto workflowDto = (WorkflowDto) workflow;
+    ResponseEntity<Workflow> responseEntity = new ResponseEntity<>(HttpStatus.OK);
+    setField(responseEntity, "body", null);
+
+    when(workflowRepo.existsById(anyString())).thenReturn(true);
+    when(workflowRepo.getViewById(anyString(), ArgumentMatchers.<Class<WorkflowDto>>any())).thenReturn(workflowDto);
+    when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<Workflow>>any())).thenReturn(responseEntity);
+
+    assertThrows(WorkflowEngineServiceException.class, () -> {
+      workflowEngineService.delete(UUID, OKAPI_TENANT, OKAPI_TOKEN);
+    });
+
+    verify(workflowRepo, never()).save(any());
+    verify(workflowRepo, never()).deleteById(anyString());
+  }
+
+  @Test
+  void startWorksTest() throws WorkflowEngineServiceException {
+    WorkflowOperationalDto workflowOperationalDto = (WorkflowOperationalDto) workflowOperational;
+    ResponseEntity<ArrayNode> responseEntity = new ResponseEntity<>(HttpStatus.OK);
+    JsonNode context = mapper.createObjectNode();
+    ObjectNode objectNode = mapper.createObjectNode();
+    objectNode.put("id", UUID);
+
+    ArrayNode arrayNode = mapper.createArrayNode();
+    arrayNode.add(objectNode);
+    setField(responseEntity, "body", arrayNode);
+
+    when(workflowRepo.getViewById(anyString(), ArgumentMatchers.<Class<WorkflowOperationalDto>>any())).thenReturn(workflowOperationalDto);
+    when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<ArrayNode>>any())).thenReturn(responseEntity);
+
+    JsonNode response = workflowEngineService.start(UUID, OKAPI_TENANT, OKAPI_TOKEN, context);
+    assertEquals(arrayNode, response);
+  }
+
+  @Test
+  void startThrowsExceptionHttpNotOkTest() throws WorkflowEngineServiceException {
+    WorkflowOperationalDto workflowOperationalDto = (WorkflowOperationalDto) workflowOperational;
+    ResponseEntity<ArrayNode> responseEntity = new ResponseEntity<>(HttpStatus.RESET_CONTENT);
+    JsonNode context = mapper.createObjectNode();
+    ObjectNode objectNode = mapper.createObjectNode();
+    objectNode.put("id", UUID);
+
+    ArrayNode arrayNode = mapper.createArrayNode();
+    arrayNode.add(objectNode);
+    setField(responseEntity, "body", arrayNode);
+
+    when(workflowRepo.getViewById(anyString(), ArgumentMatchers.<Class<WorkflowOperationalDto>>any())).thenReturn(workflowOperationalDto);
+    when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<ArrayNode>>any())).thenReturn(responseEntity);
+
+    assertThrows(WorkflowEngineServiceException.class, () -> {
+      workflowEngineService.start(UUID, OKAPI_TENANT, OKAPI_TOKEN, context);
+    });
+  }
+
+  @Test
+  void startThrowsExceptionNullOrEmptyDefinitionsTest() throws WorkflowEngineServiceException {
+    WorkflowOperationalDto workflowOperationalDto = (WorkflowOperationalDto) workflowOperational;
+    ResponseEntity<ArrayNode> responseEntity = new ResponseEntity<>(HttpStatus.OK);
+    JsonNode context = mapper.createObjectNode();
+    ObjectNode objectNode = mapper.createObjectNode();
+    objectNode.put("id", UUID);
+
+    ArrayNode arrayNode = mapper.createArrayNode();
+    setField(responseEntity, "body", arrayNode);
+
+    when(workflowRepo.getViewById(anyString(), ArgumentMatchers.<Class<WorkflowOperationalDto>>any())).thenReturn(workflowOperationalDto);
+    when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<ArrayNode>>any())).thenReturn(responseEntity);
+
+    assertThrows(WorkflowEngineServiceException.class, () -> {
+      workflowEngineService.start(UUID, OKAPI_TENANT, OKAPI_TOKEN, context);
+    });
+
+    setField(responseEntity, "body", null);
+
+    assertThrows(WorkflowEngineServiceException.class, () -> {
+      workflowEngineService.start(UUID, OKAPI_TENANT, OKAPI_TOKEN, context);
+    });
+  }
+
+  @Test
+  void startThrowsExceptionOnBadExchangeTest() throws WorkflowEngineServiceException {
+    WorkflowOperationalDto workflowOperationalDto = (WorkflowOperationalDto) workflowOperational;
+    ResponseEntity<ArrayNode> responseEntity = new ResponseEntity<>(HttpStatus.OK);
+    JsonNode context = mapper.createObjectNode();
+    ObjectNode objectNode = mapper.createObjectNode();
+    objectNode.put("id", UUID);
+
+    ArrayNode arrayNode = mapper.createArrayNode();
+    arrayNode.add(objectNode);
+    setField(responseEntity, "body", arrayNode);
+
+    when(workflowRepo.getViewById(anyString(), ArgumentMatchers.<Class<WorkflowOperationalDto>>any())).thenReturn(workflowOperationalDto);
+
+    AtomicInteger exchangeCount = new AtomicInteger(0);
+    doAnswer(invocation -> {
+      if (exchangeCount.getAndIncrement() > 0) {
+        throw new RuntimeException("Failure on second exchange call.");
+      }
+
+      return responseEntity;
+    }).when(restTemplate).exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<ArrayNode>>any());
+
+    assertThrows(WorkflowEngineServiceException.class, () -> {
+      workflowEngineService.start(UUID, OKAPI_TENANT, OKAPI_TOKEN, context);
+    });
+  }
+
+  @Test
+  void historyWorksTest() throws WorkflowEngineServiceException {
+    WorkflowOperationalDto workflowOperationalDto = (WorkflowOperationalDto) workflowOperational;
+    ResponseEntity<ArrayNode> responseEntity = new ResponseEntity<>(HttpStatus.OK);
+    ResponseEntity<ArrayNode> historyResponseEntity = new ResponseEntity<>(HttpStatus.OK);
+    ObjectNode objectNode = mapper.createObjectNode();
+    objectNode.put("id", UUID);
+
+    ObjectNode historyNode = mapper.createObjectNode();
+    historyNode.put("id", UUID);
+    historyNode.put("history", VALUE);
+
+    ArrayNode arrayNode = mapper.createArrayNode();
+    arrayNode.add(objectNode);
+    setField(responseEntity, "body", arrayNode);
+
+    ArrayNode historyArrayNode = mapper.createArrayNode();
+    historyArrayNode.add(historyNode);
+    setField(historyResponseEntity, "body", historyArrayNode);
+
+    when(workflowRepo.getViewById(anyString(), ArgumentMatchers.<Class<WorkflowOperationalDto>>any())).thenReturn(workflowOperationalDto);
+
+    AtomicInteger exchangeCount = new AtomicInteger(0);
+    doAnswer(invocation -> {
+      return (exchangeCount.getAndIncrement() > 0) ? historyResponseEntity : responseEntity;
+    }).when(restTemplate).exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<ArrayNode>>any());
+
+    JsonNode response = workflowEngineService.history(UUID, OKAPI_TENANT, OKAPI_TOKEN);
+    assertEquals(historyArrayNode, response);
+  }
+
+  @Test
+  void historyThrowsExceptionWithNotOkHttpStatusForProcessTest() throws WorkflowEngineServiceException {
+    WorkflowOperationalDto workflowOperationalDto = (WorkflowOperationalDto) workflowOperational;
+    ResponseEntity<ArrayNode> responseEntity = new ResponseEntity<>(HttpStatus.OK);
+    ResponseEntity<ArrayNode> historyResponseEntity = new ResponseEntity<>(HttpStatus.RESET_CONTENT);
+    ObjectNode objectNode = mapper.createObjectNode();
+    objectNode.put("id", UUID);
+
+    ArrayNode arrayNode = mapper.createArrayNode();
+    arrayNode.add(objectNode);
+    setField(responseEntity, "body", arrayNode);
+
+    setField(historyResponseEntity, "body", null);
+
+    when(workflowRepo.getViewById(anyString(), ArgumentMatchers.<Class<WorkflowOperationalDto>>any())).thenReturn(workflowOperationalDto);
+
+    AtomicInteger exchangeCount = new AtomicInteger(0);
+    doAnswer(invocation -> {
+      return (exchangeCount.getAndIncrement() > 0) ? historyResponseEntity : responseEntity;
+    }).when(restTemplate).exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<ArrayNode>>any());
+
+    assertThrows(WorkflowEngineServiceException.class, () -> {
+      workflowEngineService.history(UUID, OKAPI_TENANT, OKAPI_TOKEN);
+    });
+  }
+
+  @Test
+  void historyThrowsExceptionWithNullIncidentsForProcessTest() throws WorkflowEngineServiceException {
+    WorkflowOperationalDto workflowOperationalDto = (WorkflowOperationalDto) workflowOperational;
+    ResponseEntity<ArrayNode> responseEntity = new ResponseEntity<>(HttpStatus.OK);
+    ResponseEntity<ArrayNode> historyResponseEntity = new ResponseEntity<>(HttpStatus.OK);
+    ObjectNode objectNode = mapper.createObjectNode();
+    objectNode.put("id", UUID);
+
+    ArrayNode arrayNode = mapper.createArrayNode();
+    arrayNode.add(objectNode);
+    setField(responseEntity, "body", arrayNode);
+
+    setField(historyResponseEntity, "body", null);
+
+    when(workflowRepo.getViewById(anyString(), ArgumentMatchers.<Class<WorkflowOperationalDto>>any())).thenReturn(workflowOperationalDto);
+
+    AtomicInteger exchangeCount = new AtomicInteger(0);
+    doAnswer(invocation -> {
+      return (exchangeCount.getAndIncrement() > 0) ? historyResponseEntity : responseEntity;
+    }).when(restTemplate).exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<ArrayNode>>any());
+
+    assertThrows(WorkflowEngineServiceException.class, () -> {
+      workflowEngineService.history(UUID, OKAPI_TENANT, OKAPI_TOKEN);
+    });
+  }
+
+  @Test
+  void historyWorksThrowsExceptionForFetchingIncidentsHistoryTest() throws WorkflowEngineServiceException {
+    WorkflowOperationalDto workflowOperationalDto = (WorkflowOperationalDto) workflowOperational;
+    ResponseEntity<ArrayNode> responseEntity = new ResponseEntity<>(HttpStatus.OK);
+    ResponseEntity<ArrayNode> historyResponseEntity = new ResponseEntity<>(HttpStatus.OK);
+    ObjectNode objectNode = mapper.createObjectNode();
+    objectNode.put("id", UUID);
+
+    ObjectNode historyNode = mapper.createObjectNode();
+    historyNode.put("id", UUID);
+    historyNode.put("history", VALUE);
+
+    ArrayNode arrayNode = mapper.createArrayNode();
+    arrayNode.add(objectNode);
+    setField(responseEntity, "body", arrayNode);
+
+    ArrayNode historyArrayNode = mapper.createArrayNode();
+    historyArrayNode.add(historyNode);
+    setField(historyResponseEntity, "body", historyArrayNode);
+
+    when(workflowRepo.getViewById(anyString(), ArgumentMatchers.<Class<WorkflowOperationalDto>>any())).thenReturn(workflowOperationalDto);
+
+    AtomicInteger exchangeCount = new AtomicInteger(0);
+    doAnswer(invocation -> {
+      if (exchangeCount.getAndIncrement() > 1) {
+        throw new RuntimeException("Failure on third exchange call."); 
+      }
+
+      return (exchangeCount.get() > 0) ? historyResponseEntity : responseEntity;
+    }).when(restTemplate).exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<ArrayNode>>any());
+
+    assertThrows(WorkflowEngineServiceException.class, () -> {
+      workflowEngineService.history(UUID, OKAPI_TENANT, OKAPI_TOKEN);
+    });
+  }
+
+  @Test
+  void historyWorksThrowsExceptionForNotOkHttpOnIncidentsHistoryTest() throws WorkflowEngineServiceException {
+    WorkflowOperationalDto workflowOperationalDto = (WorkflowOperationalDto) workflowOperational;
+    ResponseEntity<ArrayNode> responseEntity = new ResponseEntity<>(HttpStatus.OK);
+    ResponseEntity<ArrayNode> historyResponseEntity = new ResponseEntity<>(HttpStatus.OK);
+    ResponseEntity<ArrayNode> thirdResponseEntity = new ResponseEntity<>(HttpStatus.RESET_CONTENT);
+    ObjectNode objectNode = mapper.createObjectNode();
+    objectNode.put("id", UUID);
+
+    ObjectNode historyNode = mapper.createObjectNode();
+    historyNode.put("id", UUID);
+    historyNode.put("history", VALUE);
+
+    ArrayNode arrayNode = mapper.createArrayNode();
+    arrayNode.add(objectNode);
+    setField(responseEntity, "body", arrayNode);
+
+    ArrayNode historyArrayNode = mapper.createArrayNode();
+    historyArrayNode.add(historyNode);
+    setField(historyResponseEntity, "body", historyArrayNode);
+
+    when(workflowRepo.getViewById(anyString(), ArgumentMatchers.<Class<WorkflowOperationalDto>>any())).thenReturn(workflowOperationalDto);
+
+    AtomicInteger exchangeCount = new AtomicInteger(0);
+    doAnswer(invocation -> {
+      if (exchangeCount.getAndIncrement() > 1) {
+        return thirdResponseEntity;
+      }
+
+      return (exchangeCount.get() > 0) ? historyResponseEntity : responseEntity;
+    }).when(restTemplate).exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<ArrayNode>>any());
+
+    assertThrows(WorkflowEngineServiceException.class, () -> {
+      workflowEngineService.history(UUID, OKAPI_TENANT, OKAPI_TOKEN);
+    });
+  }
+
+  @Test
+  void historyWorksThrowsExceptionForNullIncidentsOnIncidentsHistoryTest() throws WorkflowEngineServiceException {
+    WorkflowOperationalDto workflowOperationalDto = (WorkflowOperationalDto) workflowOperational;
+    ResponseEntity<ArrayNode> responseEntity = new ResponseEntity<>(HttpStatus.OK);
+    ResponseEntity<ArrayNode> historyResponseEntity = new ResponseEntity<>(HttpStatus.OK);
+    ResponseEntity<ArrayNode> thirdResponseEntity = new ResponseEntity<>(HttpStatus.OK);
+    ObjectNode objectNode = mapper.createObjectNode();
+    objectNode.put("id", UUID);
+
+    ObjectNode historyNode = mapper.createObjectNode();
+    historyNode.put("id", UUID);
+    historyNode.put("history", VALUE);
+
+    ArrayNode arrayNode = mapper.createArrayNode();
+    arrayNode.add(objectNode);
+    setField(responseEntity, "body", arrayNode);
+
+    ArrayNode historyArrayNode = mapper.createArrayNode();
+    historyArrayNode.add(historyNode);
+    setField(historyResponseEntity, "body", historyArrayNode);
+
+    when(workflowRepo.getViewById(anyString(), ArgumentMatchers.<Class<WorkflowOperationalDto>>any())).thenReturn(workflowOperationalDto);
+
+    AtomicInteger exchangeCount = new AtomicInteger(0);
+    doAnswer(invocation -> {
+      if (exchangeCount.getAndIncrement() > 1) {
+        return thirdResponseEntity;
+      }
+
+      return (exchangeCount.get() > 0) ? historyResponseEntity : responseEntity;
+    }).when(restTemplate).exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<ArrayNode>>any());
+
+    assertThrows(WorkflowEngineServiceException.class, () -> {
+      workflowEngineService.history(UUID, OKAPI_TENANT, OKAPI_TOKEN);
+    });
+  }
+
   private class WorkflowAsDto extends Workflow implements WorkflowDto {};
+
+  private class WorkflowAsOperationalDto extends Workflow implements WorkflowOperationalDto {};
 
 }

@@ -10,9 +10,7 @@ public class MappingListConverter extends AbstractConverter<List<Mapping>> {
 
   @Override
   public TypeReference<List<Mapping>> getTypeReference() {
-    // @formatter:off
     return new TypeReference<List<Mapping>>() {};
-    // @formatter:on
   }
 
 }
