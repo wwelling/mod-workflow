@@ -10,9 +10,7 @@ public class ComparisonListConverter extends AbstractConverter<List<Comparison>>
 
   @Override
   public TypeReference<List<Comparison>> getTypeReference() {
-    // @formatter:off
     return new TypeReference<List<Comparison>>() {};
-    // @formatter:on
   }
 
 }

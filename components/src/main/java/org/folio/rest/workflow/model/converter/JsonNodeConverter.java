@@ -9,9 +9,7 @@ public class JsonNodeConverter extends AbstractConverter<JsonNode> {
 
   @Override
   public TypeReference<JsonNode> getTypeReference() {
-    // @formatter:off
     return new TypeReference<JsonNode>() {};
-    // @formatter:on
   }
 
 }
