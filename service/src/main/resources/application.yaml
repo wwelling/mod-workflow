@@ -72,7 +72,7 @@ spring:
 
     properties.hibernate.jdbc.lob.non_contextual_creation: true
     generate-ddl: false
-    hibernate.ddl-auto: create-drop
+    hibernate.ddl-auto: none
     open-in-view: true
     show-sql: false
 
