@@ -10,11 +10,12 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 import org.folio.rest.workflow.model.components.DelegateTask;
+import org.folio.rest.workflow.model.has.HasAsync;
 import org.folio.rest.workflow.model.has.common.HasEmailTaskCommon;
 import org.springframework.lang.NonNull;
 
 @Entity
-public class EmailTask extends Node implements DelegateTask, HasEmailTaskCommon {
+public class EmailTask extends Node implements DelegateTask, HasAsync, HasEmailTaskCommon {
 
   @Getter
   @Setter

@@ -35,6 +35,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -96,6 +97,8 @@ class WorkflowControllerTest {
   private static final String PATH_ACTIVATE = PATH + "/" + UUID + "/activate";
 
   private static final String PATH_DEACTIVATE = PATH + "/" + UUID + "/deactivate";
+
+  private static final String PATH_DELETE = PATH + "/" + UUID + "/delete";
 
   private static final String PATH_HISTORY = PATH + "/" + UUID + "/history";
 
@@ -213,6 +216,25 @@ class WorkflowControllerTest {
   @MethodSource("provideDeleteGetPatchPostFor")
   void deactivateWorkflowFailsTest(Method method, HttpHeaders headers, String contentType, String accept, MediaType mediaType, MultiValueMap<String, String> parameters, String body, int status) throws Exception {
     mvc.perform(invokeRequestBuilder(PATH_DEACTIVATE, method, headers, contentType, accept, parameters, body))
+    .andDo(log()).andExpect(status().is(status));
+  }
+
+  @ParameterizedTest
+  @MethodSource("provideHeadersBodyStatusForDeleteWorkflow")
+  void deleteWorkflowTest(HttpHeaders headers, String contentType, String accept, MediaType mediaType, MultiValueMap<String, String> parameters, String body, int status) throws Exception {
+    lenient().doNothing().when(workflowEngineService).delete(any(), any(), any());
+
+    MockHttpServletRequestBuilder request = appendHeaders(delete(PATH_DELETE), headers, contentType, accept);
+    request = appendParameters(request, parameters);
+
+    mvc.perform(appendBody(request, body))
+      .andDo(log()).andExpect(status().is(status)).andReturn();
+  }
+
+  @ParameterizedTest
+  @MethodSource("provideGetPatchPostPutFor")
+  void deleteWorkflowFailsTest(Method method, HttpHeaders headers, String contentType, String accept, MediaType mediaType, MultiValueMap<String, String> parameters, String body, int status) throws Exception {
+    mvc.perform(invokeRequestBuilder(PATH_DELETE, method, headers, contentType, accept, parameters, body))
     .andDo(log()).andExpect(status().is(status));
   }
 
@@ -373,6 +395,29 @@ class WorkflowControllerTest {
   }
 
   /**
+   * Helper function for parameterized test providing GET, PATCH, POST, and PUT for several end points.
+   *
+   * @return
+   *   The arguments array stream with the stream columns as:
+   *     - Method The (reflection) request method.
+   *     - HttpHeaders headers.
+   *     - String contentType (Content-Type request).
+   *     - String accept (ask for this Content-Type on response).
+   *       String mediaType (response Content-Type).
+   *     - MultiValueMap<String, String> parameters.
+   *     - String body (request body).
+   *     - int status (response HTTP status code).
+   *
+   * @throws NoSuchMethodException
+   * @throws SecurityException
+   */
+  private static Stream<Arguments> provideGetPatchPostPutFor() throws NoSuchMethodException, SecurityException {
+    Object[] params = { NO_PARAM, ID_PARAM };
+
+    return buildHttpGetPatchPostPut(OKAPI_HEAD_NO_URL, params);
+  }
+
+  /**
    * Helper function for parameterized test providing DELETE, GET, PATCH, and PUT for several end points.
    *
    * @return
@@ -433,6 +478,52 @@ class WorkflowControllerTest {
       Arguments.of(OKAPI_HEAD_TENANT, APP_STREAM, NULL_STR,   MT_APP_JSON, ID_PARAM, JSON_OBJECT, 200),
       Arguments.of(OKAPI_HEAD_TENANT, APP_STREAM, APP_STAR,   MT_APP_JSON, ID_PARAM, JSON_OBJECT, 200),
       Arguments.of(OKAPI_HEAD_TENANT, APP_STREAM, STAR,       MT_APP_JSON, ID_PARAM, JSON_OBJECT, 200)
+    );
+
+    Object[] params = { };
+
+    Stream<Arguments> stream2 = Stream.concat(stream1, buildAppJsonBodyStatus(OKAPI_HEAD_TOKEN, params));
+    return Stream.concat(stream2, buildAppJsonBodyStatus(OKAPI_HEAD_TENANT, params));
+  }
+
+  /**
+   * Helper function for parameterized test providing tests with headers, body, and status for the delete workflow end point.
+   *
+   * This is intended to be used for when the correct HTTP method is being used in the request.
+   *
+   * @return
+   *   The arguments array stream with the stream columns as:
+   *     - HttpHeaders headers.
+   *     - String contentType (Content-Type request).
+   *     - String accept (ask for this Content-Type on response).
+   *       String mediaType (response Content-Type).
+   *     - MultiValueMap<String, String> parameters.
+   *     - String body (request body).
+   *     - int status (response HTTP status code).
+   */
+  private static Stream<Arguments> provideHeadersBodyStatusForDeleteWorkflow() {
+    Stream<Arguments> stream1 = Stream.of(
+      Arguments.of(OKAPI_HEAD_TENANT, APP_JSON,   APP_SCHEMA, MT_APP_JSON, ID_PARAM, JSON_OBJECT, 204),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_JSON,   APP_JSON,   MT_APP_JSON, ID_PARAM, JSON_OBJECT, 204),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_JSON,   TEXT_PLAIN, MT_APP_JSON, ID_PARAM, JSON_OBJECT, 204),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_JSON,   APP_STREAM, MT_APP_JSON, ID_PARAM, JSON_OBJECT, 204),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_JSON,   NULL_STR,   MT_APP_JSON, ID_PARAM, JSON_OBJECT, 204),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_JSON,   APP_STAR,   MT_APP_JSON, ID_PARAM, JSON_OBJECT, 204),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_JSON,   STAR,       MT_APP_JSON, ID_PARAM, JSON_OBJECT, 204),
+      Arguments.of(OKAPI_HEAD_TENANT, TEXT_PLAIN, APP_SCHEMA, MT_APP_JSON, ID_PARAM, PLAIN_BODY,  204),
+      Arguments.of(OKAPI_HEAD_TENANT, TEXT_PLAIN, APP_JSON,   MT_APP_JSON, ID_PARAM, PLAIN_BODY,  204),
+      Arguments.of(OKAPI_HEAD_TENANT, TEXT_PLAIN, TEXT_PLAIN, MT_APP_JSON, ID_PARAM, PLAIN_BODY,  204),
+      Arguments.of(OKAPI_HEAD_TENANT, TEXT_PLAIN, APP_STREAM, MT_APP_JSON, ID_PARAM, PLAIN_BODY,  204),
+      Arguments.of(OKAPI_HEAD_TENANT, TEXT_PLAIN, NULL_STR,   MT_APP_JSON, ID_PARAM, PLAIN_BODY,  204),
+      Arguments.of(OKAPI_HEAD_TENANT, TEXT_PLAIN, STAR,       MT_APP_JSON, ID_PARAM, PLAIN_BODY,  204),
+      Arguments.of(OKAPI_HEAD_TENANT, TEXT_PLAIN, APP_STAR,   MT_APP_JSON, ID_PARAM, PLAIN_BODY,  204),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_STREAM, APP_SCHEMA, MT_APP_JSON, ID_PARAM, JSON_OBJECT, 204),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_STREAM, APP_JSON,   MT_APP_JSON, ID_PARAM, JSON_OBJECT, 204),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_STREAM, TEXT_PLAIN, MT_APP_JSON, ID_PARAM, JSON_OBJECT, 204),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_STREAM, APP_STREAM, MT_APP_JSON, ID_PARAM, JSON_OBJECT, 204),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_STREAM, NULL_STR,   MT_APP_JSON, ID_PARAM, JSON_OBJECT, 204),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_STREAM, APP_STAR,   MT_APP_JSON, ID_PARAM, JSON_OBJECT, 204),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_STREAM, STAR,       MT_APP_JSON, ID_PARAM, JSON_OBJECT, 204)
     );
 
     Object[] params = { };
@@ -637,6 +728,35 @@ class WorkflowControllerTest {
     stream2 = Stream.concat(stream3, stream1);
 
     stream1 = buildArguments2(POST, headers, contentTypes, accepts, mediaTypes, params, bodys, 405);
+    return Stream.concat(stream2, stream1);
+  }
+
+  /**
+   * Build a common status that returns HTTP 405.
+   *
+   * This is generally for HTTP GET, PATCH, POST, POST, and PUT.
+   *
+   * @param headers
+   *   The HTTP headers to use.
+   * @param params
+   *   The array of parameter sets that would result in a HTTP 405.
+   *
+   * @return The stream of combinations.
+   */
+  private static Stream<Arguments> buildHttpGetPatchPostPut(HttpHeaders headers, Object[] params) {
+    String[] contentTypes = { APP_JSON, TEXT_PLAIN, APP_STREAM };
+    String[] bodys = { JSON_OBJECT, PLAIN_BODY, JSON_OBJECT };
+    String[] accepts = { APP_RAML, APP_SCHEMA, APP_JSON, TEXT_PLAIN, APP_STREAM, NULL_STR, APP_STAR, STAR };
+    MediaType[] mediaTypes = { MT_APP_JSON };
+
+    Stream<Arguments> stream1 = buildArguments2(GET, headers, contentTypes, accepts, mediaTypes, params, bodys, 405);
+    Stream<Arguments> stream2 = buildArguments2(PATCH, headers, contentTypes, accepts, mediaTypes, params, bodys, 405);
+    Stream<Arguments> stream3 = Stream.concat(stream1, stream2);
+
+    stream1 = buildArguments2(POST, headers, contentTypes, accepts, mediaTypes, params, bodys, 405);
+    stream2 = Stream.concat(stream3, stream1);
+
+    stream1 = buildArguments2(PUT, headers, contentTypes, accepts, mediaTypes, params, bodys, 405);
     return Stream.concat(stream2, stream1);
   }
 

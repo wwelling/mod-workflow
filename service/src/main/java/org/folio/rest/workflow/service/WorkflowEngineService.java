@@ -5,13 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.Iterator;
+import lombok.extern.slf4j.Slf4j;
 import org.folio.rest.workflow.dto.WorkflowDto;
 import org.folio.rest.workflow.dto.WorkflowOperationalDto;
 import org.folio.rest.workflow.exception.WorkflowEngineServiceException;
 import org.folio.rest.workflow.model.Workflow;
 import org.folio.rest.workflow.model.repo.WorkflowRepo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -23,10 +22,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+@Slf4j
 @Service
 public class WorkflowEngineService {
-
-  private static final Logger logger = LoggerFactory.getLogger(WorkflowEngineService.class);
 
   private static final String WORKFLOW_ENGINE_ACTIVATE_URL_TEMPLATE = "%s%s/workflow-engine/workflows/activate";
   private static final String WORKFLOW_ENGINE_DEACTIVATE_URL_TEMPLATE = "%s%s/workflow-engine/workflows/deactivate";
@@ -36,6 +34,8 @@ public class WorkflowEngineService {
 
   private static final String HISTORY_PROCESS_INSTANCE_URL_TEMPLATE = "%s%s/history/process-instance%s";
   private static final String HISTORY_INCIDENT_URL_TEMPLATE = "%s%s/history/incident%s";
+
+  private static final String LOG_RESPONSE_BODY = "Response body: {}";
 
   @Value("${tenant.headerName:X-Okapi-Tenant}")
   private String tenantHeaderName;
@@ -74,8 +74,36 @@ public class WorkflowEngineService {
   public Workflow deactivate(String workflowId, String tenant, String token)
       throws WorkflowEngineServiceException {
 
+    if (!workflowRepo.existsById(workflowId)) {
+      log.warn("Unable to find Workflow: {}", workflowId);
+      return null;
+    }
+
     WorkflowDto workflow = workflowRepo.getViewById(workflowId, WorkflowDto.class);
     return sendWorkflowRequest(workflow, WORKFLOW_ENGINE_DEACTIVATE_URL_TEMPLATE, tenant, token);
+  }
+
+  /**
+   * Delete the Workflow from the given Workflow ID.
+   *
+   * To be removed. This is just an experiment.
+   *
+   * @param workflowId ID of the Workflow to delete.
+   * @param tenant The tenant to use.
+   * @param token The token to use.
+   *
+   * @throws WorkflowEngineServiceException When the request fails in some way preventing the return of an HttpEntity.
+   */
+  public void delete(String workflowId, String tenant, String token)
+      throws WorkflowEngineServiceException {
+
+    try {
+      deactivate(workflowId, tenant, token);
+    } catch (WorkflowEngineServiceException e) {
+      throw new WorkflowEngineServiceException(String.format("Failed to delete Workflow '%s' due to deactivation failure: %s!", workflowId, e.getMessage()), e);
+    }
+
+    workflowRepo.deleteById(workflowId);
   }
 
   public JsonNode start(String workflowId, String tenant, String token, JsonNode context)
@@ -136,7 +164,7 @@ public class WorkflowEngineService {
 
       ArrayNode definitions = response.getBody();
       if (response.getStatusCode() == HttpStatus.OK && definitions != null && !definitions.isEmpty()) {
-        logger.debug("Response body: {}", definitions);
+        log.debug(LOG_RESPONSE_BODY, definitions);
 
         return definitions.get(0);
       }
@@ -160,7 +188,7 @@ public class WorkflowEngineService {
 
       ArrayNode definitions = response.getBody();
       if (response.getStatusCode() == HttpStatus.OK && definitions != null) {
-        logger.debug("Response body: {}", definitions);
+        log.debug(LOG_RESPONSE_BODY, definitions);
 
         return definitions;
       }
@@ -183,10 +211,10 @@ public class WorkflowEngineService {
 
       ArrayNode incidents = response.getBody();
       if (response.getStatusCode() == HttpStatus.OK && incidents != null) {
-        logger.debug("Response body: {}", incidents);
+        log.debug(LOG_RESPONSE_BODY, incidents);
       }
       else {
-        logger.debug("Unable to get workflow incidents history from workflow engine!");
+        log.debug("Unable to get workflow incidents history from workflow engine!");
 
         incidents = mapper.createArrayNode();
       }
@@ -197,22 +225,37 @@ public class WorkflowEngineService {
     }
   }
 
+  /**
+   * Send a HTTP request to perform an action to the Workflow Engine end point and update the workflow locally.
+   *
+   * @param workflow The workflow associated with the action.
+   * @param requestPath The end point being used.
+   * @param tenant The tenant to use.
+   * @param token The token to use.
+   *
+   * @return The updated Workflow.
+   *
+   * @throws WorkflowEngineServiceException On certain request failures or when failed to update the Workflow.
+   */
   private Workflow sendWorkflowRequest(WorkflowDto workflow, String requestPath, String tenant, String token)
       throws WorkflowEngineServiceException {
 
-    HttpEntity<WorkflowDto> workflowHttpEntity = new HttpEntity<>(workflow, headers(tenant, token));
-
+    HttpEntity<WorkflowDto> entity = new HttpEntity<>(workflow, headers(tenant, token));
     String url = String.format(requestPath, okapiUrl, basePath);
+
     try {
-      ResponseEntity<Workflow> response = exchange(url, HttpMethod.POST, workflowHttpEntity, Workflow.class);
+      ResponseEntity<Workflow> response = exchange(url, HttpMethod.POST, entity, Workflow.class);
 
-      Workflow responseWorkflow = response.getBody();
-      if (response.getStatusCode() == HttpStatus.OK && responseWorkflow != null) {
-        logger.debug("Response body: {}", responseWorkflow);
+      if (response.getStatusCode() == HttpStatus.OK) {
+        Workflow responseWorkflow = response.getBody();
 
-        String deploymentId = responseWorkflow.getDeploymentId();
-        logger.info("Workflow is active = {}, deploymentID = {}", responseWorkflow.isActive(), deploymentId);
-        return workflowRepo.save(responseWorkflow);
+        if (responseWorkflow != null) {
+          log.debug(LOG_RESPONSE_BODY, responseWorkflow);
+
+          String deploymentId = responseWorkflow.getDeploymentId();
+          log.info("Workflow is active = {}, deploymentID = {}", responseWorkflow.isActive(), deploymentId);
+          return workflowRepo.save(responseWorkflow);
+        }
       }
     } catch (Exception e) {
       throw new WorkflowEngineServiceException(String.format("Failed to send workflow request: %s!", e.getMessage()), e);

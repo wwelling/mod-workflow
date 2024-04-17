@@ -29,14 +29,17 @@ public class WorkflowCqlService extends AbstractCqlService<Workflow> {
   @Override
   public ObjectNode findByCql(String query, Long offset, Integer limit) {
     Page<Workflow> page = null;
+    long total = 0;
 
     if (StringUtils.isBlank(query)) {
       page = repo.findAll(new OffsetRequest(offset, limit));
+      total = repo.count();
     } else {
       page = repo.findByCql(query, new OffsetRequest(offset, limit));
+      total = repo.count(query);
     }
 
-    return toJson(page.toList(), repo.count());
+    return toJson(page.toList(), total);
   }
 
 }

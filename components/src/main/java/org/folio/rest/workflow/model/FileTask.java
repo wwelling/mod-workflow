@@ -12,10 +12,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.folio.rest.workflow.enums.FileOp;
 import org.folio.rest.workflow.model.components.DelegateTask;
+import org.folio.rest.workflow.model.has.HasAsync;
 import org.folio.rest.workflow.model.has.common.HasFileTaskCommon;
 
 @Entity
-public class FileTask extends Node implements DelegateTask, HasFileTaskCommon {
+public class FileTask extends Node implements DelegateTask, HasAsync, HasFileTaskCommon {
 
   @Getter
   @Setter

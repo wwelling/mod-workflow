@@ -120,7 +120,7 @@ public class OkapiDiscoveryService {
     headers.add(tenantHeaderName, tenant);
     HttpEntity<?> request = new HttpEntity<>(headers);
     if (logger.isDebugEnabled()) {
-      logger.debug("Proxy request for {} to {}", tenant, url);
+      logger.debug("Proxy request for {} to {}", tenant.replaceAll("[\n\r]", " "), url.replaceAll("[\n\r]", " "));
     }
     return this.httpService.exchange(url, method, request, JsonNode.class);
   }

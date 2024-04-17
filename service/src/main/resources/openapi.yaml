@@ -619,8 +619,6 @@ paths:
                             properties:
                               type:
                                 type: string
-                              encodings:
-                                type: object
                               certificates:
                                 type: array
                                 items:
@@ -644,6 +642,8 @@ paths:
                               encoded:
                                 type: string
                                 format: byte
+                              encodings:
+                                type: object
                           timestamp:
                             type: object
                             properties:
@@ -655,8 +655,6 @@ paths:
                                 properties:
                                   type:
                                     type: string
-                                  encodings:
-                                    type: object
                                   certificates:
                                     type: array
                                     items:
@@ -680,6 +678,8 @@ paths:
                                   encoded:
                                     type: string
                                     format: byte
+                                  encodings:
+                                    type: object
             modifiers:
               type: integer
               format: int32
@@ -6065,8 +6065,6 @@ paths:
                             properties:
                               type:
                                 type: string
-                              encodings:
-                                type: object
                               certificates:
                                 type: array
                                 items:
@@ -6090,6 +6088,8 @@ paths:
                               encoded:
                                 type: string
                                 format: byte
+                              encodings:
+                                type: object
                           timestamp:
                             type: object
                             properties:
@@ -6101,8 +6101,6 @@ paths:
                                 properties:
                                   type:
                                     type: string
-                                  encodings:
-                                    type: object
                                   certificates:
                                     type: array
                                     items:
@@ -6126,6 +6124,8 @@ paths:
                                   encoded:
                                     type: string
                                     format: byte
+                                  encodings:
+                                    type: object
             modifiers:
               type: integer
               format: int32
@@ -11153,22 +11153,6 @@ paths:
                 $ref: '#/components/schemas/EntityModelWorkflow'
         "204":
           description: No Content
-    delete:
-      tags:
-      - workflow-entity-controller
-      description: delete-workflow
-      operationId: deleteItemResource-workflow-delete
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-      responses:
-        "204":
-          description: No Content
-        "404":
-          description: Not Found
     patch:
       tags:
       - workflow-entity-controller
@@ -11257,22 +11241,6 @@ paths:
                 $ref: '#/components/schemas/CollectionModelNode'
         "204":
           description: No Content
-    delete:
-      tags:
-      - workflow-property-reference-controller
-      description: delete-node-by-workflow-Id
-      operationId: deletePropertyReference-workflow-delete
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-      responses:
-        "204":
-          description: No Content
-        "404":
-          description: Not Found
     patch:
       tags:
       - workflow-property-reference-controller
@@ -11331,27 +11299,6 @@ paths:
                 $ref: '#/components/schemas/CollectionModelNode'
         "404":
           description: Not Found
-    delete:
-      tags:
-      - workflow-property-reference-controller
-      description: delete-node-by-workflow-Id
-      operationId: deletePropertyReferenceId-workflow-delete
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-      - name: propertyId
-        in: path
-        required: true
-        schema:
-          type: string
-      responses:
-        "204":
-          description: No Content
-        "404":
-          description: Not Found
   /workflows/{id}/deactivate/:
     put:
       tags:
@@ -11374,14 +11321,14 @@ paths:
                 token:
                   type: string
       responses:
-        "400":
-          description: Bad Request
+        "500":
+          description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ResponseErrors'
-        "500":
-          description: Internal Server Error
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -11432,14 +11379,14 @@ paths:
                 token:
                   type: string
       responses:
-        "400":
-          description: Bad Request
+        "500":
+          description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ResponseErrors'
-        "500":
-          description: Internal Server Error
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -11490,14 +11437,14 @@ paths:
                 token:
                   type: string
       responses:
-        "400":
-          description: Bad Request
+        "500":
+          description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ResponseErrors'
-        "500":
-          description: Internal Server Error
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -11548,14 +11495,14 @@ paths:
                 token:
                   type: string
       responses:
-        "400":
-          description: Bad Request
+        "500":
+          description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ResponseErrors'
-        "500":
-          description: Internal Server Error
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -11609,14 +11556,14 @@ paths:
                   $ref: '#/components/schemas/JsonNode'
         required: true
       responses:
-        "400":
-          description: Bad Request
+        "500":
+          description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ResponseErrors'
-        "500":
-          description: Internal Server Error
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -11670,14 +11617,14 @@ paths:
                   $ref: '#/components/schemas/JsonNode'
         required: true
       responses:
-        "400":
-          description: Bad Request
+        "500":
+          description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ResponseErrors'
-        "500":
-          description: Internal Server Error
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -11734,14 +11681,14 @@ paths:
             schema:
               $ref: '#/components/schemas/JsonNode'
       responses:
-        "400":
-          description: Bad Request
+        "500":
+          description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ResponseErrors'
-        "500":
-          description: Internal Server Error
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -11790,8 +11737,8 @@ paths:
               $ref: '#/components/schemas/tenantAttributes'
         required: true
       responses:
-        "400":
-          description: Bad request
+        "500":
+          description: Internal server error
           content:
             application/hal+json:
               schema:
@@ -11802,8 +11749,8 @@ paths:
             text/plain:
               schema:
                 type: string
-        "500":
-          description: Internal server error
+        "400":
+          description: Bad request
           content:
             application/hal+json:
               schema:
@@ -11863,14 +11810,14 @@ paths:
             schema:
               type: string
       responses:
-        "400":
-          description: Bad Request
+        "500":
+          description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ResponseErrors'
-        "500":
-          description: Internal Server Error
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -11917,14 +11864,14 @@ paths:
         schema:
           type: string
       responses:
-        "400":
-          description: Bad Request
+        "500":
+          description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ResponseErrors'
-        "500":
-          description: Internal Server Error
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -11975,14 +11922,14 @@ paths:
         schema:
           type: string
       responses:
-        "400":
-          description: Bad Request
+        "500":
+          description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ResponseErrors'
-        "500":
-          description: Internal Server Error
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -12042,14 +11989,14 @@ paths:
         schema:
           type: string
       responses:
-        "400":
-          description: Bad Request
+        "500":
+          description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ResponseErrors'
-        "500":
-          description: Internal Server Error
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -12109,14 +12056,14 @@ paths:
         schema:
           type: string
       responses:
-        "400":
-          description: Bad Request
+        "500":
+          description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ResponseErrors'
-        "500":
-          description: Internal Server Error
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -12152,14 +12099,14 @@ paths:
       summary: Actuator root web endpoint
       operationId: links
       responses:
-        "400":
-          description: Bad Request
+        "500":
+          description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ResponseErrors'
-        "500":
-          description: Internal Server Error
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -12213,14 +12160,14 @@ paths:
       summary: Actuator web endpoint 'info'
       operationId: info
       responses:
-        "400":
-          description: Bad Request
+        "500":
+          description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ResponseErrors'
-        "500":
-          description: Internal Server Error
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -12262,14 +12209,14 @@ paths:
       summary: Actuator web endpoint 'health'
       operationId: health
       responses:
-        "400":
-          description: Bad Request
+        "500":
+          description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ResponseErrors'
-        "500":
-          description: Internal Server Error
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -12311,14 +12258,14 @@ paths:
       summary: Actuator web endpoint 'health-path'
       operationId: health-path
       responses:
-        "400":
-          description: Bad Request
+        "500":
+          description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ResponseErrors'
-        "500":
-          description: Internal Server Error
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -12360,14 +12307,14 @@ paths:
       summary: Actuator web endpoint 'flyway'
       operationId: flyway
       responses:
-        "400":
-          description: Bad Request
+        "500":
+          description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ResponseErrors'
-        "500":
-          description: Internal Server Error
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -12414,14 +12361,14 @@ paths:
         schema:
           type: string
       responses:
-        "400":
-          description: Bad Request
+        "500":
+          description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ResponseErrors'
-        "500":
-          description: Internal Server Error
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -12464,14 +12411,14 @@ paths:
         schema:
           type: string
       responses:
-        "400":
-          description: Bad Request
+        "500":
+          description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ResponseErrors'
-        "500":
-          description: Internal Server Error
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -12516,18 +12463,18 @@ paths:
         schema:
           type: string
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ResponseErrors'
         "500":
           description: Internal server error
           content:
             text/plain:
               schema:
                 type: string
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ResponseErrors'
         "404":
           description: Not Found
           content:
@@ -12565,14 +12512,14 @@ paths:
         schema:
           type: string
       responses:
-        "400":
-          description: Bad request
         "500":
           description: Internal server error
           content:
             text/plain:
               schema:
                 type: string
+        "400":
+          description: Bad request
         "404":
           description: Not Found
           content:
@@ -12611,14 +12558,14 @@ paths:
         schema:
           type: string
       responses:
-        "400":
-          description: Bad Request
+        "500":
+          description: Internal Server Error
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ResponseErrors'
-        "500":
-          description: Internal Server Error
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -12669,14 +12616,130 @@ paths:
         schema:
           type: string
       responses:
+        "500":
+          description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ResponseErrors'
         "400":
           description: Bad Request
           content:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/ResponseErrors'
+        "404":
+          description: Not Found
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ResponseErrors'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ResponseErrors'
+        "204":
+          description: No Content
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ResponseErrors'
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                type: object
+  /workflows/{id}/delete/:
+    delete:
+      tags:
+      - workflow-controller
+      operationId: deleteWorkflow
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tenant:
+                  type: string
+                token:
+                  type: string
+      responses:
         "500":
           description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ResponseErrors'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ResponseErrors'
+        "404":
+          description: Not Found
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ResponseErrors'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ResponseErrors'
+        "204":
+          description: No Content
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ResponseErrors'
+        "200":
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                type: object
+  /workflows/{id}/delete:
+    delete:
+      tags:
+      - workflow-controller
+      operationId: deleteWorkflow_1
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tenant:
+                  type: string
+                token:
+                  type: string
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ResponseErrors'
+        "400":
+          description: Bad Request
           content:
             application/hal+json:
               schema:
@@ -12791,232 +12854,6 @@ components:
       properties:
         _links:
           $ref: '#/components/schemas/Links'
-    CompressFileTask:
-      required:
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/Node'
-      - type: object
-        properties:
-          inputVariables:
-            uniqueItems: true
-            type: array
-            items:
-              $ref: '#/components/schemas/EmbeddedVariable'
-          outputVariable:
-            $ref: '#/components/schemas/EmbeddedVariable'
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
-          source:
-            type: string
-          destination:
-            type: string
-          format:
-            type: string
-            enum:
-            - BZIP2
-            - GZIP
-            - ZIP
-          container:
-            type: string
-            enum:
-            - NONE
-            - TAR
-    Condition:
-      required:
-      - answer
-      - expression
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/Node'
-      - type: object
-        properties:
-          expression:
-            maxLength: 128
-            minLength: 4
-            type: string
-          answer:
-            maxLength: 64
-            minLength: 2
-            type: string
-    ConnectTo:
-      required:
-      - name
-      - nodeId
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/Node'
-      - type: object
-        properties:
-          nodeId:
-            type: string
-    DatabaseConnectionTask:
-      required:
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/Node'
-      - type: object
-        properties:
-          inputVariables:
-            uniqueItems: true
-            type: array
-            items:
-              $ref: '#/components/schemas/EmbeddedVariable'
-          outputVariable:
-            $ref: '#/components/schemas/EmbeddedVariable'
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
-          designation:
-            type: string
-          url:
-            type: string
-          username:
-            type: string
-          password:
-            type: string
-    DatabaseDisconnectTask:
-      required:
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/Node'
-      - type: object
-        properties:
-          inputVariables:
-            uniqueItems: true
-            type: array
-            items:
-              $ref: '#/components/schemas/EmbeddedVariable'
-          outputVariable:
-            $ref: '#/components/schemas/EmbeddedVariable'
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
-          designation:
-            type: string
-    DatabaseQueryTask:
-      required:
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/Node'
-      - type: object
-        properties:
-          inputVariables:
-            uniqueItems: true
-            type: array
-            items:
-              $ref: '#/components/schemas/EmbeddedVariable'
-          outputVariable:
-            $ref: '#/components/schemas/EmbeddedVariable'
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
-          designation:
-            type: string
-          query:
-            type: string
-          outputPath:
-            type: string
-          resultType:
-            type: string
-            enum:
-            - CSV
-            - TSV
-            - JSON
-          includeHeader:
-            type: boolean
-    DirectoryTask:
-      required:
-      - action
-      - name
-      - path
-      - workflow
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/Node'
-      - type: object
-        properties:
-          inputVariables:
-            uniqueItems: true
-            type: array
-            items:
-              $ref: '#/components/schemas/EmbeddedVariable'
-          outputVariable:
-            $ref: '#/components/schemas/EmbeddedVariable'
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
-          path:
-            type: string
-          workflow:
-            type: string
-          action:
-            type: string
-            enum:
-            - READ_NEXT
-            - DELETE_NEXT
-            - LIST
-            - WRITE
-    EmailTask:
-      required:
-      - mailFrom
-      - mailSubject
-      - mailText
-      - mailTo
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/Node'
-      - type: object
-        properties:
-          inputVariables:
-            uniqueItems: true
-            type: array
-            items:
-              $ref: '#/components/schemas/EmbeddedVariable'
-          outputVariable:
-            $ref: '#/components/schemas/EmbeddedVariable'
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
-          mailTo:
-            maxLength: 256
-            minLength: 3
-            type: string
-          mailCc:
-            type: string
-          mailBcc:
-            type: string
-          mailFrom:
-            maxLength: 256
-            minLength: 3
-            type: string
-          mailSubject:
-            maxLength: 256
-            minLength: 2
-            type: string
-          mailText:
-            maxLength: 2147483647
-            minLength: 2
-            type: string
-          mailMarkup:
-            type: string
-          attachmentPath:
-            type: string
-          includeAttachment:
-            type: string
     EmbeddedLoopReference:
       required:
       - parallel
@@ -13112,163 +12949,26 @@ components:
           type: boolean
         asTransient:
           type: boolean
-    EndEvent:
+    EntityModelNode:
       required:
       - name
       type: object
-      allOf:
-      - $ref: '#/components/schemas/Node'
-    EventSubprocess:
-      required:
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/Node'
-      - type: object
-        properties:
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
-    ExclusiveGateway:
-      required:
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/Node'
-      - type: object
-        properties:
-          direction:
-            type: string
-            enum:
-            - UNSPECIFIED
-            - CONVERGING
-            - DIVERGING
-            - MIXED
-          nodes:
-            type: array
-            items:
-              $ref: '#/components/schemas/Node'
-    FileTask:
-      required:
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/Node'
-      - type: object
-        properties:
-          inputVariables:
-            uniqueItems: true
-            type: array
-            items:
-              $ref: '#/components/schemas/EmbeddedVariable'
-          outputVariable:
-            $ref: '#/components/schemas/EmbeddedVariable'
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
-          op:
-            type: string
-            enum:
-            - LIST
-            - READ
-            - WRITE
-            - COPY
-            - MOVE
-            - DELETE
-            - LINE_COUNT
-            - READ_LINE
-            - PUSH
-            - POP
-          path:
-            type: string
-          target:
-            type: string
-          line:
-            type: string
-    FtpTask:
-      required:
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/Node'
-      - type: object
-        properties:
-          inputVariables:
-            uniqueItems: true
-            type: array
-            items:
-              $ref: '#/components/schemas/EmbeddedVariable'
-          outputVariable:
-            $ref: '#/components/schemas/EmbeddedVariable'
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
-          originPath:
-            type: string
-          destinationPath:
-            type: string
-          op:
-            type: string
-            enum:
-            - GET
-            - PUT
-          scheme:
-            type: string
-          host:
-            type: string
-          port:
-            type: integer
-            format: int32
-          username:
-            type: string
-          password:
-            type: string
-          basePath:
-            type: string
-    InclusiveGateway:
-      required:
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/Node'
-      - type: object
-        properties:
-          direction:
-            type: string
-            enum:
-            - UNSPECIFIED
-            - CONVERGING
-            - DIVERGING
-            - MIXED
-    MoveToLastGateway:
-      required:
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/Node'
-      - type: object
-        properties:
-          direction:
-            type: string
-            enum:
-            - UNSPECIFIED
-            - CONVERGING
-            - DIVERGING
-            - MIXED
-    MoveToNode:
-      required:
-      - gatewayId
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/Node'
-      - type: object
-        properties:
-          gatewayId:
-            type: string
+      properties:
+        name:
+          maxLength: 64
+          minLength: 3
+          type: string
+        description:
+          maxLength: 512
+          minLength: 0
+          type: string
+        deserializeAs:
+          type: string
+          readOnly: true
+        identifier:
+          type: string
+        _links:
+          $ref: '#/components/schemas/Links'
     Node:
       required:
       - name
@@ -13291,170 +12991,6 @@ components:
           type: string
       discriminator:
         propertyName: deserializeAs
-    ParallelGateway:
-      required:
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/Node'
-      - type: object
-        properties:
-          direction:
-            type: string
-            enum:
-            - UNSPECIFIED
-            - CONVERGING
-            - DIVERGING
-            - MIXED
-    ProcessorTask:
-      required:
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/Node'
-      - type: object
-        properties:
-          inputVariables:
-            uniqueItems: true
-            type: array
-            items:
-              $ref: '#/components/schemas/EmbeddedVariable'
-          outputVariable:
-            $ref: '#/components/schemas/EmbeddedVariable'
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
-          processor:
-            $ref: '#/components/schemas/EmbeddedProcessor'
-    ReceiveTask:
-      required:
-      - message
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/Node'
-      - type: object
-        properties:
-          message:
-            maxLength: 256
-            minLength: 4
-            type: string
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
-    RequestTask:
-      required:
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/Node'
-      - type: object
-        properties:
-          inputVariables:
-            uniqueItems: true
-            type: array
-            items:
-              $ref: '#/components/schemas/EmbeddedVariable'
-          headerOutputVariables:
-            uniqueItems: true
-            type: array
-            items:
-              $ref: '#/components/schemas/EmbeddedVariable'
-          outputVariable:
-            $ref: '#/components/schemas/EmbeddedVariable'
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
-          request:
-            $ref: '#/components/schemas/EmbeddedRequest'
-    ScriptTask:
-      required:
-      - code
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/Node'
-      - type: object
-        properties:
-          scriptFormat:
-            type: string
-          code:
-            type: string
-          resultVariable:
-            type: string
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
-    StartEvent:
-      required:
-      - name
-      - type
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/Node'
-      - type: object
-        properties:
-          type:
-            type: string
-            enum:
-            - MESSAGE_CORRELATION
-            - SCHEDULED
-            - SIGNAL
-            - NONE
-          expression:
-            maxLength: 256
-            minLength: 4
-            type: string
-          interrupting:
-            type: boolean
-          asyncBefore:
-            type: boolean
-    Subprocess:
-      required:
-      - name
-      - type
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/Node'
-      - type: object
-        properties:
-          type:
-            type: string
-            enum:
-            - EMBEDDED
-            - TRANSACTION
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
-          loopRef:
-            $ref: '#/components/schemas/EmbeddedLoopReference'
-          multiInstance:
-            type: boolean
-    EntityModelNode:
-      required:
-      - name
-      type: object
-      properties:
-        name:
-          maxLength: 64
-          minLength: 3
-          type: string
-        description:
-          maxLength: 512
-          minLength: 0
-          type: string
-        deserializeAs:
-          type: string
-          readOnly: true
-        identifier:
-          type: string
-        _links:
-          $ref: '#/components/schemas/Links'
     PageMetadata:
       type: object
       properties:
@@ -13484,171 +13020,6 @@ components:
           $ref: '#/components/schemas/Links'
         page:
           $ref: '#/components/schemas/PageMetadata'
-    JsonNode:
-      type: object
-    Setup:
-      type: object
-      properties:
-        asyncBefore:
-          type: boolean
-        asyncAfter:
-          type: boolean
-    Workflow:
-      required:
-      - name
-      - versionTag
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          maxLength: 64
-          minLength: 4
-          type: string
-        description:
-          maxLength: 512
-          minLength: 0
-          type: string
-        versionTag:
-          maxLength: 64
-          minLength: 1
-          type: string
-        historyTimeToLive:
-          minimum: 0
-          type: integer
-          format: int32
-        active:
-          type: boolean
-        deploymentId:
-          type: string
-        setup:
-          $ref: '#/components/schemas/Setup'
-        nodes:
-          type: array
-          items:
-            oneOf:
-            - $ref: '#/components/schemas/CompressFileTask'
-            - $ref: '#/components/schemas/Condition'
-            - $ref: '#/components/schemas/ConnectTo'
-            - $ref: '#/components/schemas/DatabaseConnectionTask'
-            - $ref: '#/components/schemas/DatabaseDisconnectTask'
-            - $ref: '#/components/schemas/DatabaseQueryTask'
-            - $ref: '#/components/schemas/DirectoryTask'
-            - $ref: '#/components/schemas/EmailTask'
-            - $ref: '#/components/schemas/EndEvent'
-            - $ref: '#/components/schemas/EventSubprocess'
-            - $ref: '#/components/schemas/ExclusiveGateway'
-            - $ref: '#/components/schemas/FileTask'
-            - $ref: '#/components/schemas/FtpTask'
-            - $ref: '#/components/schemas/InclusiveGateway'
-            - $ref: '#/components/schemas/MoveToLastGateway'
-            - $ref: '#/components/schemas/MoveToNode'
-            - $ref: '#/components/schemas/ParallelGateway'
-            - $ref: '#/components/schemas/ProcessorTask'
-            - $ref: '#/components/schemas/ReceiveTask'
-            - $ref: '#/components/schemas/RequestTask'
-            - $ref: '#/components/schemas/ScriptTask'
-            - $ref: '#/components/schemas/StartEvent'
-            - $ref: '#/components/schemas/Subprocess'
-        initialContext:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/JsonNode'
-    EntityModelWorkflow:
-      required:
-      - name
-      - versionTag
-      type: object
-      properties:
-        name:
-          maxLength: 64
-          minLength: 4
-          type: string
-        description:
-          maxLength: 512
-          minLength: 0
-          type: string
-        versionTag:
-          maxLength: 64
-          minLength: 1
-          type: string
-        historyTimeToLive:
-          minimum: 0
-          type: integer
-          format: int32
-        active:
-          type: boolean
-        deploymentId:
-          type: string
-        setup:
-          $ref: '#/components/schemas/Setup'
-        initialContext:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/JsonNode'
-        _links:
-          $ref: '#/components/schemas/Links'
-    PagedModelEntityModelWorkflow:
-      type: object
-      properties:
-        _embedded:
-          type: object
-          properties:
-            workflows:
-              type: array
-              items:
-                $ref: '#/components/schemas/EntityModelWorkflow'
-        _links:
-          $ref: '#/components/schemas/Links'
-        page:
-          $ref: '#/components/schemas/PageMetadata'
-    CollectionModelNode:
-      type: object
-      properties:
-        _embedded:
-          type: object
-          properties:
-            nodes:
-              type: array
-              items:
-                oneOf:
-                - $ref: '#/components/schemas/CompressFileTaskResponse'
-                - $ref: '#/components/schemas/ConditionResponse'
-                - $ref: '#/components/schemas/ConnectToResponse'
-                - $ref: '#/components/schemas/DatabaseConnectionTaskResponse'
-                - $ref: '#/components/schemas/DatabaseDisconnectTaskResponse'
-                - $ref: '#/components/schemas/DatabaseQueryTaskResponse'
-                - $ref: '#/components/schemas/DirectoryTaskResponse'
-                - $ref: '#/components/schemas/EmailTaskResponse'
-                - $ref: '#/components/schemas/EndEventResponse'
-                - $ref: '#/components/schemas/EventSubprocessResponse'
-                - $ref: '#/components/schemas/ExclusiveGatewayResponse'
-                - $ref: '#/components/schemas/FileTaskResponse'
-                - $ref: '#/components/schemas/FtpTaskResponse'
-                - $ref: '#/components/schemas/InclusiveGatewayResponse'
-                - $ref: '#/components/schemas/MoveToLastGatewayResponse'
-                - $ref: '#/components/schemas/MoveToNodeResponse'
-                - $ref: '#/components/schemas/ParallelGatewayResponse'
-                - $ref: '#/components/schemas/ProcessorTaskResponse'
-                - $ref: '#/components/schemas/ReceiveTaskResponse'
-                - $ref: '#/components/schemas/RequestTaskResponse'
-                - $ref: '#/components/schemas/ScriptTaskResponse'
-                - $ref: '#/components/schemas/StartEventResponse'
-                - $ref: '#/components/schemas/SubprocessResponse'
-        _links:
-          $ref: '#/components/schemas/Links'
-    CollectionModelObject:
-      type: object
-      properties:
-        _embedded:
-          type: object
-          properties:
-            objects:
-              type: array
-              items:
-                type: object
-        _links:
-          $ref: '#/components/schemas/Links'
     EntityModelTrigger:
       required:
       - method
@@ -13705,6 +13076,148 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/EntityModelTrigger'
+        _links:
+          $ref: '#/components/schemas/Links'
+    EntityModelWorkflow:
+      required:
+      - name
+      - versionTag
+      type: object
+      properties:
+        name:
+          maxLength: 64
+          minLength: 4
+          type: string
+        description:
+          maxLength: 512
+          minLength: 0
+          type: string
+        versionTag:
+          maxLength: 64
+          minLength: 1
+          type: string
+        historyTimeToLive:
+          minimum: 0
+          type: integer
+          format: int32
+        active:
+          type: boolean
+        deploymentId:
+          type: string
+        setup:
+          $ref: '#/components/schemas/Setup'
+        initialContext:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/JsonNode'
+        _links:
+          $ref: '#/components/schemas/Links'
+    JsonNode:
+      type: object
+    PagedModelEntityModelWorkflow:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          properties:
+            workflows:
+              type: array
+              items:
+                $ref: '#/components/schemas/EntityModelWorkflow'
+        _links:
+          $ref: '#/components/schemas/Links'
+        page:
+          $ref: '#/components/schemas/PageMetadata'
+    Setup:
+      type: object
+      properties:
+        asyncBefore:
+          type: boolean
+        asyncAfter:
+          type: boolean
+    Workflow:
+      required:
+      - name
+      - versionTag
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          maxLength: 64
+          minLength: 4
+          type: string
+        description:
+          maxLength: 512
+          minLength: 0
+          type: string
+        versionTag:
+          maxLength: 64
+          minLength: 1
+          type: string
+        historyTimeToLive:
+          minimum: 0
+          type: integer
+          format: int32
+        active:
+          type: boolean
+        deploymentId:
+          type: string
+        setup:
+          $ref: '#/components/schemas/Setup'
+        nodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Node'
+        initialContext:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/JsonNode'
+    CollectionModelNode:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          properties:
+            nodes:
+              type: array
+              items:
+                oneOf:
+                - $ref: '#/components/schemas/CompressFileTaskResponse'
+                - $ref: '#/components/schemas/ConditionResponse'
+                - $ref: '#/components/schemas/ConnectToResponse'
+                - $ref: '#/components/schemas/DatabaseConnectionTaskResponse'
+                - $ref: '#/components/schemas/DatabaseDisconnectTaskResponse'
+                - $ref: '#/components/schemas/DatabaseQueryTaskResponse'
+                - $ref: '#/components/schemas/DirectoryTaskResponse'
+                - $ref: '#/components/schemas/EmailTaskResponse'
+                - $ref: '#/components/schemas/EndEventResponse'
+                - $ref: '#/components/schemas/EventSubprocessResponse'
+                - $ref: '#/components/schemas/ExclusiveGatewayResponse'
+                - $ref: '#/components/schemas/FileTaskResponse'
+                - $ref: '#/components/schemas/FtpTaskResponse'
+                - $ref: '#/components/schemas/InclusiveGatewayResponse'
+                - $ref: '#/components/schemas/MoveToLastGatewayResponse'
+                - $ref: '#/components/schemas/MoveToNodeResponse'
+                - $ref: '#/components/schemas/ParallelGatewayResponse'
+                - $ref: '#/components/schemas/ProcessorTaskResponse'
+                - $ref: '#/components/schemas/ReceiveTaskResponse'
+                - $ref: '#/components/schemas/RequestTaskResponse'
+                - $ref: '#/components/schemas/ScriptTaskResponse'
+                - $ref: '#/components/schemas/StartEventResponse'
+                - $ref: '#/components/schemas/SubprocessResponse'
+        _links:
+          $ref: '#/components/schemas/Links'
+    CollectionModelObject:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          properties:
+            objects:
+              type: array
+              items:
+                type: object
         _links:
           $ref: '#/components/schemas/Links'
     TriggerRequestBody:

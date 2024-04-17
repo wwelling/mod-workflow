@@ -13,10 +13,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.folio.rest.workflow.enums.DirectoryAction;
 import org.folio.rest.workflow.model.components.DelegateTask;
+import org.folio.rest.workflow.model.has.HasAsync;
 import org.folio.rest.workflow.model.has.common.HasDirectoryTaskCommon;
 
 @Entity
-public class DirectoryTask extends Node implements DelegateTask, HasDirectoryTaskCommon {
+public class DirectoryTask extends Node implements DelegateTask, HasAsync, HasDirectoryTaskCommon {
 
   @Getter
   @Setter
