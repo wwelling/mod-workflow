@@ -1,21 +1,22 @@
 package org.folio.rest.workflow.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderColumn;
+import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderColumn;
-import javax.validation.constraints.NotNull;
 import org.folio.rest.workflow.enums.SubprocessType;
 import org.folio.rest.workflow.model.components.Branch;
 import org.folio.rest.workflow.model.components.MultiInstance;
+import org.folio.rest.workflow.model.has.HasAsync;
 
 @Entity
-public class Subprocess extends Node implements Branch, MultiInstance {
+public class Subprocess extends Node implements Branch, HasAsync, MultiInstance {
 
   @NotNull
   @Column(nullable = false)

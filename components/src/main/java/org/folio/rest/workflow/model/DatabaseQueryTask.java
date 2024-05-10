@@ -1,21 +1,22 @@
 package org.folio.rest.workflow.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import java.util.Set;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import lombok.Getter;
 import lombok.Setter;
 import org.folio.rest.workflow.enums.DatabaseResultType;
 import org.folio.rest.workflow.model.components.DelegateTask;
+import org.folio.rest.workflow.model.has.HasAsync;
 import org.folio.rest.workflow.model.has.HasDesignation;
 import org.folio.rest.workflow.model.has.common.HasDatabaseQueryTaskCommon;
 
 @Entity
-public class DatabaseQueryTask extends Node implements DelegateTask, HasDatabaseQueryTaskCommon, HasDesignation {
+public class DatabaseQueryTask extends Node implements DelegateTask, HasAsync, HasDatabaseQueryTaskCommon, HasDesignation {
 
   @Getter
   @Setter

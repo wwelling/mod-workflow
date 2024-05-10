@@ -1,14 +1,14 @@
 package org.folio.rest.workflow.model;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.folio.rest.workflow.enums.HttpMethod;
 import org.folio.rest.workflow.model.has.common.HasEmbeddedRequestCommon;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 
 @Embeddable

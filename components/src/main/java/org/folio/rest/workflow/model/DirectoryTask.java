@@ -1,22 +1,23 @@
 package org.folio.rest.workflow.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.folio.rest.workflow.enums.DirectoryAction;
 import org.folio.rest.workflow.model.components.DelegateTask;
+import org.folio.rest.workflow.model.has.HasAsync;
 import org.folio.rest.workflow.model.has.common.HasDirectoryTaskCommon;
 
 @Entity
-public class DirectoryTask extends Node implements DelegateTask, HasDirectoryTaskCommon {
+public class DirectoryTask extends Node implements DelegateTask, HasAsync, HasDirectoryTaskCommon {
 
   @Getter
   @Setter

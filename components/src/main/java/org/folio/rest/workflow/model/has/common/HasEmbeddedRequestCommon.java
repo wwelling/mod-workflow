@@ -1,6 +1,6 @@
 package org.folio.rest.workflow.model.has.common;
 
-import org.springframework.http.HttpMethod;
+import org.folio.rest.workflow.enums.HttpMethod;
 
 /**
  * This interface provides common methods for {@link org.folio.rest.workflow.model.EmbeddedRequest EmbeddedRequest}.

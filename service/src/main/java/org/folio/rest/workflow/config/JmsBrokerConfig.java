@@ -1,6 +1,6 @@
 package org.folio.rest.workflow.config;
 
-import javax.jms.Queue;
+import jakarta.jms.Queue;
 
 import org.apache.activemq.broker.BrokerService;
 import org.apache.activemq.command.ActiveMQQueue;

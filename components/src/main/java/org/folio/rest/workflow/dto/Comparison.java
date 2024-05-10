@@ -1,7 +1,11 @@
 package org.folio.rest.workflow.dto;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class Comparison {
 
   @NotNull
@@ -12,22 +16,6 @@ public class Comparison {
 
   public Comparison() {
     super();
-  }
-
-  public String getSourceProperty() {
-    return sourceProperty;
-  }
-
-  public String getTargetProperty() {
-    return targetProperty;
-  }
-
-  public void setSourceProperty(String sourceProperty) {
-    this.sourceProperty = sourceProperty;
-  }
-
-  public void setTargetProperty(String targetProperty) {
-    this.targetProperty = targetProperty;
   }
 
 }
