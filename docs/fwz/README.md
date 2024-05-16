@@ -80,11 +80,11 @@ The following properties are supported:
 | `deploymentId` | `e4b0906c-298d-4b3a-b9a4-54d0dcdf58a5` | A **UUID** representing the identifier of the **Workflow** deployed in the **Workflow Engine**.|
 | `description` | `"This is my workflow."` | A description of the **Workflow**, usually represented as a complete sentence. |
 | `name` | `"My Workflow"` | The name of the **Workflow**. |
-| `historyTimeToLive` | `90` | A number designating the time in days to preserve the history. The [Camunda historyTimeToLive page](https://docs.camunda.org/manual/7.21/reference/bpmn20/custom-extensions/extension-attributes/#historytimetolive) further describes this. |
+| `historyTimeToLive` | `90` | A number designating the time in days to preserve the history. The [Camunda historyTimeToLive documentation](https://docs.camunda.org/manual/7.21/reference/bpmn20/custom-extensions/extension-attributes/#historytimetolive) further describes this. |
 | `initialContext` | `{}` | An object representing additional properties, added to the **Workflow**. |
 | `nodes` | `[]` | An array of **Nodes** represented as a string that operates in a top-down order. |
-| `setup.asyncAfter`  | `false` | A boolean designating [asynchronous continuation](https://docs.camunda.org/manual/7.21/user-guide/process-engine/transactions-in-processes/#asynchronous-continuations) after an activity.  The [Camunda asyncAfter page](https://docs.camunda.org/manual/7.21/reference/bpmn20/custom-extensions/extension-attributes/#asyncafter) further describes this. |
-| `setup.asyncBefore` | `true` |  A boolean designating [asynchronous continuation](https://docs.camunda.org/manual/7.21/user-guide/process-engine/transactions-in-processes/#asynchronous-continuations) before an activity.  The [Camunda asyncBefore page](https://docs.camunda.org/manual/7.21/reference/bpmn20/custom-extensions/extension-attributes/#asyncbefore) further describes this. |
+| `setup.asyncAfter`  | `false` | A boolean designating [asynchronous continuation](https://docs.camunda.org/manual/7.21/user-guide/process-engine/transactions-in-processes/#asynchronous-continuations) after an activity.  The [Camunda asyncAfter documentation](https://docs.camunda.org/manual/7.21/reference/bpmn20/custom-extensions/extension-attributes/#asyncafter) further describes this. |
+| `setup.asyncBefore` | `true` |  A boolean designating [asynchronous continuation](https://docs.camunda.org/manual/7.21/user-guide/process-engine/transactions-in-processes/#asynchronous-continuations) before an activity.  The [Camunda asyncBefore documentation](https://docs.camunda.org/manual/7.21/reference/bpmn20/custom-extensions/extension-attributes/#asyncbefore) further describes this. |
 | `versionTag` | `"1.0.0"` | A version number string representing the version of the **Workflow**. |
 
 The following is an example `workflow.json` file:
@@ -313,8 +313,8 @@ Each of these types of **Nodes** may be used in the `deserializeAs` property to 
     - This has the [Common Asynchronous Properties](#common-asynchronous-properties).
 
 ### Common Asynchronous Properties
-  - `asyncAfter`: A boolean designating [asynchronous continuation](https://docs.camunda.org/manual/7.21/user-guide/process-engine/transactions-in-processes/#asynchronous-continuations) after an activity.  The [Camunda asyncAfter page](https://docs.camunda.org/manual/7.21/reference/bpmn20/custom-extensions/extension-attributes/#asyncafter) further describes this.
-  - `asyncBefore`: A boolean designating [asynchronous continuation](https://docs.camunda.org/manual/7.21/user-guide/process-engine/transactions-in-processes/#asynchronous-continuations) before an activity.  The [Camunda asyncBefore page](https://docs.camunda.org/manual/7.21/reference/bpmn20/custom-extensions/extension-attributes/#asyncbefore) further describes this.
+  - `asyncAfter`: A boolean designating [asynchronous continuation](https://docs.camunda.org/manual/7.21/user-guide/process-engine/transactions-in-processes/#asynchronous-continuations) after an activity.  The [Camunda asyncAfter documentation](https://docs.camunda.org/manual/7.21/reference/bpmn20/custom-extensions/extension-attributes/#asyncafter) further describes this.
+  - `asyncBefore`: A boolean designating [asynchronous continuation](https://docs.camunda.org/manual/7.21/user-guide/process-engine/transactions-in-processes/#asynchronous-continuations) before an activity.  The [Camunda asyncBefore documentation](https://docs.camunda.org/manual/7.21/reference/bpmn20/custom-extensions/extension-attributes/#asyncbefore) further describes this.
 
 ### Common Credentials Properties
   - `password`: The password associated with the specified user name.
