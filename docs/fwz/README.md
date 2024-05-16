@@ -91,8 +91,8 @@ The following is an example `workflow.json` file:
 ```json
 {
   "id": "9908e4c0-6c48-4b2f-a487-a0398f74549f",
-  "name": "Quick Javascript Test",
-  "description": "Test workflow",
+  "name": "Quick JavaScript Test",
+  "description": "Test that JavaScript works as a ScriptTask by printing a simple message.",
   "versionTag": "1.0",
   "historyTimeToLive": 90,
   "deploymentId": null,
