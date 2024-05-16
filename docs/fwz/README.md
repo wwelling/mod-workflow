@@ -182,9 +182,9 @@ A [list of supported **Nodes**](https://github.com/folio-org/mod-workflow/blob/m
 Each of these types of **Nodes** may be used in the `deserializeAs` property to designate the **Node** type of a given file.
 
   - **`CompressFileTask`**: A Task for compressing some file or directory.
-    - `container`: The container, if any, to store the file before compression, such as `none` or `tar`. This is useful for compressing directries.
+    - `container`: The container, if any, to store the file before compression, such as `NONE` or `TAR`. This is useful for compressing directries.
     - `destination`: The destination file path to compress the file as.
-    - `format`: The compression format to use, such as `bzip2`, `gzip`, and `zip`.
+    - `format`: The compression format to use, such as `BZIP2`, `GZIP`, and `ZIP`.
     - `source`: The source file path to compress.
     - This has the [Common Asynchronous Properties](#common-asynchronous-properties).
     - This has the [Common Variable Properties](#common-variable-properties).
@@ -214,7 +214,7 @@ Each of these types of **Nodes** may be used in the `deserializeAs` property to 
     - This has the [Common Variable Properties](#common-variable-properties).
 
   - **`DirectoryTask`**: Perform an operation against a directory, such as creating or deleting the directory.
-    - `action`: The action to perform on the directory, such as `read_next`, `delete_next`, `list`, or `write`.
+    - `action`: The action to perform on the directory, such as `READ_NEXT`, `DELETE_NEXT`, `LIST`, or `WRITE`.
     - `path`: The file path to the directory, including the directory itself.
     - This has the [Common Asynchronous Properties](#common-asynchronous-properties).
     - This has the [Common Variable Properties](#common-variable-properties).
@@ -240,7 +240,7 @@ Each of these types of **Nodes** may be used in the `deserializeAs` property to 
 
   - **`FileTask`**: Perform an operation against a file, such as creating or deleting the file.
     - `line`: This is a number representing the line to use for line-specific actions.
-    - `op`: The action to perform on the file, such as `list`, `read`, `write`, `copy`, `move`, `delete`, `line_count`, `read_line`, `push`, or `pop`.
+    - `op`: The action to perform on the file, such as `LIST`, `READ`, `WRITE`, `COPY`, `MOVE`, `DELETE`, `LINE_COUNT`, `READ_LINE`, `PUSH`, or `POP`.
     - `path`: The file path to the file. The directory path to the file is expected to already exist.
     - `target`: For `copy`, `move`, or any action that requires an additional file path or directory path to function.
     - This has the [Common Asynchronous Properties](#common-asynchronous-properties).
@@ -249,7 +249,7 @@ Each of these types of **Nodes** may be used in the `deserializeAs` property to 
   - **`FtpTask`**: Perform an **FTP** or **SFTP** operation using some file.
     - `destinationPath`: The destination path to a file or directory on the server side of the connection.
     - `host`: The **URL** host part of the server to connect to.
-    - `op`: The action to perform on the file, such as `get` or `put`.
+    - `op`: The action to perform on the file, such as `GET` or `PUT`.
     - `originPath`: The source path to a file or directory on the client side of the connection.
     - `port`: The **URL** port part of the server to connect to.
     - `scheme`: The **URL** scheme part of the server to connect to.
@@ -309,7 +309,7 @@ Each of these types of **Nodes** may be used in the `deserializeAs` property to 
   - **`Subprocess`**: Is a collection of **Nodes** in a **Workflow** that may potentially also act as a loop.
     - `loopRef`: The identifier used to reference the loop when acting as a loop.
     - `nodes`: Additional **Nodes** to be operated within this sub-process.
-    - `type`: The type of sub-process, such as `embedded` or `transaction`.
+    - `type`: The type of sub-process, such as `EMBEDDED` or `TRANSACTION`.
     - This has the [Common Asynchronous Properties](#common-asynchronous-properties).
 
 ### Common Asynchronous Properties
@@ -321,7 +321,7 @@ Each of these types of **Nodes** may be used in the `deserializeAs` property to 
   - `username`: The user name to login as.
 
 ### Common Gateway Properties
-  - `direction`: The direction in which the **Gateway** operates, such as `unspecified`, `converging`, `diverging`, or `mixed`.
+  - `direction`: The direction in which the **Gateway** operates, such as `UNSPECIFIED`, `CONVERGING`, `DIVERGING`, or `MIXED`.
   - `nodes`: Additional **Nodes** to be operated within this **Gateway**.
 
 ### Common Variable Properties
