@@ -57,7 +57,7 @@ public class CompressFileMagic {
    * @return TRUE if the string represents the format and FALSE otherwise.
    */
   public static boolean isBzip2(byte[] input) {
-    return input == null ? false : matchBytes(input, MAGIC_BZIP2);
+    return matchBytes(input, MAGIC_BZIP2);
   }
 
   /**
@@ -68,7 +68,7 @@ public class CompressFileMagic {
    * @return TRUE if the string represents the format and FALSE otherwise.
    */
   public static boolean isGzip(byte[] input) {
-    return input == null ? false : matchBytes(input, MAGIC_GZIP);
+    return matchBytes(input, MAGIC_GZIP);
   }
 
   /**
@@ -79,7 +79,7 @@ public class CompressFileMagic {
    * @return TRUE if the string represents the format and FALSE otherwise.
    */
   public static boolean isZip(byte[] input) {
-    if (input == null || !matchBytes(input, MAGIC_ZIP) && !matchBytes(input, MAGIC_ZIP_EMPTY) && !matchBytes(input, MAGIC_ZIP_SPAN)) {
+    if (!matchBytes(input, MAGIC_ZIP) && !matchBytes(input, MAGIC_ZIP_EMPTY) && !matchBytes(input, MAGIC_ZIP_SPAN)) {
       return false;
     }
 
@@ -136,7 +136,7 @@ public class CompressFileMagic {
    * @return TRUE if the string represents the format and FALSE otherwise.
    */
   private static boolean matchBytes(byte[] input, byte[] match) {
-    if (input.length < match.length) return false;
+    if (input == null || input.length < match.length) return false;
 
     for (int i = 0; i < match.length; i++) {
       if (input[i] != match[i]) return false;
