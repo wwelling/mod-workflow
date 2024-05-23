@@ -102,7 +102,7 @@ public class ExtractedWorkflow {
   /**
    * The version regex pattern supporting 1.0.* versions.
    */
-  public static final Pattern VERSION_PATTERN_1_0 = Pattern.compile("^1\\.0(|\\.\\d+.*)$");
+  public static final Pattern VERSION_PATTERN_1_0 = Pattern.compile("^1\\.0($|\\.\\d)");
 
   /**
    * The name of the workflow JSON file within the archive.
