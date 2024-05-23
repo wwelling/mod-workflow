@@ -348,7 +348,7 @@ For example, a **Ruby** script name `myScript.rb` has an extension `rb` and so t
 The **JSON** files that include the `nodes` property must use a special format to designate the individual **Nodes**.
 The `nodes` is an array of **UUIDs**.
 The **UUID** of the node is required.
-The **Node** type may optionally be prefixed to the start of the such as `"/startEvent/613f670b-ae88-462a-a19a-bb2af8b65279"`.
+The **Node** type may optionally be prefixed to the start of the string, such as `"/startEvent/613f670b-ae88-462a-a19a-bb2af8b65279"`.
 
 
 ## Glossary
