@@ -17,6 +17,8 @@ A `ScriptTask` stores the actual contents of the `code` in a separate file in a 
 On import of an **FWZ** file, this script file is stored as a single value in the `code`, replacing the file name that was previously stored in the value of the `code` property.
 On export into an **FWZ** file, this `code` is converted into a script file and the file is named base on the `ScriptTask` name with an extension based on the scripting language in use.
 
+The files contained within the **FWZ** file are expected to be in **UTF-8** encoding.
+
 
 ## Base Directory Structure
 
@@ -102,9 +104,9 @@ The following is an example `workflow.json` file:
     "asyncAfter": false
   },
   "nodes": [
-    "{{mod-workflow}}/startEvent/613f670b-ae88-462a-a19a-bb2af8b65279",
-    "{{mod-workflow}}/scriptTask/76ddfc54-0d05-42c2-a0a7-4efa16f63f66",
-    "{{mod-workflow}}/endEvent/b9b00b03-89f1-4a02-a8fb-e0ea0e6eb021"
+    "/startEvent/613f670b-ae88-462a-a19a-bb2af8b65279",
+    "/scriptTask/76ddfc54-0d05-42c2-a0a7-4efa16f63f66",
+    "/endEvent/b9b00b03-89f1-4a02-a8fb-e0ea0e6eb021"
   ],
   "initialContext": {}
 }
@@ -327,6 +329,26 @@ Each of these types of **Nodes** may be used in the `deserializeAs` property to 
 ### Common Variable Properties
   - `inputVariables`: An array of variables passed to the **Node**.
   - `outputVariable`: A single variable returned by the processing of the **Node**.
+
+
+## Properties Needing Special Handling
+
+Some properties within the **JSON** files require special handling.
+
+### Special Handling of `code` Property
+
+The **JSON** files, currently only `ScriptTask`, that include the `code` property must use the name of a source file rather than the actual code.
+The file specified by this `code` is expanded, escaped, and stored within the `code` property during import into `mod-workflow`.
+These source files are stored within a sub-directory within the `nodes/` directory based on the programming language.
+For example, a **Ruby** script name `myScript.rb` has an extension `rb` and so the path to the **Ruby** script might be `nodes/rb/myScript.rb`.
+
+
+### Special Handling of `nodes` Property
+
+The **JSON** files that include the `nodes` property must use a special format to designate the individual **Nodes**.
+The `nodes` is an array of **UUIDs**.
+The **UUID** of the node is required.
+The **Node** type may optionally be prefixed to the start of the such as `"/startEvent/613f670b-ae88-462a-a19a-bb2af8b65279"`.
 
 
 ## Glossary
