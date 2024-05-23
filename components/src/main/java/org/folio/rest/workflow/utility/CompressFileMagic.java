@@ -15,35 +15,39 @@ import org.folio.rest.workflow.enums.CompressFileFormat;
  */
 public class CompressFileMagic {
 
+  private CompressFileMagic() {
+    throw new IllegalStateException("Attempt to instatiate a utility class.");
+  }
+
   /**
    * A minimum header size needed to perform the magic checks.
    */
-  public static final int HEADER_SIZE = 4;
+  protected static final int HEADER_SIZE = 4;
 
   /**
    * Magic header for the BZIP2 format.
    */
-  public static final byte[] MAGIC_BZIP2 = { 0x42, 0x5A, 0x68 };
+  protected static final byte[] MAGIC_BZIP2 = { 0x42, 0x5A, 0x68 };
 
   /**
    * Magic header for the GZIP format.
    */
-  public static final byte[] MAGIC_GZIP = { 0x1F, (byte) 0x8B };
+  protected static final byte[] MAGIC_GZIP = { 0x1F, (byte) 0x8B };
 
   /**
    * Magic header for the ZIP format.
    */
-  public static final byte[] MAGIC_ZIP = { 0x50, 0x4B, 0x03, 0x04 };
+  protected static final byte[] MAGIC_ZIP = { 0x50, 0x4B, 0x03, 0x04 };
 
   /**
    * Magic header for the ZIP format that is empty.
    */
-  public static final byte[] MAGIC_ZIP_EMPTY = { 0x50, 0x4B, 0x05, 0x06 };
+  protected static final byte[] MAGIC_ZIP_EMPTY = { 0x50, 0x4B, 0x05, 0x06 };
 
   /**
    * Magic header for the ZIP format that is spanned.
    */
-  public static final byte[] MAGIC_ZIP_SPAN = { 0x50, 0x4B, 0x07, 0x08 };
+  protected static final byte[] MAGIC_ZIP_SPAN = { 0x50, 0x4B, 0x07, 0x08 };
 
   /**
    * Detect if a string represents a BZIP2 format.
@@ -53,11 +57,7 @@ public class CompressFileMagic {
    * @return TRUE if the string represents the format and FALSE otherwise.
    */
   public static boolean isBzip2(byte[] input) {
-    if (input == null) {
-      return false;
-    }
-
-    return matchBytes(input, MAGIC_BZIP2);
+    return input == null ? false : matchBytes(input, MAGIC_BZIP2);
   }
 
   /**
@@ -68,11 +68,7 @@ public class CompressFileMagic {
    * @return TRUE if the string represents the format and FALSE otherwise.
    */
   public static boolean isGzip(byte[] input) {
-    if (input == null) {
-      return false;
-    }
-
-    return matchBytes(input, MAGIC_GZIP);
+    return input == null ? false : matchBytes(input, MAGIC_GZIP);
   }
 
   /**
@@ -83,23 +79,11 @@ public class CompressFileMagic {
    * @return TRUE if the string represents the format and FALSE otherwise.
    */
   public static boolean isZip(byte[] input) {
-    if (input == null) {
+    if (input == null || !matchBytes(input, MAGIC_ZIP) && !matchBytes(input, MAGIC_ZIP_EMPTY) && !matchBytes(input, MAGIC_ZIP_SPAN)) {
       return false;
     }
 
-    if (matchBytes(input, MAGIC_ZIP)) {
-      return true;
-    }
-
-    if (matchBytes(input, MAGIC_ZIP_EMPTY)) {
-      return true;
-    }
-
-    if (matchBytes(input, MAGIC_ZIP_SPAN)) {
-      return true;
-    }
-
-    return false;
+    return true;
   }
 
   /**

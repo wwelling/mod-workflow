@@ -381,10 +381,9 @@ class WorkflowControllerTest {
    *     - String body (request body).
    *     - int status (response HTTP status code).
    *
-   * @throws NoSuchMethodException
    * @throws SecurityException
    */
-  private static Stream<Arguments> provideDeletePatchPostPutForSearchWorkflows() throws NoSuchMethodException, SecurityException {
+  private static Stream<Arguments> provideDeletePatchPostPutForSearchWorkflows() throws SecurityException {
     Object[] params = { NO_PARAM, LIM_PARAM, OFF_LIM_PARAM, OFF_PARAM };
 
     return buildHttpDeletePatchPostPut(OKAPI_HEAD_NO_URL, params);
@@ -404,10 +403,9 @@ class WorkflowControllerTest {
    *     - String body (request body).
    *     - int status (response HTTP status code).
    *
-   * @throws NoSuchMethodException
    * @throws SecurityException
    */
-  private static Stream<Arguments> provideDeleteGetPatchPutForImportWorkflows() throws NoSuchMethodException, SecurityException {
+  private static Stream<Arguments> provideDeleteGetPatchPutForImportWorkflows() throws SecurityException {
     Object[] params = { NO_PARAM };
 
     return buildHttpDeleteGetPatchPut(OKAPI_HEAD_NO_URL, params);
@@ -427,10 +425,9 @@ class WorkflowControllerTest {
    *     - String body (request body).
    *     - int status (response HTTP status code).
    *
-   * @throws NoSuchMethodException
    * @throws SecurityException
    */
-  private static Stream<Arguments> provideDeletePatchPostPutFor() throws NoSuchMethodException, SecurityException {
+  private static Stream<Arguments> provideDeletePatchPostPutFor() throws SecurityException {
     Object[] params = { NO_PARAM, ID_PARAM };
 
     return buildHttpDeletePatchPostPut(OKAPI_HEAD_NO_URL, params);
@@ -450,10 +447,9 @@ class WorkflowControllerTest {
    *     - String body (request body).
    *     - int status (response HTTP status code).
    *
-   * @throws NoSuchMethodException
    * @throws SecurityException
    */
-  private static Stream<Arguments> provideDeleteGetPatchPostFor() throws NoSuchMethodException, SecurityException {
+  private static Stream<Arguments> provideDeleteGetPatchPostFor() throws SecurityException {
     Object[] params = { NO_PARAM, ID_PARAM };
 
     return buildHttpDeleteGetPatchPost(OKAPI_HEAD_NO_URL, params);
@@ -473,10 +469,9 @@ class WorkflowControllerTest {
    *     - String body (request body).
    *     - int status (response HTTP status code).
    *
-   * @throws NoSuchMethodException
    * @throws SecurityException
    */
-  private static Stream<Arguments> provideGetPatchPostPutFor() throws NoSuchMethodException, SecurityException {
+  private static Stream<Arguments> provideGetPatchPostPutFor() throws SecurityException {
     Object[] params = { NO_PARAM, ID_PARAM };
 
     return buildHttpGetPatchPostPut(OKAPI_HEAD_NO_URL, params);
@@ -496,10 +491,9 @@ class WorkflowControllerTest {
    *     - String body (request body).
    *     - int status (response HTTP status code).
    *
-   * @throws NoSuchMethodException
    * @throws SecurityException
    */
-  private static Stream<Arguments> provideDeleteGetPatchPutFor() throws NoSuchMethodException, SecurityException {
+  private static Stream<Arguments> provideDeleteGetPatchPutFor() throws SecurityException {
     Object[] params = { NO_PARAM, ID_PARAM };
 
     return buildHttpDeleteGetPatchPut(OKAPI_HEAD_NO_URL, params);

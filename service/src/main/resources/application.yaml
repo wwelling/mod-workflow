@@ -7,7 +7,7 @@ logging:
       zaxxer:
         hikari: INFO
     org:
-      folio: INFO
+      folio: WARN
       hibernate: INFO
       springframework: INFO
 

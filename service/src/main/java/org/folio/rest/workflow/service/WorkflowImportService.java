@@ -21,7 +21,6 @@ import static org.folio.rest.workflow.model.ExtractedWorkflow.VERSION_PATTERN_1_
 import static org.folio.rest.workflow.model.ExtractedWorkflow.WORKFLOW_JSON;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -151,25 +150,8 @@ public class WorkflowImportService {
    */
   private void collapseNodeScripts(ExtractedWorkflow extracted) throws WorkflowImportInvalidOrMissingProperty, WorkflowImportRequiredFileMissing, JsonProcessingException {
     for (Entry<String, JsonNode> entry : extracted.getNodes().entrySet()) {
-      if (!entry.getValue().has(DESERIALIZE_AS)) {
+      if (collapseNodeScriptsContinue(entry)) {
         continue;
-      }
-
-      if (entry.getValue().get(DESERIALIZE_AS).getNodeType() != JsonNodeType.STRING) {
-        throw new WorkflowImportInvalidOrMissingProperty(entry.getKey(), DESERIALIZE_AS);
-      }
-
-      String deserializeAs = entry.getValue().get(DESERIALIZE_AS).asText();
-      if (!SCRIPT_TASK.equalsIgnoreCase(deserializeAs)) {
-        continue;
-      }
-
-      if (!entry.getValue().has(SCRIPT_FORMAT) || entry.getValue().get(SCRIPT_FORMAT).getNodeType() != JsonNodeType.STRING) {
-        throw new WorkflowImportInvalidOrMissingProperty(entry.getKey(), SCRIPT_FORMAT);
-      }
-
-      if (!entry.getValue().has(CODE) || entry.getValue().get(CODE).getNodeType() != JsonNodeType.STRING) {
-        throw new WorkflowImportInvalidOrMissingProperty(entry.getKey(), CODE);
       }
 
       String scriptFormat = entry.getValue().get(SCRIPT_FORMAT).asText();
@@ -188,7 +170,7 @@ public class WorkflowImportService {
           break;
       }
 
-      String scriptPath = NODES + "/" + extension + "/" + fileName;
+      String scriptPath = String.format("%s/%s/%s", NODES, extension, fileName);
       if (!extracted.getScripts().containsKey(scriptPath)) {
         throw new WorkflowImportRequiredFileMissing(scriptPath);
       }
@@ -200,15 +182,47 @@ public class WorkflowImportService {
   }
 
   /**
+   * Helper function for reducing the continue statements in collapseNodeScripts().
+   *
+   * This is added to appease SonarCloud's java:S135 issue.
+   *
+   * @param entry The entry of a single extracted data.
+   *
+   * @throws WorkflowImportInvalidOrMissingProperty If a property is missing.
+   */
+  private boolean collapseNodeScriptsContinue(Entry<String, JsonNode> entry) throws WorkflowImportInvalidOrMissingProperty {
+    if (!entry.getValue().has(DESERIALIZE_AS)) {
+      return true;
+    }
+
+    if (entry.getValue().get(DESERIALIZE_AS).getNodeType() != JsonNodeType.STRING) {
+      throw new WorkflowImportInvalidOrMissingProperty(entry.getKey(), DESERIALIZE_AS);
+    }
+
+    String deserializeAs = entry.getValue().get(DESERIALIZE_AS).asText();
+    if (!SCRIPT_TASK.equalsIgnoreCase(deserializeAs)) {
+      return true;
+    }
+
+    if (!entry.getValue().has(SCRIPT_FORMAT) || entry.getValue().get(SCRIPT_FORMAT).getNodeType() != JsonNodeType.STRING) {
+      throw new WorkflowImportInvalidOrMissingProperty(entry.getKey(), SCRIPT_FORMAT);
+    }
+
+    if (!entry.getValue().has(CODE) || entry.getValue().get(CODE).getNodeType() != JsonNodeType.STRING) {
+      throw new WorkflowImportInvalidOrMissingProperty(entry.getKey(), CODE);
+    }
+    return false;
+  }
+
+  /**
    * Create the Nodes in the database.
    *
    * @param nodes The Nodes to iterate over.
    * @param expanded An array of IDs of nodes representing the top-down order of creation.
    *
    * @throws JsonProcessingException On JSON parse failure.
-   * @throws JsonMappingException On JSON mapping failure.
    */
-  private void createNodes(Map<String, JsonNode> nodes, List<String> expanded) throws JsonMappingException, JsonProcessingException {
+  private void createNodes(Map<String, JsonNode> nodes, List<String> expanded) throws JsonProcessingException {
     for (String uuid : expanded) {
       Node node = objectMapper.readValue(nodes.get(uuid).toString(), Node.class);
       nodeRepo.save(node);
@@ -221,9 +235,8 @@ public class WorkflowImportService {
    * @param triggers The Triggers to iterate over.
    *
    * @throws JsonProcessingException On JSON parse failure.
-   * @throws JsonMappingException On JSON mapping failure.
    */
-  private void createTriggers(Map<String, JsonNode> triggers) throws JsonMappingException, JsonProcessingException {
+  private void createTriggers(Map<String, JsonNode> triggers) throws JsonProcessingException {
     for (JsonNode triggerNode : triggers.values()) {
       Trigger trigger = objectMapper.readValue(triggerNode.toString(), Trigger.class);
       triggerRepo.save(trigger);
@@ -238,9 +251,8 @@ public class WorkflowImportService {
    * @return The created Workflow.
    *
    * @throws JsonProcessingException On JSON parse failure.
-   * @throws JsonMappingException On JSON mapping failure.
    */
-  private Workflow createWorkflow(JsonNode workflowJson) throws JsonMappingException, JsonProcessingException {
+  private Workflow createWorkflow(JsonNode workflowJson) throws JsonProcessingException {
     Workflow workflow = objectMapper.readValue(workflowJson.toString(), Workflow.class);
     return workflowRepo.save(workflow);
   }
@@ -320,10 +332,9 @@ public class WorkflowImportService {
    * @param extracted The extracted data.
    *
    * @throws JsonProcessingException On JSON parse failure.
-   * @throws JsonMappingException On JSON mapping failure.
    * @throws WorkflowImportInvalidOrMissingProperty On invalid property.
    */
-  private void expandWorkflow(ExtractedWorkflow extracted) throws JsonMappingException, JsonProcessingException, WorkflowImportInvalidOrMissingProperty {
+  private void expandWorkflow(ExtractedWorkflow extracted) throws  JsonProcessingException, WorkflowImportInvalidOrMissingProperty {
     for (JsonNode node : extracted.getNodes().values()) {
       expandNode(extracted.getNodes(), node, extracted.getExpanded());
     }
@@ -350,10 +361,9 @@ public class WorkflowImportService {
    * @param expanded An array of IDs of nodes that have already been expanded.
    *
    * @throws JsonProcessingException On JSON parse failure.
-   * @throws JsonMappingException On JSON mapping failure.
    * @throws WorkflowImportInvalidOrMissingProperty On invalid property.
    */
-  private void expandNode(Map<String, JsonNode> nodes, JsonNode node, List<String> expanded) throws JsonMappingException, JsonProcessingException, WorkflowImportInvalidOrMissingProperty {
+  private void expandNode(Map<String, JsonNode> nodes, JsonNode node, List<String> expanded) throws JsonProcessingException, WorkflowImportInvalidOrMissingProperty {
     String nodeId = node.get(ID).asText();
     if (expanded.contains(nodeId)) {
       return;
