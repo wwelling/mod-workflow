@@ -15,7 +15,7 @@ import org.folio.rest.workflow.enums.CompressFileFormat;
  */
 public class CompressFileMagic {
 
-  private CompressFileMagic() {
+  protected CompressFileMagic() {
     throw new IllegalStateException("Attempt to instatiate a utility class.");
   }
 

@@ -97,9 +97,7 @@ public class WorkflowImportService {
    * @throws IOException On error reading the file stream, extracting the JSON, or other such errors.
    * @throws WorkflowImportException On import failure.
    */
-  public Workflow importFile(Resource fwz) throws IOException, CompressorException, ArchiveException,
-      WorkflowImportException {
-
+  public Workflow importFile(Resource fwz) throws IOException, CompressorException, ArchiveException, WorkflowImportException {
     CompressFileFormat format = CompressFileMagic.detectFormat(fwz.getInputStream());
 
     if (format != null) {
