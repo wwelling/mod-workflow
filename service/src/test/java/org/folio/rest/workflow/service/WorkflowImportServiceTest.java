@@ -4,14 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
-import com.github.jknack.handlebars.internal.Files;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.compressors.CompressorException;
 import org.folio.rest.workflow.exception.WorkflowImportException;
@@ -64,13 +61,13 @@ class WorkflowImportServiceTest {
   private ClassLoader classLoader;
 
   @BeforeEach
-  public void beforeEach() {
+  void beforeEach() {
     classLoader = getClass().getClassLoader();
   }
 
-  @Disabled
+  @Disabled("Not yet complete")
   @Test
-  public void importFileWorksForGzipTest() throws IOException, CompressorException, ArchiveException, WorkflowImportException {
+  void importFileWorksForGzipTest() throws IOException, CompressorException, ArchiveException, WorkflowImportException {
     InputStream fwzStream = loadFile(PATH_FWZ_GZIP);
     when(mockFwz.getInputStream()).thenReturn(fwzStream);
 
@@ -79,9 +76,9 @@ class WorkflowImportServiceTest {
     assertEquals(WORKFLOW_UUID, workflow.getId());
   }
 
-  @Disabled
+  @Disabled("Not yet complete")
   @Test
-  public void importFileWorksForGzipWithUnknownVersionTest() throws IOException, CompressorException, ArchiveException, WorkflowImportException {
+  void importFileWorksForGzipWithUnknownVersionTest() throws IOException, CompressorException, ArchiveException, WorkflowImportException {
     InputStream fwzStream = loadFile(PATH_FWZ_GZIP_UN_VER);
     when(mockFwz.getInputStream()).thenReturn(fwzStream);
 
