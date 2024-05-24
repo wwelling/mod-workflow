@@ -5,14 +5,13 @@ import static org.folio.spring.test.mock.MockMvcConstant.UUID;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class WorkflowImportInvalidOrMissingPropertyTest {
 
   @Test
-  void workflowImportInvalidOrMissingPropertyWorksTest() throws IOException {
+  void workflowImportInvalidOrMissingPropertyWorksTest() {
     WorkflowImportInvalidOrMissingProperty exception = Assertions.assertThrows(WorkflowImportInvalidOrMissingProperty.class, () -> {
       throw new WorkflowImportInvalidOrMissingProperty(UUID, URL);
     });
@@ -23,7 +22,7 @@ class WorkflowImportInvalidOrMissingPropertyTest {
   }
 
   @Test
-  void workflowImportInvalidOrMissingPropertyWorksWithChildExceptionTest() throws IOException {
+  void workflowImportInvalidOrMissingPropertyWorksWithChildExceptionTest() {
     WorkflowImportInvalidOrMissingProperty exception = Assertions.assertThrows(WorkflowImportInvalidOrMissingProperty.class, () -> {
       throw new WorkflowImportInvalidOrMissingProperty(UUID, URL, new RuntimeException("Additional Exception"));
     });

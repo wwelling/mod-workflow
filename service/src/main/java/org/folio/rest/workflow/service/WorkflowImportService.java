@@ -158,7 +158,7 @@ public class WorkflowImportService {
       String fileName = entry.getValue().get(CODE).asText();
       String extension = scriptFormat.toLowerCase().trim();
 
-      switch(scriptFormat) {
+      switch (scriptFormat) {
         case JAVASCRIPT:
           extension = JAVASCRIPT_EXT_NAME;
           break;
@@ -167,6 +167,8 @@ public class WorkflowImportService {
           break;
         case RUBY:
           extension = RUBY_EXT_NAME;
+          break;
+        default:
           break;
       }
 
@@ -267,9 +269,10 @@ public class WorkflowImportService {
    * @param isDirectory Designate the the entry is a directory.
    *
    * @throws IOException On error reading the file stream, extracting the JSON, or other such errors.
-   * @throws WorkflowImportException On import failure.
+   * @throws WorkflowImportInvalidOrMissingProperty On import failure due to invalid or missing property.
+   * @throws WorkflowImportJsonFileIsDirectory On import failure due to JSON file being actually a directory.
    */
-  private void extractNodesAndScripts(String name, InputStream inputStream, ExtractedWorkflow extracted, boolean isDirectory) throws IOException, WorkflowImportException {
+  private void extractNodesAndScripts(String name, InputStream inputStream, ExtractedWorkflow extracted, boolean isDirectory) throws IOException, WorkflowImportInvalidOrMissingProperty, WorkflowImportJsonFileIsDirectory {
     String[] pathParts = name.split("/", 4);
 
     if (!verifyPathParts(name, pathParts)) {
@@ -283,33 +286,9 @@ public class WorkflowImportService {
         }
 
         if (pathParts.length == 1) {
-          if (FWZ_JSON.equalsIgnoreCase(name)) {
-            extracted.getRequired().put(FWZ_JSON, objectMapper.readTree(inputStream));
-
-            verifyVersion(extracted.getRequired().get(FWZ_JSON));
-          } else if (WORKFLOW_JSON.equalsIgnoreCase(name)) {
-            extracted.getRequired().put(WORKFLOW_JSON, objectMapper.readTree(inputStream));
-          } else if (SETUP_JSON.equalsIgnoreCase(name)) {
-            extracted.getRequired().put(SETUP_JSON, objectMapper.readTree(inputStream));
-          } else {
-            warnOnUnknownFileOrDir(name);
-          }
+          extractTopLevel(name, inputStream, extracted);
         } else {
-          JsonNode json = objectMapper.readTree(inputStream);
-
-          if (!json.has(ID) || json.get(ID).getNodeType() != JsonNodeType.STRING) {
-            throw new WorkflowImportInvalidOrMissingProperty(name, ID);
-          }
-
-          if (!json.has(DESERIALIZE_AS) || json.get(DESERIALIZE_AS).getNodeType() != JsonNodeType.STRING) {
-            throw new WorkflowImportInvalidOrMissingProperty(name, DESERIALIZE_AS);
-          }
-
-          if (pathParts[0].equalsIgnoreCase(NODES)) {
-            extracted.getNodes().put(json.get(ID).asText(), json);
-          } else {
-            extracted.getTriggers().put(json.get(ID).asText(), json);
-          }
+          extractSubLevel(name, inputStream, extracted, pathParts);
         }
       } else if (!isDirectory) {
          warnOnUnknownFileOrDir(name);
@@ -321,6 +300,60 @@ public class WorkflowImportService {
       } else {
         warnOnUnknownFileOrDir(name);
       }
+    }
+  }
+
+  /**
+   * Extract the files that exist at the top-level.
+   *
+   * @param name The file being processed.
+   * @param pathParts The array of path parts.
+   * @param inputStream The input stream to use.
+   * @param extracted The extracted data.
+   *
+   * @throws IOException On error reading the file stream, extracting the JSON, or other such errors.
+   */
+  private void extractTopLevel(String name, InputStream inputStream, ExtractedWorkflow extracted) throws IOException {
+    if (FWZ_JSON.equalsIgnoreCase(name)) {
+      extracted.getRequired().put(FWZ_JSON, objectMapper.readTree(inputStream));
+
+      verifyVersion(extracted.getRequired().get(FWZ_JSON));
+    } else if (WORKFLOW_JSON.equalsIgnoreCase(name)) {
+      extracted.getRequired().put(WORKFLOW_JSON, objectMapper.readTree(inputStream));
+    } else if (SETUP_JSON.equalsIgnoreCase(name)) {
+      extracted.getRequired().put(SETUP_JSON, objectMapper.readTree(inputStream));
+    } else {
+      warnOnUnknownFileOrDir(name);
+    }
+  }
+
+  /**
+   * Extract the files that exist within the top-level directories.
+   *
+   * @param name The file being processed.
+   * @param pathParts The array of path parts.
+   * @param inputStream The input stream to use.
+   * @param extracted The extracted data.
+   * @param pathParts The broken up path parts.
+   *
+   * @throws IOException On error reading the file stream, extracting the JSON, or other such errors.
+   * @throws WorkflowImportInvalidOrMissingProperty  On import failure due to invalid or missing property.
+   */
+  private void extractSubLevel(String name, InputStream inputStream, ExtractedWorkflow extracted, String[] pathParts) throws IOException, WorkflowImportInvalidOrMissingProperty {
+
+    JsonNode json = objectMapper.readTree(inputStream);
+    if (!json.has(ID) || json.get(ID).getNodeType() != JsonNodeType.STRING) {
+      throw new WorkflowImportInvalidOrMissingProperty(name, ID);
+    }
+
+    if (!json.has(DESERIALIZE_AS) || json.get(DESERIALIZE_AS).getNodeType() != JsonNodeType.STRING) {
+      throw new WorkflowImportInvalidOrMissingProperty(name, DESERIALIZE_AS);
+    }
+
+    if (pathParts[0].equalsIgnoreCase(NODES)) {
+      extracted.getNodes().put(json.get(ID).asText(), json);
+    } else {
+      extracted.getTriggers().put(json.get(ID).asText(), json);
     }
   }
 
@@ -424,13 +457,10 @@ public class WorkflowImportService {
    * @param extracted The extracted data.
    * @param format The compression format.
    *
-   * @throws ArchiveException On archive error.
-   * @throws CompressorException On compressor error.
    * @throws IOException On error reading the file stream, extracting the JSON, or other such errors.
    * @throws WorkflowImportException On import failure.
    */
-  private void processTar(Resource fwz, ExtractedWorkflow extracted, CompressFileFormat format) throws CompressorException, ArchiveException,
-      IOException, WorkflowImportException {
+  private void processTar(Resource fwz, ExtractedWorkflow extracted, CompressFileFormat format) throws IOException, WorkflowImportException {
 
     try (BufferedInputStream buffer = new BufferedInputStream(fwz.getInputStream());
           InputStream compressed = getCompressorInputStream(buffer, format);

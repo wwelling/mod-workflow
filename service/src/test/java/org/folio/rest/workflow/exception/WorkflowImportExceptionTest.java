@@ -4,14 +4,13 @@ import static org.folio.spring.test.mock.MockMvcConstant.UUID;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class WorkflowImportExceptionTest {
 
   @Test
-  void workflowImportExceptionWorksTest() throws IOException {
+  void workflowImportExceptionWorksTest() {
     WorkflowImportException exception = Assertions.assertThrows(WorkflowImportException.class, () -> {
       throw new WorkflowImportException(UUID);
     });
@@ -21,7 +20,7 @@ class WorkflowImportExceptionTest {
   }
 
   @Test
-  void workflowImportExceptionWorksWithChildExceptionTest() throws IOException {
+  void workflowImportExceptionWorksWithChildExceptionTest() {
     WorkflowImportException exception = Assertions.assertThrows(WorkflowImportException.class, () -> {
       throw new WorkflowImportException(UUID, new RuntimeException("Additional Exception"));
     });

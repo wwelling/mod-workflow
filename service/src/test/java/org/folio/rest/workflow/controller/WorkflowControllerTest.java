@@ -354,9 +354,10 @@ class WorkflowControllerTest {
 
     if (status == 200) {
       MediaType responseType = MediaType.parseMediaType(result.getResponse().getContentType());
+      String workflowJson = mapper.writeValueAsString(workflow);
 
       assertTrue(mediaType.isCompatibleWith(responseType));
-      assertEquals(workflow, result.getResponse().getContentAsString());
+      assertEquals(workflowJson, result.getResponse().getContentAsString());
     }
   }
 

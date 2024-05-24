@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 class WorkflowImportAlreadyImportedTest {
 
   @Test
-  void workflowImportAlreadyImportedWorksTest() throws IOException {
+  void workflowImportAlreadyImportedWorksTest() {
     WorkflowImportAlreadyImported exception = Assertions.assertThrows(WorkflowImportAlreadyImported.class, () -> {
       throw new WorkflowImportAlreadyImported(UUID);
     });
