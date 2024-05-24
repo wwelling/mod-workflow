@@ -16,4 +16,5 @@ public class SpringOkapiModule extends SpringBootServletInitializer {
   public static void main(String[] args) {
     SpringApplication.run(SpringOkapiModule.class, args);
   }
+
 }

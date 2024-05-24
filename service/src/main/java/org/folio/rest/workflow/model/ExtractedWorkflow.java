@@ -126,4 +126,5 @@ public class ExtractedWorkflow {
     triggers = new HashMap<>();
     scripts = new HashMap<>();
   }
+
 }
