@@ -37,6 +37,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
@@ -51,6 +52,7 @@ import java.util.stream.Stream;
 import org.folio.rest.workflow.model.Workflow;
 import org.folio.rest.workflow.service.WorkflowCqlService;
 import org.folio.rest.workflow.service.WorkflowEngineService;
+import org.folio.rest.workflow.service.WorkflowImportService;
 import org.folio.spring.tenant.properties.TenantProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -61,8 +63,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -78,6 +82,8 @@ class WorkflowControllerTest {
 
   private static final String PATH = "/workflows";
 
+  private static final String PATH_IMPORT = PATH + "/import";
+
   private static final String PATH_SEARCH = PATH + "/search";
 
   private static final String OFFSET = "offset";
@@ -87,6 +93,8 @@ class WorkflowControllerTest {
   private static final String LIMIT = "limit";
 
   private static final String LIMIT_VALUE = "100";
+
+  private static final String MULTIPART_FORM = MediaType.MULTIPART_FORM_DATA_VALUE;
 
   private static final String QUERY = "query";
 
@@ -152,6 +160,9 @@ class WorkflowControllerTest {
 
   @MockBean
   private WorkflowEngineService workflowEngineService;
+
+  @MockBean
+  private WorkflowImportService workflowImportService;
 
   @MockBean
   private TenantProperties tenantProperties;
@@ -325,6 +336,38 @@ class WorkflowControllerTest {
       .andDo(log()).andExpect(status().is(status));
   }
 
+  @ParameterizedTest
+  @MethodSource("provideHeadersBodyStatusForImportWorkflows")
+  void importWorkflowsTest(HttpHeaders headers, String contentType, String accept, MediaType mediaType, MultiValueMap<String, String> parameters, String body, int status) throws Exception {
+    Workflow workflow = new Workflow();
+    workflow.setId(UUID);
+
+    MockMultipartFile exampleFwz = new MockMultipartFile("file", "example.fwz", APP_JSON, JSON_OBJECT.getBytes());
+
+    lenient().when(workflowImportService.importFile(any(Resource.class))).thenReturn(workflow);
+
+    MockHttpServletRequestBuilder request = appendHeaders(multipart(PATH_IMPORT).file(exampleFwz), headers, contentType, accept);
+    request = appendParameters(request, parameters);
+
+    MvcResult result = mvc.perform(appendBody(request, body))
+      .andDo(log()).andExpect(status().is(status)).andReturn();
+
+    if (status == 200) {
+      MediaType responseType = MediaType.parseMediaType(result.getResponse().getContentType());
+      String workflowJson = mapper.writeValueAsString(workflow);
+
+      assertTrue(mediaType.isCompatibleWith(responseType));
+      assertEquals(workflowJson, result.getResponse().getContentAsString());
+    }
+  }
+
+  @ParameterizedTest
+  @MethodSource("provideDeleteGetPatchPutForImportWorkflows")
+  void importWorkflowsFailsTest(Method method, HttpHeaders headers, String contentType, String accept, MediaType mediaType, MultiValueMap<String, String> parameters, String body, int status) throws Exception {
+    mvc.perform(invokeRequestBuilder(PATH_IMPORT, method, headers, contentType, accept, parameters, body))
+      .andDo(log()).andExpect(status().is(status));
+  }
+
   /**
    * Helper function for parameterized test providing DELETE, PATCH, POST, and PUT for search workflows end point.
    *
@@ -339,13 +382,34 @@ class WorkflowControllerTest {
    *     - String body (request body).
    *     - int status (response HTTP status code).
    *
-   * @throws NoSuchMethodException
    * @throws SecurityException
    */
-  private static Stream<Arguments> provideDeletePatchPostPutForSearchWorkflows() throws NoSuchMethodException, SecurityException {
+  private static Stream<Arguments> provideDeletePatchPostPutForSearchWorkflows() throws SecurityException {
     Object[] params = { NO_PARAM, LIM_PARAM, OFF_LIM_PARAM, OFF_PARAM };
 
     return buildHttpDeletePatchPostPut(OKAPI_HEAD_NO_URL, params);
+  }
+
+  /**
+   * Helper function for parameterized test providing DELETE, PATCH, POST, and PUT for search workflows end point.
+   *
+   * @return
+   *   The arguments array stream with the stream columns as:
+   *     - Method The (reflection) request method.
+   *     - HttpHeaders headers.
+   *     - String contentType (Content-Type request).
+   *     - String accept (ask for this Content-Type on response).
+   *       String mediaType (response Content-Type).
+   *     - MultiValueMap<String, String> parameters.
+   *     - String body (request body).
+   *     - int status (response HTTP status code).
+   *
+   * @throws SecurityException
+   */
+  private static Stream<Arguments> provideDeleteGetPatchPutForImportWorkflows() throws SecurityException {
+    Object[] params = { NO_PARAM };
+
+    return buildHttpDeleteGetPatchPut(OKAPI_HEAD_NO_URL, params);
   }
 
   /**
@@ -362,10 +426,9 @@ class WorkflowControllerTest {
    *     - String body (request body).
    *     - int status (response HTTP status code).
    *
-   * @throws NoSuchMethodException
    * @throws SecurityException
    */
-  private static Stream<Arguments> provideDeletePatchPostPutFor() throws NoSuchMethodException, SecurityException {
+  private static Stream<Arguments> provideDeletePatchPostPutFor() throws SecurityException {
     Object[] params = { NO_PARAM, ID_PARAM };
 
     return buildHttpDeletePatchPostPut(OKAPI_HEAD_NO_URL, params);
@@ -385,10 +448,9 @@ class WorkflowControllerTest {
    *     - String body (request body).
    *     - int status (response HTTP status code).
    *
-   * @throws NoSuchMethodException
    * @throws SecurityException
    */
-  private static Stream<Arguments> provideDeleteGetPatchPostFor() throws NoSuchMethodException, SecurityException {
+  private static Stream<Arguments> provideDeleteGetPatchPostFor() throws SecurityException {
     Object[] params = { NO_PARAM, ID_PARAM };
 
     return buildHttpDeleteGetPatchPost(OKAPI_HEAD_NO_URL, params);
@@ -408,10 +470,9 @@ class WorkflowControllerTest {
    *     - String body (request body).
    *     - int status (response HTTP status code).
    *
-   * @throws NoSuchMethodException
    * @throws SecurityException
    */
-  private static Stream<Arguments> provideGetPatchPostPutFor() throws NoSuchMethodException, SecurityException {
+  private static Stream<Arguments> provideGetPatchPostPutFor() throws SecurityException {
     Object[] params = { NO_PARAM, ID_PARAM };
 
     return buildHttpGetPatchPostPut(OKAPI_HEAD_NO_URL, params);
@@ -431,10 +492,9 @@ class WorkflowControllerTest {
    *     - String body (request body).
    *     - int status (response HTTP status code).
    *
-   * @throws NoSuchMethodException
    * @throws SecurityException
    */
-  private static Stream<Arguments> provideDeleteGetPatchPutFor() throws NoSuchMethodException, SecurityException {
+  private static Stream<Arguments> provideDeleteGetPatchPutFor() throws SecurityException {
     Object[] params = { NO_PARAM, ID_PARAM };
 
     return buildHttpDeleteGetPatchPut(OKAPI_HEAD_NO_URL, params);
@@ -643,6 +703,54 @@ class WorkflowControllerTest {
 
     Stream<Arguments> stream2 = Stream.concat(stream1, buildAppJsonBodyStatus(OKAPI_HEAD_TOKEN, params));
     return Stream.concat(stream2, buildAppJsonBodyStatus(OKAPI_HEAD_TENANT, params));
+  }
+
+  /**
+   * Helper function for parameterized test providing tests with headers, body, and status for search workflows end point.
+   *
+   * This is intended to be used for when the correct HTTP method is being used in the request.
+   *
+   * @return
+   *   The arguments array stream with the stream columns as:
+   *     - HttpHeaders headers.
+   *     - String contentType (Content-Type request).
+   *     - String accept (ask for this Content-Type on response).
+   *       String mediaType (response Content-Type).
+   *     - MultiValueMap<String, String> parameters.
+   *     - String body (request body).
+   *     - int status (response HTTP status code).
+   */
+  private static Stream<Arguments> provideHeadersBodyStatusForImportWorkflows() {
+    return Stream.of(
+      Arguments.of(OKAPI_HEAD_TENANT, APP_JSON,       APP_SCHEMA, MT_APP_JSON, NO_PARAM, JSON_OBJECT, 415),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_JSON,       APP_JSON,   MT_APP_JSON, NO_PARAM, JSON_OBJECT, 415),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_JSON,       TEXT_PLAIN, MT_APP_JSON, NO_PARAM, JSON_OBJECT, 415),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_JSON,       APP_STREAM, MT_APP_JSON, NO_PARAM, JSON_OBJECT, 415),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_JSON,       NULL_STR,   MT_APP_JSON, NO_PARAM, JSON_OBJECT, 415),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_JSON,       APP_STAR,   MT_APP_JSON, NO_PARAM, JSON_OBJECT, 415),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_JSON,       STAR,       MT_APP_JSON, NO_PARAM, JSON_OBJECT, 415),
+      Arguments.of(OKAPI_HEAD_TENANT, TEXT_PLAIN,     APP_SCHEMA, MT_APP_JSON, NO_PARAM, PLAIN_BODY,  415),
+      Arguments.of(OKAPI_HEAD_TENANT, TEXT_PLAIN,     APP_JSON,   MT_APP_JSON, NO_PARAM, PLAIN_BODY,  415),
+      Arguments.of(OKAPI_HEAD_TENANT, TEXT_PLAIN,     TEXT_PLAIN, MT_APP_JSON, NO_PARAM, PLAIN_BODY,  415),
+      Arguments.of(OKAPI_HEAD_TENANT, TEXT_PLAIN,     APP_STREAM, MT_APP_JSON, NO_PARAM, PLAIN_BODY,  415),
+      Arguments.of(OKAPI_HEAD_TENANT, TEXT_PLAIN,     NULL_STR,   MT_APP_JSON, NO_PARAM, PLAIN_BODY,  415),
+      Arguments.of(OKAPI_HEAD_TENANT, TEXT_PLAIN,     STAR,       MT_APP_JSON, NO_PARAM, PLAIN_BODY,  415),
+      Arguments.of(OKAPI_HEAD_TENANT, TEXT_PLAIN,     APP_STAR,   MT_APP_JSON, NO_PARAM, PLAIN_BODY,  415),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_STREAM,     APP_SCHEMA, MT_APP_JSON, NO_PARAM, JSON_OBJECT, 415),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_STREAM,     APP_JSON,   MT_APP_JSON, NO_PARAM, JSON_OBJECT, 415),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_STREAM,     TEXT_PLAIN, MT_APP_JSON, NO_PARAM, JSON_OBJECT, 415),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_STREAM,     APP_STREAM, MT_APP_JSON, NO_PARAM, JSON_OBJECT, 415),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_STREAM,     NULL_STR,   MT_APP_JSON, NO_PARAM, JSON_OBJECT, 415),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_STREAM,     APP_STAR,   MT_APP_JSON, NO_PARAM, JSON_OBJECT, 415),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_STREAM,     STAR,       MT_APP_JSON, NO_PARAM, JSON_OBJECT, 415),
+      Arguments.of(OKAPI_HEAD_TENANT, MULTIPART_FORM, APP_SCHEMA, MT_APP_JSON, NO_PARAM, JSON_OBJECT, 406),
+      Arguments.of(OKAPI_HEAD_TENANT, MULTIPART_FORM, APP_JSON,   MT_APP_JSON, NO_PARAM, JSON_OBJECT, 201),
+      Arguments.of(OKAPI_HEAD_TENANT, MULTIPART_FORM, TEXT_PLAIN, MT_APP_JSON, NO_PARAM, JSON_OBJECT, 406),
+      Arguments.of(OKAPI_HEAD_TENANT, MULTIPART_FORM, APP_STREAM, MT_APP_JSON, NO_PARAM, JSON_OBJECT, 406),
+      Arguments.of(OKAPI_HEAD_TENANT, MULTIPART_FORM, NULL_STR,   MT_APP_JSON, NO_PARAM, JSON_OBJECT, 201),
+      Arguments.of(OKAPI_HEAD_TENANT, MULTIPART_FORM, APP_STAR,   MT_APP_JSON, NO_PARAM, JSON_OBJECT, 201),
+      Arguments.of(OKAPI_HEAD_TENANT, MULTIPART_FORM, STAR,       MT_APP_JSON, NO_PARAM, JSON_OBJECT, 201)
+    );
   }
 
   /**
