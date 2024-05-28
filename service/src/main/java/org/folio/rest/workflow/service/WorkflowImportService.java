@@ -555,7 +555,7 @@ public class WorkflowImportService {
     if (json.has(VERSION)) {
       String version = json.get(VERSION).asText();
 
-      if (!VERSION_PATTERN_1_0.matcher(version).matches()) {
+      if (!VERSION_PATTERN_1_0.matcher(version).find()) {
         log.warn("Unknown version '{}', attempting import anyway.", version);
       }
     } else {
