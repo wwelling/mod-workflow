@@ -98,7 +98,7 @@ class WorkflowImportServiceTest {
    */
   private InputStream loadFile(String path) throws IOException {
     URL fileUrl = classLoader.getResource(path);
-    assertNotNull(fileUrl);
+    assertNotNull(fileUrl, "For path: " + path);
 
     File file = new File(fileUrl.getFile());
     assertNotNull(file);

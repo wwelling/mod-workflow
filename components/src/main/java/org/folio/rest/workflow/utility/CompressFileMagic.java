@@ -131,7 +131,7 @@ public class CompressFileMagic {
    *
    * @return TRUE if the string represents the format and FALSE otherwise.
    */
-  private static boolean matchBytes(byte[] input, byte[] match) {
+  protected static boolean matchBytes(byte[] input, byte[] match) {
     if (input == null || match == null || input.length < match.length) return false;
 
     for (int i = 0; i < match.length; i++) {
