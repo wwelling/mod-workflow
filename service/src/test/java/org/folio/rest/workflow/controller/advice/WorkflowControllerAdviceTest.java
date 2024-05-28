@@ -22,6 +22,11 @@ import org.folio.rest.workflow.controller.WorkflowController;
 import org.folio.rest.workflow.exception.WorkflowAlreadyActiveException;
 import org.folio.rest.workflow.exception.WorkflowDeploymentException;
 import org.folio.rest.workflow.exception.WorkflowEngineServiceException;
+import org.folio.rest.workflow.exception.WorkflowImportAlreadyImported;
+import org.folio.rest.workflow.exception.WorkflowImportException;
+import org.folio.rest.workflow.exception.WorkflowImportInvalidOrMissingProperty;
+import org.folio.rest.workflow.exception.WorkflowImportJsonFileIsDirectory;
+import org.folio.rest.workflow.exception.WorkflowImportRequiredFileMissing;
 import org.folio.rest.workflow.exception.WorkflowNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -93,7 +98,12 @@ class WorkflowControllerAdviceTest {
       Arguments.of(new EntityNotFoundException(), EntityNotFoundException.class.getSimpleName(), 404),
       Arguments.of(new WorkflowAlreadyActiveException(VALUE), WorkflowAlreadyActiveException.class.getSimpleName(), 403),
       Arguments.of(new WorkflowDeploymentException(), WorkflowDeploymentException.class.getSimpleName(), 500),
-      Arguments.of(new WorkflowEngineServiceException(VALUE), WorkflowEngineServiceException.class.getSimpleName(), 500)
+      Arguments.of(new WorkflowEngineServiceException(VALUE), WorkflowEngineServiceException.class.getSimpleName(), 500),
+      Arguments.of(new WorkflowImportException(VALUE), WorkflowImportException.class.getSimpleName(), 400),
+      Arguments.of(new WorkflowImportAlreadyImported(VALUE), WorkflowImportAlreadyImported.class.getSimpleName(), 400),
+      Arguments.of(new WorkflowImportInvalidOrMissingProperty(VALUE, VALUE), WorkflowImportInvalidOrMissingProperty.class.getSimpleName(), 400),
+      Arguments.of(new WorkflowImportJsonFileIsDirectory(VALUE), WorkflowImportJsonFileIsDirectory.class.getSimpleName(), 400),
+      Arguments.of(new WorkflowImportRequiredFileMissing(VALUE), WorkflowImportRequiredFileMissing.class.getSimpleName(), 400)
     );
   }
 

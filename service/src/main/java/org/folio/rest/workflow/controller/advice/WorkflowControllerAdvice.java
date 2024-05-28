@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.folio.rest.workflow.exception.WorkflowAlreadyActiveException;
 import org.folio.rest.workflow.exception.WorkflowDeploymentException;
 import org.folio.rest.workflow.exception.WorkflowEngineServiceException;
+import org.folio.rest.workflow.exception.WorkflowImportException;
 import org.folio.rest.workflow.exception.WorkflowNotFoundException;
 import org.folio.spring.web.model.response.ResponseErrors;
 import org.folio.spring.web.utility.ErrorUtility;
@@ -52,6 +53,13 @@ public class WorkflowControllerAdvice {
   public ResponseErrors handleWorkflowEngineServiceException(WorkflowEngineServiceException exception) {
     logger.debug(exception.getMessage(), exception);
     return ErrorUtility.buildError(exception, HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ExceptionHandler(WorkflowImportException.class)
+  public ResponseErrors handleWorkflowImportExceptionException(WorkflowImportException exception) {
+    logger.debug(exception.getMessage(), exception);
+    return ErrorUtility.buildError(exception, HttpStatus.BAD_REQUEST);
   }
 
 }
