@@ -77,6 +77,9 @@ class WorkflowImportServiceTest {
   @Value("classpath:fwz/unit_test_gzip-bad_deserializeas.fwz")
   private Resource fwzGzipBadDeserializeasResource;
 
+  @Value("classpath:fwz/unit_test_gzip-bad_id.fwz")
+  private Resource fwzGzipBadIdResource;
+
   @Value("classpath:fwz/unit_test_gzip-bad_scriptformat.fwz")
   private Resource fwzGzipBadScriptformatResource;
 
@@ -85,6 +88,9 @@ class WorkflowImportServiceTest {
 
   @Value("classpath:fwz/unit_test_gzip-missing_deserializeas.fwz")
   private Resource fwzGzipMisDeserializeasResource;
+
+  @Value("classpath:fwz/unit_test_gzip-missing_id.fwz")
+  private Resource fwzGzipMisIdResource;
 
   @Value("classpath:fwz/unit_test_gzip-missing_script.fwz")
   private Resource fwzGzipMisScriptResource;
@@ -148,6 +154,13 @@ class WorkflowImportServiceTest {
   }
 
   @Test
+  void importFileThrowsExceptionWithBadIdTest() {
+    assertThrows(WorkflowImportInvalidOrMissingProperty.class, () ->
+      workflowImportService.importFile(fwzGzipBadIdResource)
+    );
+  }
+
+  @Test
   void importFileThrowsExceptionWithBadScriptformatTest() {
     assertThrows(WorkflowImportInvalidOrMissingProperty.class, () ->
       workflowImportService.importFile(fwzGzipBadScriptformatResource)
@@ -155,9 +168,23 @@ class WorkflowImportServiceTest {
   }
 
   @Test
+  void importFileThrowsExceptionWithMisCodeTest() {
+    assertThrows(WorkflowImportInvalidOrMissingProperty.class, () ->
+      workflowImportService.importFile(fwzGzipMisCodeResource)
+    );
+  }
+
+  @Test
   void importFileThrowsExceptionWithMisDeserializeasTest() {
     assertThrows(WorkflowImportInvalidOrMissingProperty.class, () ->
       workflowImportService.importFile(fwzGzipMisDeserializeasResource)
+    );
+  }
+
+  @Test
+  void importFileThrowsExceptionWithMisIdTest() {
+    assertThrows(WorkflowImportInvalidOrMissingProperty.class, () ->
+      workflowImportService.importFile(fwzGzipMisIdResource)
     );
   }
 
