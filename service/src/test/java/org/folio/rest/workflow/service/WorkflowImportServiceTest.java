@@ -2,6 +2,7 @@ package org.folio.rest.workflow.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -59,6 +60,9 @@ class WorkflowImportServiceTest {
   @Value("classpath:fwz/unit_test_gzip.fwz")
   private Resource fwzGzipResource;
 
+  @Value("classpath:fwz/unit_test_fake.fwz")
+  private Resource fwzFakeResource;
+
   @Value("classpath:fwz/unit_test_gzip-unknown_version.fwz")
   private Resource fwzGzipUnVerResource;
 
@@ -77,6 +81,13 @@ class WorkflowImportServiceTest {
     Workflow imported = workflowImportService.importFile(fwzGzipResource);
     assertNotNull(imported);
     assertEquals(workflow.getId(), imported.getId());
+  }
+
+  @Test
+  void importFileThrowsExceptionForFakeTest() throws IOException, CompressorException, ArchiveException, WorkflowImportException {
+    assertThrows(WorkflowImportException.class, () ->
+      workflowImportService.importFile(fwzFakeResource)
+    );
   }
 
   @Test
