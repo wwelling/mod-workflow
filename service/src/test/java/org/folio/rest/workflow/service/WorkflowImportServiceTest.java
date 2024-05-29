@@ -80,6 +80,9 @@ class WorkflowImportServiceTest {
   @Value("classpath:fwz/unit_test_gzip-bad_id.fwz")
   private Resource fwzGzipBadIdResource;
 
+  @Value("classpath:fwz/unit_test_gzip-bad_nodes.fwz")
+  private Resource fwzGzipBadNodesResource;
+
   @Value("classpath:fwz/unit_test_gzip-bad_scriptformat.fwz")
   private Resource fwzGzipBadScriptformatResource;
 
@@ -164,6 +167,13 @@ class WorkflowImportServiceTest {
   void importFileThrowsExceptionWithBadScriptformatTest() {
     assertThrows(WorkflowImportInvalidOrMissingProperty.class, () ->
       workflowImportService.importFile(fwzGzipBadScriptformatResource)
+    );
+  }
+
+  @Test
+  void importFileThrowsExceptionWithBadNodesTest() {
+    assertThrows(WorkflowImportInvalidOrMissingProperty.class, () ->
+      workflowImportService.importFile(fwzGzipBadNodesResource)
     );
   }
 
