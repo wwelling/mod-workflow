@@ -127,56 +127,56 @@ class WorkflowImportServiceTest {
   }
 
   @Test
-  void importFileThrowsExceptionForFakeTest() throws IOException, CompressorException, ArchiveException, WorkflowImportException {
+  void importFileThrowsExceptionForFakeTest() throws CompressorException, ArchiveException, WorkflowImportException {
     assertThrows(WorkflowImportException.class, () ->
       workflowImportService.importFile(fwzFakeResource)
     );
   }
 
   @Test
-  void importFileThrowsExceptionWithBadCodeTest() throws IOException, CompressorException, ArchiveException, WorkflowImportException {
+  void importFileThrowsExceptionWithBadCodeTest() throws CompressorException, ArchiveException, WorkflowImportException {
     assertThrows(WorkflowImportInvalidOrMissingProperty.class, () ->
       workflowImportService.importFile(fwzGzipBadCodeResource)
     );
   }
 
   @Test
-  void importFileThrowsExceptionWithBadDeserializeasTest() throws IOException, CompressorException, ArchiveException, WorkflowImportException {
+  void importFileThrowsExceptionWithBadDeserializeasTest() throws CompressorException, ArchiveException, WorkflowImportException {
     assertThrows(WorkflowImportInvalidOrMissingProperty.class, () ->
       workflowImportService.importFile(fwzGzipBadDeserializeasResource)
     );
   }
 
   @Test
-  void importFileThrowsExceptionWithBadScriptformatTest() throws IOException, CompressorException, ArchiveException, WorkflowImportException {
+  void importFileThrowsExceptionWithBadScriptformatTest() throws CompressorException, ArchiveException, WorkflowImportException {
     assertThrows(WorkflowImportInvalidOrMissingProperty.class, () ->
       workflowImportService.importFile(fwzGzipBadScriptformatResource)
     );
   }
 
   @Test
-  void importFileThrowsExceptionWithMisDeserializeasTest() throws IOException, CompressorException, ArchiveException, WorkflowImportException {
+  void importFileThrowsExceptionWithMisDeserializeasTest() throws CompressorException, ArchiveException, WorkflowImportException {
     assertThrows(WorkflowImportInvalidOrMissingProperty.class, () ->
       workflowImportService.importFile(fwzGzipMisDeserializeasResource)
     );
   }
 
   @Test
-  void importFileThrowsExceptionWithMisScriptTest() throws IOException, CompressorException, ArchiveException, WorkflowImportException {
+  void importFileThrowsExceptionWithMisScriptTest() throws CompressorException, ArchiveException, WorkflowImportException {
     assertThrows(WorkflowImportRequiredFileMissing.class, () ->
       workflowImportService.importFile(fwzGzipMisScriptResource)
     );
   }
 
   @Test
-  void importFileThrowsExceptionWithMisSetupTest() throws IOException, CompressorException, ArchiveException, WorkflowImportException {
+  void importFileThrowsExceptionWithMisSetupTest() throws CompressorException, ArchiveException, WorkflowImportException {
     assertThrows(WorkflowImportRequiredFileMissing.class, () ->
       workflowImportService.importFile(fwzGzipMisSetupResource)
     );
   }
 
   @Test
-  void importFileThrowsExceptionWithMisWorkflowTest() throws IOException, CompressorException, ArchiveException, WorkflowImportException {
+  void importFileThrowsExceptionWithMisWorkflowTest() throws CompressorException, ArchiveException, WorkflowImportException {
     assertThrows(WorkflowImportRequiredFileMissing.class, () ->
       workflowImportService.importFile(fwzGzipMisWorkflowResource)
     );
@@ -259,7 +259,7 @@ class WorkflowImportServiceTest {
   public static class JmsBrokerConfig {
 
     @Bean
-    public BrokerService broker() throws Exception {
+    public BrokerService broker() {
       return Mockito.mock(BrokerService.class);
     }
   }

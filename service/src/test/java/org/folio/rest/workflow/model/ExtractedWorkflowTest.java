@@ -31,10 +31,10 @@ class ExtractedWorkflowTest {
     extractedWorkflow = new ExtractedWorkflow();
 
     assertIterableEquals(EMPTY_LIST, extractedWorkflow.getExpanded());
-    assertTrue(EMPTY_JSON_MAP.equals(extractedWorkflow.getRequired()));
-    assertTrue(EMPTY_JSON_MAP.equals(extractedWorkflow.getNodes()));
-    assertTrue(EMPTY_JSON_MAP.equals(extractedWorkflow.getTriggers()));
-    assertTrue(EMPTY_STRING_MAP.equals(extractedWorkflow.getScripts()));
+    assertEquals(EMPTY_JSON_MAP, extractedWorkflow.getRequired());
+    assertEquals(EMPTY_JSON_MAP, extractedWorkflow.getNodes());
+    assertEquals(EMPTY_JSON_MAP, extractedWorkflow.getTriggers());
+    assertEquals(EMPTY_STRING_MAP, extractedWorkflow.getScripts());
   }
 
   @ParameterizedTest

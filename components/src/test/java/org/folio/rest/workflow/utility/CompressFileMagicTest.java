@@ -47,7 +47,7 @@ class CompressFileMagicTest {
   }
 
   @Test
-  public void attemptToInstantiateThrowsException() {
+  void attemptToInstantiateThrowsException() {
     assertThrows(IllegalStateException.class, () -> {
       new CompressFileMagicHelper();
     });
@@ -55,31 +55,31 @@ class CompressFileMagicTest {
 
   @ParameterizedTest
   @MethodSource("provideBzip2For")
-  public void isBzip2Works(byte[] input, boolean expect) {
+  void isBzip2Works(byte[] input, boolean expect) {
     assertEquals(expect, CompressFileMagic.isBzip2(input));
   }
 
   @ParameterizedTest
   @MethodSource("provideGzipFor")
-  public void isGzipWorks(byte[] input, boolean expect) {
+  void isGzipWorks(byte[] input, boolean expect) {
     assertEquals(expect, CompressFileMagic.isGzip(input));
   }
 
   @ParameterizedTest
   @MethodSource("provideZipFor")
-  public void isZipWorks(byte[] input, boolean expect) {
+  void isZipWorks(byte[] input, boolean expect) {
     assertEquals(expect, CompressFileMagic.isZip(input));
   }
 
   @ParameterizedTest
   @MethodSource("provideNullFor")
-  public void isNullWorks(byte[] input, boolean expect) {
+  void isNullWorks(byte[] input, boolean expect) {
     assertEquals(expect, CompressFileMagicHelper.isNull(input));
   }
 
   @ParameterizedTest
   @MethodSource("detectFormatFor")
-  public void detectFormatWorks(String path, CompressFileFormat expect) throws IOException {
+  void detectFormatWorks(String path, CompressFileFormat expect) throws IOException {
     File file = loadFile(path);
     assertEquals(expect, CompressFileMagic.detectFormat(file));
   }
@@ -197,10 +197,8 @@ class CompressFileMagicTest {
    * @param path The path to the file to load.
    *
    * @return The contents of the file.
-   *
-   * @throws IOException On I/O error.
    */
-  private File loadFile(String path) throws IOException {
+  private File loadFile(String path) {
     URL fileUrl = classLoader.getResource(path);
     assertNotNull(fileUrl, "For path: " + path);
 
