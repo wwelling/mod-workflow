@@ -12,6 +12,8 @@ import org.apache.activemq.broker.BrokerService;
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.compressors.CompressorException;
 import org.folio.rest.workflow.exception.WorkflowImportException;
+import org.folio.rest.workflow.exception.WorkflowImportInvalidOrMissingProperty;
+import org.folio.rest.workflow.exception.WorkflowImportRequiredFileMissing;
 import org.folio.rest.workflow.model.Workflow;
 import org.folio.rest.workflow.model.repo.NodeRepo;
 import org.folio.rest.workflow.model.repo.TriggerRepo;
@@ -69,8 +71,41 @@ class WorkflowImportServiceTest {
   @Value("classpath:fwz/unit_test_gzip.tar.gz")
   private Resource fwzGzipAsGzResource;
 
+  @Value("classpath:fwz/unit_test_gzip-bad_code.fwz")
+  private Resource fwzGzipBadCodeResource;
+
+  @Value("classpath:fwz/unit_test_gzip-bad_deserializeas.fwz")
+  private Resource fwzGzipBadDeserializeasResource;
+
+  @Value("classpath:fwz/unit_test_gzip-bad_scriptformat.fwz")
+  private Resource fwzGzipBadScriptformatResource;
+
+  @Value("classpath:fwz/unit_test_gzip-missing_code.fwz")
+  private Resource fwzGzipMisCodeResource;
+
+  @Value("classpath:fwz/unit_test_gzip-missing_deserializeas.fwz")
+  private Resource fwzGzipMisDeserializeasResource;
+
+  @Value("classpath:fwz/unit_test_gzip-missing_script.fwz")
+  private Resource fwzGzipMisScriptResource;
+
+  @Value("classpath:fwz/unit_test_gzip-missing_scriptformat.fwz")
+  private Resource fwzGzipMisScriptformatResource;
+
+  @Value("classpath:fwz/unit_test_gzip-missing_setup.fwz")
+  private Resource fwzGzipMisSetupResource;
+
+  @Value("classpath:fwz/unit_test_gzip-missing_workflow.fwz")
+  private Resource fwzGzipMisWorkflowResource;
+
+  @Value("classpath:fwz/unit_test_gzip-python.fwz")
+  private Resource fwzGzipPythonResource;
+
   @Value("classpath:fwz/unit_test_gzip.fwz")
   private Resource fwzGzipResource;
+
+  @Value("classpath:fwz/unit_test_gzip-ruby.fwz")
+  private Resource fwzGzipRubyResource;
 
   @Value("classpath:fwz/unit_test_gzip-unknown_version.fwz")
   private Resource fwzGzipUnVerResource;
@@ -99,6 +134,55 @@ class WorkflowImportServiceTest {
   }
 
   @Test
+  void importFileThrowsExceptionWithBadCodeTest() throws IOException, CompressorException, ArchiveException, WorkflowImportException {
+    assertThrows(WorkflowImportInvalidOrMissingProperty.class, () ->
+      workflowImportService.importFile(fwzGzipBadCodeResource)
+    );
+  }
+
+  @Test
+  void importFileThrowsExceptionWithBadDeserializeasTest() throws IOException, CompressorException, ArchiveException, WorkflowImportException {
+    assertThrows(WorkflowImportInvalidOrMissingProperty.class, () ->
+      workflowImportService.importFile(fwzGzipBadDeserializeasResource)
+    );
+  }
+
+  @Test
+  void importFileThrowsExceptionWithBadScriptformatTest() throws IOException, CompressorException, ArchiveException, WorkflowImportException {
+    assertThrows(WorkflowImportInvalidOrMissingProperty.class, () ->
+      workflowImportService.importFile(fwzGzipBadScriptformatResource)
+    );
+  }
+
+  @Test
+  void importFileThrowsExceptionWithMisDeserializeasTest() throws IOException, CompressorException, ArchiveException, WorkflowImportException {
+    assertThrows(WorkflowImportInvalidOrMissingProperty.class, () ->
+      workflowImportService.importFile(fwzGzipMisDeserializeasResource)
+    );
+  }
+
+  @Test
+  void importFileThrowsExceptionWithMisScriptTest() throws IOException, CompressorException, ArchiveException, WorkflowImportException {
+    assertThrows(WorkflowImportRequiredFileMissing.class, () ->
+      workflowImportService.importFile(fwzGzipMisScriptResource)
+    );
+  }
+
+  @Test
+  void importFileThrowsExceptionWithMisSetupTest() throws IOException, CompressorException, ArchiveException, WorkflowImportException {
+    assertThrows(WorkflowImportRequiredFileMissing.class, () ->
+      workflowImportService.importFile(fwzGzipMisSetupResource)
+    );
+  }
+
+  @Test
+  void importFileThrowsExceptionWithMisWorkflowTest() throws IOException, CompressorException, ArchiveException, WorkflowImportException {
+    assertThrows(WorkflowImportRequiredFileMissing.class, () ->
+      workflowImportService.importFile(fwzGzipMisWorkflowResource)
+    );
+  }
+
+  @Test
   void importFileWorksForBzip2Test() throws IOException, CompressorException, ArchiveException, WorkflowImportException {
     Workflow imported = workflowImportService.importFile(fwzBzip2Resource);
     assertNotNull(imported);
@@ -122,6 +206,20 @@ class WorkflowImportServiceTest {
   @Test
   void importFileWorksForGzipAsGzTest() throws IOException, CompressorException, ArchiveException, WorkflowImportException {
     Workflow imported = workflowImportService.importFile(fwzGzipAsGzResource);
+    assertNotNull(imported);
+    assertEquals(workflow.getId(), imported.getId());
+  }
+
+  @Test
+  void importFileWorksForGzipWithPythonTest() throws IOException, CompressorException, ArchiveException, WorkflowImportException {
+    Workflow imported = workflowImportService.importFile(fwzGzipPythonResource);
+    assertNotNull(imported);
+    assertEquals(workflow.getId(), imported.getId());
+  }
+
+  @Test
+  void importFileWorksForGzipWithRubyTest() throws IOException, CompressorException, ArchiveException, WorkflowImportException {
+    Workflow imported = workflowImportService.importFile(fwzGzipRubyResource);
     assertNotNull(imported);
     assertEquals(workflow.getId(), imported.getId());
   }

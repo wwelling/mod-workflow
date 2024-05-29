@@ -211,6 +211,7 @@ public class WorkflowImportService {
     if (!entry.getValue().has(CODE) || entry.getValue().get(CODE).getNodeType() != JsonNodeType.STRING) {
       throw new WorkflowImportInvalidOrMissingProperty(entry.getKey(), CODE);
     }
+
     return false;
   }
 
