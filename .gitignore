@@ -54,6 +54,8 @@ nbdist/
 *.rar
 !components/src/test/resources/magic/*.tar.*
 !components/src/test/resources/magic/*.zip
+!service/src/test/resources/fwz/*.tar.*
+!service/src/test/resources/fwz/*.zip
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
