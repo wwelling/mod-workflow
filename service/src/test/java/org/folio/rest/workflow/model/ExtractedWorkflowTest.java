@@ -1,7 +1,6 @@
 package org.folio.rest.workflow.model;
 
 import static org.folio.rest.workflow.model.ExtractedWorkflow.VERSION_PATTERN_1_0;
-import static org.folio.spring.test.mock.MockMvcConstant.NULL_STR;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
