@@ -127,56 +127,56 @@ class WorkflowImportServiceTest {
   }
 
   @Test
-  void importFileThrowsExceptionForFakeTest() throws CompressorException, ArchiveException, WorkflowImportException {
+  void importFileThrowsExceptionForFakeTest() {
     assertThrows(WorkflowImportException.class, () ->
       workflowImportService.importFile(fwzFakeResource)
     );
   }
 
   @Test
-  void importFileThrowsExceptionWithBadCodeTest() throws CompressorException, ArchiveException, WorkflowImportException {
+  void importFileThrowsExceptionWithBadCodeTest() {
     assertThrows(WorkflowImportInvalidOrMissingProperty.class, () ->
       workflowImportService.importFile(fwzGzipBadCodeResource)
     );
   }
 
   @Test
-  void importFileThrowsExceptionWithBadDeserializeasTest() throws CompressorException, ArchiveException, WorkflowImportException {
+  void importFileThrowsExceptionWithBadDeserializeasTest() {
     assertThrows(WorkflowImportInvalidOrMissingProperty.class, () ->
       workflowImportService.importFile(fwzGzipBadDeserializeasResource)
     );
   }
 
   @Test
-  void importFileThrowsExceptionWithBadScriptformatTest() throws CompressorException, ArchiveException, WorkflowImportException {
+  void importFileThrowsExceptionWithBadScriptformatTest() {
     assertThrows(WorkflowImportInvalidOrMissingProperty.class, () ->
       workflowImportService.importFile(fwzGzipBadScriptformatResource)
     );
   }
 
   @Test
-  void importFileThrowsExceptionWithMisDeserializeasTest() throws CompressorException, ArchiveException, WorkflowImportException {
+  void importFileThrowsExceptionWithMisDeserializeasTest() {
     assertThrows(WorkflowImportInvalidOrMissingProperty.class, () ->
       workflowImportService.importFile(fwzGzipMisDeserializeasResource)
     );
   }
 
   @Test
-  void importFileThrowsExceptionWithMisScriptTest() throws CompressorException, ArchiveException, WorkflowImportException {
+  void importFileThrowsExceptionWithMisScriptTest() {
     assertThrows(WorkflowImportRequiredFileMissing.class, () ->
       workflowImportService.importFile(fwzGzipMisScriptResource)
     );
   }
 
   @Test
-  void importFileThrowsExceptionWithMisSetupTest() throws CompressorException, ArchiveException, WorkflowImportException {
+  void importFileThrowsExceptionWithMisSetupTest() {
     assertThrows(WorkflowImportRequiredFileMissing.class, () ->
       workflowImportService.importFile(fwzGzipMisSetupResource)
     );
   }
 
   @Test
-  void importFileThrowsExceptionWithMisWorkflowTest() throws CompressorException, ArchiveException, WorkflowImportException {
+  void importFileThrowsExceptionWithMisWorkflowTest() {
     assertThrows(WorkflowImportRequiredFileMissing.class, () ->
       workflowImportService.importFile(fwzGzipMisWorkflowResource)
     );
