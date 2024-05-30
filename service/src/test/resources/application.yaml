@@ -33,7 +33,8 @@ spring:
     returnBodyOnUpdate: true
 
   main:
-    allow-bean-definition-overriding: false
+    # Enable overriding of bean definition so that unit tests can do this (see WorkflowImportServiceTest).
+    allow-bean-definition-overriding: true
     allow-circular-references: false
     banner-mode: console
     log-startup-info: true

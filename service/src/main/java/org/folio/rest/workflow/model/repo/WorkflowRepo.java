@@ -12,5 +12,9 @@ public interface WorkflowRepo extends JpaCqlRepository<Workflow, String> {
 
   @Override
   @RestResource(exported = false)
+  public boolean existsById(String id);
+
+  @Override
+  @RestResource(exported = false)
   public void deleteById(String id);
 }

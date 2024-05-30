@@ -22,6 +22,11 @@ import org.folio.rest.workflow.controller.WorkflowController;
 import org.folio.rest.workflow.exception.WorkflowAlreadyActiveException;
 import org.folio.rest.workflow.exception.WorkflowDeploymentException;
 import org.folio.rest.workflow.exception.WorkflowEngineServiceException;
+import org.folio.rest.workflow.exception.WorkflowImportAlreadyImported;
+import org.folio.rest.workflow.exception.WorkflowImportException;
+import org.folio.rest.workflow.exception.WorkflowImportInvalidOrMissingProperty;
+import org.folio.rest.workflow.exception.WorkflowImportJsonFileIsDirectory;
+import org.folio.rest.workflow.exception.WorkflowImportRequiredFileMissing;
 import org.folio.rest.workflow.exception.WorkflowNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,12 +38,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 @ExtendWith(MockitoExtension.class)
 class WorkflowControllerAdviceTest {
@@ -93,7 +99,12 @@ class WorkflowControllerAdviceTest {
       Arguments.of(new EntityNotFoundException(), EntityNotFoundException.class.getSimpleName(), 404),
       Arguments.of(new WorkflowAlreadyActiveException(VALUE), WorkflowAlreadyActiveException.class.getSimpleName(), 403),
       Arguments.of(new WorkflowDeploymentException(), WorkflowDeploymentException.class.getSimpleName(), 500),
-      Arguments.of(new WorkflowEngineServiceException(VALUE), WorkflowEngineServiceException.class.getSimpleName(), 500)
+      Arguments.of(new WorkflowEngineServiceException(VALUE), WorkflowEngineServiceException.class.getSimpleName(), 500),
+      Arguments.of(new WorkflowImportException(VALUE), WorkflowImportException.class.getSimpleName(), 400),
+      Arguments.of(new WorkflowImportAlreadyImported(VALUE), WorkflowImportAlreadyImported.class.getSimpleName(), 400),
+      Arguments.of(new WorkflowImportInvalidOrMissingProperty(VALUE, VALUE), WorkflowImportInvalidOrMissingProperty.class.getSimpleName(), 400),
+      Arguments.of(new WorkflowImportJsonFileIsDirectory(VALUE), WorkflowImportJsonFileIsDirectory.class.getSimpleName(), 400),
+      Arguments.of(new WorkflowImportRequiredFileMissing(VALUE), WorkflowImportRequiredFileMissing.class.getSimpleName(), 400)
     );
   }
 
