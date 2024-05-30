@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import org.apache.activemq.broker.BrokerService;
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.compressors.CompressorException;
+import org.folio.rest.workflow.exception.WorkflowImportAlreadyImported;
 import org.folio.rest.workflow.exception.WorkflowImportException;
 import org.folio.rest.workflow.exception.WorkflowImportInvalidOrMissingProperty;
 import org.folio.rest.workflow.exception.WorkflowImportRequiredFileMissing;
@@ -86,6 +88,9 @@ class WorkflowImportServiceTest {
   @Value("classpath:fwz/unit_test_gzip-bad_scriptformat.fwz")
   private Resource fwzGzipBadScriptformatResource;
 
+  @Value("classpath:fwz/unit_test_gzip-bad_version.fwz")
+  private Resource fwzGzipBadVersionResource;
+
   @Value("classpath:fwz/unit_test_gzip-java.fwz")
   private Resource fwzGzipJavaResource;
 
@@ -98,6 +103,9 @@ class WorkflowImportServiceTest {
   @Value("classpath:fwz/unit_test_gzip-missing_id.fwz")
   private Resource fwzGzipMisIdResource;
 
+  @Value("classpath:fwz/unit_test_gzip-missing_id_workflow_json.fwz")
+  private Resource fwzGzipMisIdWorkflowJsonResource;
+
   @Value("classpath:fwz/unit_test_gzip-missing_script.fwz")
   private Resource fwzGzipMisScriptResource;
 
@@ -106,6 +114,9 @@ class WorkflowImportServiceTest {
 
   @Value("classpath:fwz/unit_test_gzip-missing_setup.fwz")
   private Resource fwzGzipMisSetupResource;
+
+  @Value("classpath:fwz/unit_test_gzip-missing_version.fwz")
+  private Resource fwzGzipMisVersionResource;
 
   @Value("classpath:fwz/unit_test_gzip-missing_workflow.fwz")
   private Resource fwzGzipMisWorkflowResource;
@@ -145,6 +156,15 @@ class WorkflowImportServiceTest {
   void importFileThrowsExceptionForFakeTest() {
     assertThrows(WorkflowImportException.class, () ->
       workflowImportService.importFile(fwzFakeResource)
+    );
+  }
+
+  @Test
+  void importFileThrowsExceptionForExistingIdTest() {
+    when(workflowRepo.existsById(anyString())).thenReturn(true);
+
+    assertThrows(WorkflowImportAlreadyImported.class, () ->
+      workflowImportService.importFile(fwzGzipResource)
     );
   }
 
@@ -205,6 +225,14 @@ class WorkflowImportServiceTest {
   }
 
   @Test
+  void importFileThrowsExceptionWithMisIdWorkflowJsonTest() {
+    assertThrows(WorkflowImportInvalidOrMissingProperty.class, () ->
+      workflowImportService.importFile(fwzGzipMisIdWorkflowJsonResource)
+    );
+  }
+
+
+  @Test
   void importFileThrowsExceptionWithMisScriptTest() {
     assertThrows(WorkflowImportRequiredFileMissing.class, () ->
       workflowImportService.importFile(fwzGzipMisScriptResource)
@@ -254,6 +282,13 @@ class WorkflowImportServiceTest {
   }
 
   @Test
+  void importFileWorksForGzipWithBadVersionTest() throws IOException, CompressorException, ArchiveException, WorkflowImportException {
+    Workflow imported = workflowImportService.importFile(fwzGzipBadVersionResource);
+    assertNotNull(imported);
+    assertEquals(workflow.getId(), imported.getId());
+  }
+
+  @Test
   void importFileWorksForGzipWithJavaTest() throws IOException, CompressorException, ArchiveException, WorkflowImportException {
     Workflow imported = workflowImportService.importFile(fwzGzipJavaResource);
     assertNotNull(imported);
@@ -277,6 +312,13 @@ class WorkflowImportServiceTest {
   @Test
   void importFileWorksForGzipWithRubyTest() throws IOException, CompressorException, ArchiveException, WorkflowImportException {
     Workflow imported = workflowImportService.importFile(fwzGzipRubyResource);
+    assertNotNull(imported);
+    assertEquals(workflow.getId(), imported.getId());
+  }
+
+  @Test
+  void importFileWorksForGzipWithMissingVersionTest() throws IOException, CompressorException, ArchiveException, WorkflowImportException {
+    Workflow imported = workflowImportService.importFile(fwzGzipMisVersionResource);
     assertNotNull(imported);
     assertEquals(workflow.getId(), imported.getId());
   }
