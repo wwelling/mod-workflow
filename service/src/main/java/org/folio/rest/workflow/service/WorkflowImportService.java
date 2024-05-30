@@ -427,18 +427,13 @@ public class WorkflowImportService {
    * @return An input stream based on the compression format.
    *
    * @throws IOException On failure to build the input stream.
-   * @throws WorkflowImportException On import failure.
    */
-  private InputStream getCompressorInputStream(InputStream inputStream, CompressFileFormat format) throws IOException, WorkflowImportException {
+  private InputStream getCompressorInputStream(InputStream inputStream, CompressFileFormat format) throws IOException {
     if (CompressFileFormat.BZIP2.equals(format)) {
       return new BZip2CompressorInputStream(inputStream);
     }
 
-    if (CompressFileFormat.GZIP.equals(format)) {
-      return new GzipCompressorInputStream(inputStream);
-    }
-
-    throw new WorkflowImportException(String.format("Unknown compression format '%s'.", format));
+    return new GzipCompressorInputStream(inputStream);
   }
 
   /**
