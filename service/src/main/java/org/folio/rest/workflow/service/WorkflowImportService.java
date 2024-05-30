@@ -112,7 +112,7 @@ public class WorkflowImportService {
           processTar(fwz, extracted, CompressFileFormat.GZIP);
           break;
 
-        case ZIP:
+        default:
           processZip(fwz, extracted);
           break;
       }
