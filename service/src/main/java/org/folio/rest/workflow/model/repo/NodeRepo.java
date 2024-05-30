@@ -5,6 +5,6 @@ import org.folio.spring.cql.JpaCqlRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource
-public interface TaskRepo extends JpaCqlRepository<Node, String> {
+public interface NodeRepo extends JpaCqlRepository<Node, String> {
 
 }

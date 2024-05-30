@@ -4,14 +4,13 @@ import static org.folio.spring.test.mock.MockMvcConstant.VALUE;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class WorkflowNotFoundExceptionTest {
 
   @Test
-  void workflowNotFoundExceptionWorksTest() throws IOException {
+  void workflowNotFoundExceptionWorksTest() {
     WorkflowNotFoundException exception = Assertions.assertThrows(WorkflowNotFoundException.class, () -> {
       throw new WorkflowNotFoundException(VALUE);
     });

@@ -113,6 +113,12 @@
       <artifactId>lombok</artifactId>
       <scope>provided</scope>
     </dependency>
+
+    <dependency>
+       <groupId>org.apache.commons</groupId>
+       <artifactId>commons-compress</artifactId>
+       <version>1.26.1</version>
+    </dependency>
   </dependencies>
 
   <build>
