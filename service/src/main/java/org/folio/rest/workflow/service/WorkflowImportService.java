@@ -191,14 +191,6 @@ public class WorkflowImportService {
    * @throws WorkflowImportInvalidOrMissingProperty If a property is missing.
    */
   private boolean collapseNodeScriptsContinue(Entry<String, JsonNode> entry) throws WorkflowImportInvalidOrMissingProperty {
-    if (!entry.getValue().has(DESERIALIZE_AS)) {
-      return true;
-    }
-
-    if (entry.getValue().get(DESERIALIZE_AS).getNodeType() != JsonNodeType.STRING) {
-      throw new WorkflowImportInvalidOrMissingProperty(entry.getKey(), DESERIALIZE_AS);
-    }
-
     String deserializeAs = entry.getValue().get(DESERIALIZE_AS).asText();
     if (!SCRIPT_TASK.equalsIgnoreCase(deserializeAs)) {
       return true;

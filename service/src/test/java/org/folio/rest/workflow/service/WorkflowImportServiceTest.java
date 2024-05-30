@@ -86,6 +86,9 @@ class WorkflowImportServiceTest {
   @Value("classpath:fwz/unit_test_gzip-bad_scriptformat.fwz")
   private Resource fwzGzipBadScriptformatResource;
 
+  @Value("classpath:fwz/unit_test_gzip-java.fwz")
+  private Resource fwzGzipJavaResource;
+
   @Value("classpath:fwz/unit_test_gzip-missing_code.fwz")
   private Resource fwzGzipMisCodeResource;
 
@@ -106,6 +109,9 @@ class WorkflowImportServiceTest {
 
   @Value("classpath:fwz/unit_test_gzip-missing_workflow.fwz")
   private Resource fwzGzipMisWorkflowResource;
+
+  @Value("classpath:fwz/unit_test_gzip-odd_files.fwz")
+  private Resource fwzGzipOddFilesResource;
 
   @Value("classpath:fwz/unit_test_gzip-python.fwz")
   private Resource fwzGzipPythonResource;
@@ -243,6 +249,20 @@ class WorkflowImportServiceTest {
   @Test
   void importFileWorksForGzipAsGzTest() throws IOException, CompressorException, ArchiveException, WorkflowImportException {
     Workflow imported = workflowImportService.importFile(fwzGzipAsGzResource);
+    assertNotNull(imported);
+    assertEquals(workflow.getId(), imported.getId());
+  }
+
+  @Test
+  void importFileWorksForGzipWithJavaTest() throws IOException, CompressorException, ArchiveException, WorkflowImportException {
+    Workflow imported = workflowImportService.importFile(fwzGzipJavaResource);
+    assertNotNull(imported);
+    assertEquals(workflow.getId(), imported.getId());
+  }
+
+  @Test
+  void importFileWorksForGzipWithOddFilesTest() throws IOException, CompressorException, ArchiveException, WorkflowImportException {
+    Workflow imported = workflowImportService.importFile(fwzGzipOddFilesResource);
     assertNotNull(imported);
     assertEquals(workflow.getId(), imported.getId());
   }
