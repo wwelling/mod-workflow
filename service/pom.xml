@@ -11,8 +11,8 @@
 
   <artifactId>workflow-service</artifactId>
 
-  <name>Workflow Service</name>
-  <description>Okapi workflow module using Spring Boot</description>
+  <name>Okapi Workflow Service</name>
+  <description>Okapi workflow service using Spring Boot</description>
 
   <packaging>jar</packaging>
 

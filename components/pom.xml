@@ -11,8 +11,8 @@
 
   <artifactId>workflow-components</artifactId>
 
-  <name>Workflow Components</name>
-  <description>Okapi workflow components</description>
+  <name>Okapi Workflow Components</name>
+  <description>Okapi workflow components library using Spring Boot</description>
 
   <dependencies>
     <dependency>
