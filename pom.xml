@@ -9,7 +9,7 @@
     <version>2.1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>workflow-parent</artifactId>
+  <artifactId>mod-workflow</artifactId>
   <version>1.2.0-SNAPSHOT</version>
 
   <name>Workflow Parent</name>
