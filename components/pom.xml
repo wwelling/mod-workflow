@@ -5,14 +5,14 @@
 
   <parent>
     <groupId>org.folio</groupId>
-    <artifactId>workflow-parent</artifactId>
+    <artifactId>mod-workflow</artifactId>
     <version>1.2.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>workflow-components</artifactId>
 
-  <name>Workflow Components</name>
-  <description>Okapi workflow components</description>
+  <name>Okapi Workflow Components</name>
+  <description>Okapi workflow components library using Spring Boot</description>
 
   <dependencies>
     <dependency>
