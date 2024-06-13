@@ -480,7 +480,19 @@
       { "name": "DB_QUERYTIMEOUT", "value": "60000" },
       { "name": "DB_CHARSET", "value": "UTF-8" },
       { "name": "DB_MAXPOOLSIZE", "value": "16" },
-      { "name": "OKAPI_URL", "value": "http://10.0.2.15:9130", "description": "The URL to the OKAPI service." }
+      { "name": "EVENT_UPLOADS_PATH", "value": "events", "description": "The ActiveMQ event uploads path." },
+      { "name": "EVENT_QUEUE_NAME", "value": "event.queue", "description": "The ActiveMQ event queue name." },
+      { "name": "OKAPI_CAMUNDA_BASEPATH", "value": "/", "description": "The context path, or base path of Mod-Camunda." },
+      { "name": "OKAPI_CAMUNDA_RESTPATH", "value": "/rest", "description": "The path Mod-Camunda uses for REST requests." },
+      { "name": "OKAPI_URL", "value": "http://10.0.2.15:9130", "description": "The URL to the OKAPI service." },
+      { "name": "SERVER_PORT", "value": "8081", "description": "The port to listen on that must match the PortBindings." },
+      { "name": "SERVER_SERVLET_CONTEXTPATH", "value": "/", "description": "The context path, or base path, to host at." },
+      { "name": "SPRING_ACTIVEMQ_BROKERURL", "value": "tcp://localhost:61616", "description": "The URL to the ActiveMQ server." },
+      { "name": "SPRING_FLYWAY_ENABLED", "value": "false", "description": "Database migration support via Spring Flyway." },
+      { "name": "SPRING_JPA_HIBERNATE_DDLAUTO", "value": "update", "description": "Auto-configure database on startup." },
+      { "name": "TENANT_DEFAULTTENANT", "value": "diku", "description": "The name of the default tenant to use." },
+      { "name": "TENANT_FORCETENANT", "value": "false", "description": "Forcibly add or overwrite the tenant name using the default tenant." },
+      { "name": "TENANT_INITIALIZEDEFAULTTENANT", "value": "true", "description": "Perform initial auto-creation of tenant in the DB (schema, tables, etc..)." }
     ]
   }
 }
