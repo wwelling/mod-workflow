@@ -133,6 +133,12 @@
           "permissionsDesired": ["workflow.workflows.domain.*", "workflow.workflows.domain.all"]
         },
         {
+          "methods": ["POST"],
+          "pathPattern": "/workflows/import",
+          "permissionsRequired": ["workflow.workflows.item.post"],
+          "permissionsDesired": ["workflow.workflows.domain.*", "workflow.workflows.domain.all"]
+        },
+        {
           "methods": ["PUT"],
           "pathPattern": "/workflows/{id}",
           "permissionsRequired": ["workflow.workflows.item.put"],
