@@ -49,12 +49,15 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
+import org.assertj.core.api.Assertions;
+import org.folio.rest.workflow.exception.WorkflowNotFoundException;
 import org.folio.rest.workflow.model.Workflow;
 import org.folio.rest.workflow.service.WorkflowCqlService;
 import org.folio.rest.workflow.service.WorkflowEngineService;
 import org.folio.rest.workflow.service.WorkflowImportService;
 import org.folio.spring.tenant.properties.TenantProperties;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -233,6 +236,7 @@ class WorkflowControllerTest {
   @ParameterizedTest
   @MethodSource("provideHeadersBodyStatusForDeleteWorkflow")
   void deleteWorkflowTest(HttpHeaders headers, String contentType, String accept, MediaType mediaType, MultiValueMap<String, String> parameters, String body, int status) throws Exception {
+    lenient().doNothing().when(workflowEngineService).exists(anyString());
     lenient().doNothing().when(workflowEngineService).delete(any(), any(), any());
 
     MockHttpServletRequestBuilder request = appendHeaders(delete(PATH_DELETE), headers, contentType, accept);
@@ -242,9 +246,24 @@ class WorkflowControllerTest {
       .andDo(log()).andExpect(status().is(status)).andReturn();
   }
 
+  @Test
+  void deleteWorkflowThrowsNotFoundTest() throws Exception {
+    lenient().doThrow(WorkflowNotFoundException.class).when(workflowEngineService).exists(anyString());
+
+    Assertions.assertThatThrownBy(() -> {
+      MockHttpServletRequestBuilder request = appendHeaders(delete(PATH_DELETE), OKAPI_HEAD_TENANT, APP_JSON, APP_JSON);
+      request = appendParameters(request, ID_PARAM);
+
+      mvc.perform(request)
+        .andDo(log()).andExpect(status().is(404));
+    }).hasCauseInstanceOf(WorkflowNotFoundException.class);
+  }
+
   @ParameterizedTest
   @MethodSource("provideGetPatchPostPutFor")
   void deleteWorkflowFailsTest(Method method, HttpHeaders headers, String contentType, String accept, MediaType mediaType, MultiValueMap<String, String> parameters, String body, int status) throws Exception {
+    lenient().doNothing().when(workflowEngineService).exists(anyString());
+
     mvc.perform(invokeRequestBuilder(PATH_DELETE, method, headers, contentType, accept, parameters, body))
     .andDo(log()).andExpect(status().is(status));
   }
