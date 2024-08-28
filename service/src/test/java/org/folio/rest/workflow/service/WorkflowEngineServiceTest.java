@@ -20,7 +20,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.folio.rest.workflow.dto.WorkflowDto;
 import org.folio.rest.workflow.dto.WorkflowOperationalDto;
@@ -132,7 +131,7 @@ class WorkflowEngineServiceTest {
   }
 
   @Test
-  void deleteThrowsExceptionUnableGetUpdatedTest() throws IOException {
+  void deleteThrowsExceptionUnableGetUpdatedTest() {
     WorkflowDto workflowDto = (WorkflowDto) workflow;
     ResponseEntity<Workflow> responseEntity = new ResponseEntity<>(HttpStatus.ACCEPTED);
     setField(responseEntity, "body", workflow);
