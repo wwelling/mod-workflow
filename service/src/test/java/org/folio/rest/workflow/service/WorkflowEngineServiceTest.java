@@ -99,7 +99,7 @@ class WorkflowEngineServiceTest {
   }
 
   @Test
-  void deactivateWorksTest() throws WorkflowEngineServiceException, WorkflowNotFoundException {
+  void deactivateWorksTest() throws WorkflowEngineServiceException {
     WorkflowDto workflowDto = (WorkflowDto) workflow;
     ResponseEntity<Workflow> responseEntity = new ResponseEntity<>(HttpStatus.OK);
     setField(responseEntity, "body", workflow);
@@ -115,7 +115,7 @@ class WorkflowEngineServiceTest {
   }
 
   @Test
-  void deleteWorksTest() throws WorkflowEngineServiceException, WorkflowNotFoundException {
+  void deleteWorksTest() throws WorkflowEngineServiceException {
     WorkflowDto workflowDto = (WorkflowDto) workflow;
     ResponseEntity<Workflow> responseEntity = new ResponseEntity<>(HttpStatus.OK);
     setField(responseEntity, "body", workflow);
@@ -132,7 +132,7 @@ class WorkflowEngineServiceTest {
   }
 
   @Test
-  void deleteThrowsExceptionUnableGetUpdatedTest() throws IOException, WorkflowEngineServiceException {
+  void deleteThrowsExceptionUnableGetUpdatedTest() throws IOException {
     WorkflowDto workflowDto = (WorkflowDto) workflow;
     ResponseEntity<Workflow> responseEntity = new ResponseEntity<>(HttpStatus.ACCEPTED);
     setField(responseEntity, "body", workflow);
@@ -149,7 +149,7 @@ class WorkflowEngineServiceTest {
   }
 
   @Test
-  void deleteThrowsExceptionFailedToSaveTest() throws IOException, WorkflowEngineServiceException {
+  void deleteThrowsExceptionFailedToSaveTest() {
     WorkflowDto workflowDto = (WorkflowDto) workflow;
     ResponseEntity<Workflow> responseEntity = new ResponseEntity<>(HttpStatus.OK);
     setField(responseEntity, "body", workflow);
@@ -167,7 +167,7 @@ class WorkflowEngineServiceTest {
   }
 
   @Test
-  void deleteThrowsExceptionFailedToSendWithNullResponseBodyTest() throws IOException, WorkflowEngineServiceException {
+  void deleteThrowsExceptionFailedToSendWithNullResponseBodyTest() {
     WorkflowDto workflowDto = (WorkflowDto) workflow;
     ResponseEntity<Workflow> responseEntity = new ResponseEntity<>(HttpStatus.OK);
     setField(responseEntity, "body", null);
@@ -184,14 +184,14 @@ class WorkflowEngineServiceTest {
   }
 
   @Test
-  void existsWorksTest() throws IOException, WorkflowNotFoundException {
+  void existsWorksTest() {
     when(workflowRepo.existsById(anyString())).thenReturn(true);
 
     assertDoesNotThrow(() -> workflowEngineService.exists(UUID));
   }
 
   @Test
-  void existsThrowsExceptionWorkflowNotFoundTest() throws IOException, WorkflowNotFoundException {
+  void existsThrowsExceptionWorkflowNotFoundTest() {
     when(workflowRepo.existsById(anyString())).thenReturn(false);
 
     assertThrows(WorkflowNotFoundException.class, () -> {
