@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.folio.rest.workflow.dto.WorkflowDto;
 import org.folio.rest.workflow.dto.WorkflowOperationalDto;
 import org.folio.rest.workflow.exception.WorkflowEngineServiceException;
+import org.folio.rest.workflow.exception.WorkflowNotFoundException;
 import org.folio.rest.workflow.model.Workflow;
 import org.folio.rest.workflow.model.repo.WorkflowRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,11 +75,6 @@ public class WorkflowEngineService {
   public Workflow deactivate(String workflowId, String tenant, String token)
       throws WorkflowEngineServiceException {
 
-    if (!workflowRepo.existsById(workflowId)) {
-      log.warn("Unable to find Workflow: {}", workflowId);
-      return null;
-    }
-
     WorkflowDto workflow = workflowRepo.getViewById(workflowId, WorkflowDto.class);
     return sendWorkflowRequest(workflow, WORKFLOW_ENGINE_DEACTIVATE_URL_TEMPLATE, tenant, token);
   }
@@ -104,6 +100,19 @@ public class WorkflowEngineService {
     }
 
     workflowRepo.deleteById(workflowId);
+  }
+
+  /**
+   * Check that the Workflow exists or thrown an exception.
+   *
+   * @param workflowId The Workflow to check.
+   *
+   * @throws WorkflowNotFoundException The exception when the Workflow is not found.
+   */
+  public void exists(String workflowId) throws WorkflowNotFoundException {
+    if (!workflowRepo.existsById(workflowId)) {
+      throw new WorkflowNotFoundException(workflowId);
+    }
   }
 
   public JsonNode start(String workflowId, String tenant, String token, JsonNode context)

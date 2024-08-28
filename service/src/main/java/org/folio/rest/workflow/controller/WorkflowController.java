@@ -9,6 +9,7 @@ import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.compressors.CompressorException;
 import org.folio.rest.workflow.exception.WorkflowEngineServiceException;
 import org.folio.rest.workflow.exception.WorkflowImportException;
+import org.folio.rest.workflow.exception.WorkflowNotFoundException;
 import org.folio.rest.workflow.model.Workflow;
 import org.folio.rest.workflow.service.WorkflowCqlService;
 import org.folio.rest.workflow.service.WorkflowEngineService;
@@ -89,8 +90,11 @@ public class WorkflowController {
     @PathVariable String id,
     @TenantHeader String tenant,
     @TokenHeader String token
-  ) throws WorkflowEngineServiceException {
+  ) throws WorkflowEngineServiceException, WorkflowNotFoundException {
     log.info("Deactivating: {}", id);
+
+    workflowEngineService.exists(id);
+
     return workflowEngineService.deactivate(id, tenant, token);
   }
 
@@ -99,8 +103,11 @@ public class WorkflowController {
     @PathVariable String id,
     @TenantHeader String tenant,
     @TokenHeader String token
-  ) throws WorkflowEngineServiceException {
+  ) throws WorkflowEngineServiceException, WorkflowNotFoundException {
     log.info("Deleting: {}", id);
+
+    workflowEngineService.exists(id);
+
     workflowEngineService.delete(id, tenant, token);
 
     // Ensure that a HTTP 204 is returned on success.
