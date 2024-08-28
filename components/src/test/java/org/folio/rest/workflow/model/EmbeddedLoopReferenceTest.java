@@ -81,7 +81,7 @@ class EmbeddedLoopReferenceTest {
   void getParallelWorksTest() {
     setField(embeddedLoopReference, "parallel", true);
 
-    assertEquals(true, embeddedLoopReference.isParallel());
+    assertEquals(true, embeddedLoopReference.getParallel());
   }
 
   @Test

@@ -1,42 +1,19 @@
 package org.folio.rest.workflow.model;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import java.util.Set;
+import jakarta.persistence.PrePersist;
 import lombok.Getter;
 import lombok.Setter;
 import org.folio.rest.workflow.enums.DatabaseResultType;
-import org.folio.rest.workflow.model.components.DelegateTask;
-import org.folio.rest.workflow.model.has.HasAsync;
 import org.folio.rest.workflow.model.has.HasDesignation;
 import org.folio.rest.workflow.model.has.common.HasDatabaseQueryTaskCommon;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
-public class DatabaseQueryTask extends Node implements DelegateTask, HasAsync, HasDatabaseQueryTaskCommon, HasDesignation {
-
-  @Getter
-  @Setter
-  @ElementCollection
-  private Set<EmbeddedVariable> inputVariables;
-
-  @Getter
-  @Setter
-  @Embedded
-  private EmbeddedVariable outputVariable;
-
-  @Getter
-  @Setter
-  @Column(nullable = false)
-  private boolean asyncBefore;
-
-  @Getter
-  @Setter
-  @Column(nullable = false)
-  private boolean asyncAfter;
+public class DatabaseQueryTask extends AbstractDelegateTaskNode implements HasDatabaseQueryTaskCommon, HasDesignation {
 
   @Getter
   @Setter
@@ -45,13 +22,13 @@ public class DatabaseQueryTask extends Node implements DelegateTask, HasAsync, H
 
   @Getter
   @Setter
-  @Column(columnDefinition = "TEXT", nullable = false)
-  private String query;
+  @Column(nullable = true)
+  private String outputPath;
 
   @Getter
   @Setter
-  @Column(nullable = true)
-  private String outputPath;
+  @Column(columnDefinition = "TEXT", nullable = false)
+  private String query;
 
   @Getter
   @Setter
@@ -61,16 +38,31 @@ public class DatabaseQueryTask extends Node implements DelegateTask, HasAsync, H
 
   @Getter
   @Setter
-  @Column(nullable = false)
+  @Column(nullable = true)
+  @ColumnDefault("false")
   private Boolean includeHeader;
 
   public DatabaseQueryTask() {
     super();
 
-    asyncBefore = false;
-    asyncAfter = false;
-    resultType = DatabaseResultType.TSV;
+    designation = "";
+    query = "";
     includeHeader = false;
+  }
+
+  @PrePersist
+  public void prePersist() {
+    if (designation == null) {
+      designation = "";
+    }
+
+    if (query == null) {
+      query = "";
+    }
+
+    if (includeHeader == null) {
+      includeHeader = false;
+    }
   }
 
 }

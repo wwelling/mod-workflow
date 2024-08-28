@@ -52,7 +52,7 @@ class EmbeddedVariableTest {
   void getSpinWorksTest() {
     setField(embeddedVariable, "spin", true);
 
-    assertEquals(true, embeddedVariable.isSpin());
+    assertEquals(true, embeddedVariable.getSpin());
   }
 
   @Test
@@ -72,7 +72,7 @@ class EmbeddedVariableTest {
 
   @Test
   void setAsJsonWorksTest() {
-    setField(embeddedVariable, "asJson", null);
+    setField(embeddedVariable, "asJson", false);
 
     embeddedVariable.setAsJson(true);
     assertEquals(true, getField(embeddedVariable, "asJson"));
@@ -87,7 +87,7 @@ class EmbeddedVariableTest {
 
   @Test
   void setAsTransientWorksTest() {
-    setField(embeddedVariable, "asTransient", null);
+    setField(embeddedVariable, "asTransient", false);
 
     embeddedVariable.setAsTransient(true);
     assertEquals(true, getField(embeddedVariable, "asTransient"));

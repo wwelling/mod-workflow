@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderColumn;
+import jakarta.persistence.PrePersist;
 import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,19 @@ public class MoveToNode extends Node implements Branch, HasMoveToNodeCommon {
   public MoveToNode() {
     super();
 
-    nodes = new ArrayList<Node>();
+    gatewayId = "";
+    nodes = new ArrayList<>();
+  }
+
+  @PrePersist
+  public void prePersist() {
+    if (gatewayId == null) {
+      gatewayId = "";
+    }
+
+    if (nodes == null) {
+      nodes = new ArrayList<>();
+    }
   }
 
 }

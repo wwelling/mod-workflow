@@ -253,7 +253,7 @@ public class WorkflowEngineService {
           log.debug(LOG_RESPONSE_BODY, responseWorkflow);
 
           String deploymentId = responseWorkflow.getDeploymentId();
-          log.info("Workflow is active = {}, deploymentID = {}", responseWorkflow.isActive(), deploymentId);
+          log.info("Workflow is active = {}, deploymentID = {}", Boolean.TRUE.equals(responseWorkflow.getActive()), deploymentId);
           return workflowRepo.save(responseWorkflow);
         }
       }

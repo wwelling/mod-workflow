@@ -1,42 +1,22 @@
 package org.folio.rest.workflow.model;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import java.util.HashSet;
-import java.util.Set;
+import jakarta.persistence.PrePersist;
 import lombok.Getter;
 import lombok.Setter;
 import org.folio.rest.workflow.enums.FileOp;
-import org.folio.rest.workflow.model.components.DelegateTask;
-import org.folio.rest.workflow.model.has.HasAsync;
 import org.folio.rest.workflow.model.has.common.HasFileTaskCommon;
 
 @Entity
-public class FileTask extends Node implements DelegateTask, HasAsync, HasFileTaskCommon {
+public class FileTask extends AbstractDelegateTaskNode implements HasFileTaskCommon {
 
   @Getter
   @Setter
-  @ElementCollection
-  private Set<EmbeddedVariable> inputVariables;
-
-  @Getter
-  @Setter
-  @Embedded
-  private EmbeddedVariable outputVariable;
-
-  @Getter
-  @Setter
-  @Column(nullable = false)
-  private boolean asyncBefore;
-
-  @Getter
-  @Setter
-  @Column(nullable = false)
-  private boolean asyncAfter;
+  @Column(nullable = true)
+  private String line;
 
   @Getter
   @Setter
@@ -54,17 +34,22 @@ public class FileTask extends Node implements DelegateTask, HasAsync, HasFileTas
   @Column(nullable = true)
   private String target;
 
-  @Getter
-  @Setter
-  @Column(nullable = true)
-  private String line;
-
   public FileTask() {
     super();
 
-    inputVariables = new HashSet<EmbeddedVariable>();
-    asyncBefore = false;
-    asyncAfter = false;
+    op = FileOp.READ;
+    path = "";
+  }
+
+  @PrePersist
+  public void prePersist() {
+    if (op  == null) {
+      op = FileOp.READ;
+    }
+
+    if (path == null) {
+      path = "";
+    }
   }
 
 }

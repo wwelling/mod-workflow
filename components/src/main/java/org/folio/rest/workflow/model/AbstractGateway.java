@@ -6,6 +6,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderColumn;
+import jakarta.persistence.PrePersist;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
@@ -33,7 +34,18 @@ public abstract class AbstractGateway extends Node implements Gateway, HasNodes 
     super();
 
     direction = Direction.UNSPECIFIED;
-    nodes = new ArrayList<Node>();
+    nodes = new ArrayList<>();
+  }
+
+  @PrePersist
+  public void prePersist() {
+    if (direction == null) {
+      direction = Direction.UNSPECIFIED;
+    }
+
+    if (nodes == null) {
+      nodes = new ArrayList<>();
+    }
   }
 
 }

@@ -9,12 +9,12 @@ import org.folio.rest.workflow.model.Setup;
  */
 public interface HasWorkflowCommon {
 
+  public Boolean getActive();
   public Integer getHistoryTimeToLive();
   public Map<String, JsonNode> getInitialContext();
   public Setup getSetup();
-  public boolean isActive();
 
-  public void setActive(boolean active);
+  public void setActive(Boolean active);
   public void setHistoryTimeToLive(Integer historyTimeToLive);
   public void setInitialContext(Map<String, JsonNode> initialContext);
   public void setSetup(Setup setup);
