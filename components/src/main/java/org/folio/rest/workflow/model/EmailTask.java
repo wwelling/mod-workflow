@@ -74,8 +74,11 @@ public class EmailTask extends AbstractDelegateTaskNode implements HasEmailTaskC
     mailSubject = "";
   }
 
+  @Override
   @PrePersist
   public void prePersist() {
+    super.prePersist();
+
     if (mailFrom == null) {
       mailFrom = "";
     }

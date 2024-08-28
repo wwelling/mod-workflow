@@ -70,7 +70,6 @@ public class EmbeddedRequest implements HasEmbeddedRequestCommon {
 
   @PrePersist
   public void prePersist() {
-
     if (accept == null) {
       accept = MediaType.APPLICATION_JSON_VALUE;
     }

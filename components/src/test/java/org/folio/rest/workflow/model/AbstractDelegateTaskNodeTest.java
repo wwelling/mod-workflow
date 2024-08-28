@@ -156,6 +156,6 @@ class AbstractDelegateTaskNodeTest {
     assertEquals(true, getField(abstractDelegateTaskNode, "asyncAfter"));
   }
 
-  private static class Impl extends AbstractDelegateTaskNode { };
+  private static class Impl extends AbstractDelegateTaskNode { }
 
 }

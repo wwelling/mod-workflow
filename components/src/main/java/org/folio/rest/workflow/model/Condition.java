@@ -33,8 +33,11 @@ public class Condition extends Node implements Conditional {
     expression = "";
   }
 
+  @Override
   @PrePersist
   public void prePersist() {
+    super.prePersist();
+
     if (answer == null) {
       answer = "";
     }

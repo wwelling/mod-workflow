@@ -35,8 +35,11 @@ public class ScriptTask extends AbstractDelegateTaskNode implements HasCode, Has
     scriptFormat = "javaScript";
   }
 
+  @Override
   @PrePersist
   public void prePersist() {
+    super.prePersist();
+
     if (code == null) {
       code = "";
     }

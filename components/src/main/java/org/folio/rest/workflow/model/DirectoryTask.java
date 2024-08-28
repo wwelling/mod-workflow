@@ -41,8 +41,11 @@ public class DirectoryTask extends AbstractDelegateTaskNode implements HasDirect
     action = DirectoryAction.LIST;
   }
 
+  @Override
   @PrePersist
   public void prePersist() {
+    super.prePersist();
+
     if (path == null) {
       path = "";
     }

@@ -68,8 +68,11 @@ public class FtpTask extends AbstractDelegateTaskNode implements HasFtpTaskCommo
     scheme = "";
   }
 
+  @Override
   @PrePersist
   public void prePersist() {
+    super.prePersist();
+
     if (destinationPath == null) {
       destinationPath = "";
     }

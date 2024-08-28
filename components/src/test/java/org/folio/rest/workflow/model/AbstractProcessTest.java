@@ -135,6 +135,6 @@ class AbstractProcessTest {
     assertEquals(nodes, getField(abstractProcess, "nodes"));
   }
 
-  private static class Impl extends AbstractProcess { };
+  private static class Impl extends AbstractProcess { }
 
 }

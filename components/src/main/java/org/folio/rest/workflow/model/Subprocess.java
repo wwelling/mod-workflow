@@ -34,8 +34,11 @@ public class Subprocess extends AbstractProcess implements Branch, MultiInstance
     type = SubprocessType.EMBEDDED;
   }
 
+  @Override
   @PrePersist
   public void prePersist() {
+    super.prePersist();
+
     if (type == null) {
       type = SubprocessType.EMBEDDED;
     }

@@ -35,8 +35,11 @@ public class MoveToNode extends Node implements Branch, HasMoveToNodeCommon {
     nodes = new ArrayList<>();
   }
 
+  @Override
   @PrePersist
   public void prePersist() {
+    super.prePersist();
+
     if (gatewayId == null) {
       gatewayId = "";
     }

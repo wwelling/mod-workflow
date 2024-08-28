@@ -25,7 +25,7 @@ public class RequestTask extends AbstractDelegateTaskNode implements HasRequestT
   public RequestTask() {
     super();
 
-    headerOutputVariables = new HashSet<EmbeddedVariable>();
+    headerOutputVariables = new HashSet<>();
   }
 
 }

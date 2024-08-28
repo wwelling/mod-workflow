@@ -23,8 +23,11 @@ public class ConnectTo extends Node implements Navigation {
     nodeId = "";
   }
 
+  @Override
   @PrePersist
   public void prePersist() {
+    super.prePersist();
+
     if (nodeId == null) {
       nodeId = "";
     }

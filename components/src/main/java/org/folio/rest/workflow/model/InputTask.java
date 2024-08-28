@@ -59,8 +59,11 @@ public class InputTask extends AbstractDelegateTaskNode {
     required = false;
   }
 
+  @Override
   @PrePersist
   public void prePersist() {
+    super.prePersist();
+
     if (attributes == null) {
       attributes = new ArrayList<>();
     }

@@ -47,8 +47,11 @@ public abstract class AbstractProcess extends Node implements HasAsync, HasNodes
     nodes = new ArrayList<>();
   }
 
+  @Override
   @PrePersist
   public void prePersist() {
+    super.prePersist();
+
     if (asyncAfter == null) {
       asyncAfter = false;
     }

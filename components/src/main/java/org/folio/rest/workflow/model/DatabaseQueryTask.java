@@ -50,8 +50,11 @@ public class DatabaseQueryTask extends AbstractDelegateTaskNode implements HasDa
     includeHeader = false;
   }
 
+  @Override
   @PrePersist
   public void prePersist() {
+    super.prePersist();
+
     if (designation == null) {
       designation = "";
     }

@@ -45,8 +45,11 @@ public class CompressFileTask extends AbstractDelegateTaskNode implements HasCom
     container = CompressFileContainer.NONE;
   }
 
+  @Override
   @PrePersist
   public void prePersist() {
+    super.prePersist();
+
     if (source == null) {
       source = "";
     }

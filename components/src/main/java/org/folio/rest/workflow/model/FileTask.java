@@ -41,8 +41,11 @@ public class FileTask extends AbstractDelegateTaskNode implements HasFileTaskCom
     path = "";
   }
 
+  @Override
   @PrePersist
   public void prePersist() {
+    super.prePersist();
+
     if (op  == null) {
       op = FileOp.READ;
     }

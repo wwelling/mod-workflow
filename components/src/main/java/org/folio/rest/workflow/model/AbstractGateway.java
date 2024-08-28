@@ -37,8 +37,11 @@ public abstract class AbstractGateway extends Node implements Gateway, HasNodes 
     nodes = new ArrayList<>();
   }
 
+  @Override
   @PrePersist
   public void prePersist() {
+    super.prePersist();
+
     if (direction == null) {
       direction = Direction.UNSPECIFIED;
     }

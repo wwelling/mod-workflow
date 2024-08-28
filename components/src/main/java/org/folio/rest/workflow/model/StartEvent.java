@@ -49,8 +49,11 @@ public class StartEvent extends Node implements Event {
     type = StartEventType.NONE;
   }
 
+  @Override
   @PrePersist
   public void prePersist() {
+    super.prePersist();
+
     if (asyncBefore == null) {
       asyncBefore = false;
     }

@@ -49,11 +49,14 @@ public abstract class AbstractDelegateTaskNode extends Node implements DelegateT
 
     asyncAfter = false;
     asyncBefore = false;
-    inputVariables = new HashSet<EmbeddedVariable>();
+    inputVariables = new HashSet<>();
   }
 
+  @Override
   @PrePersist
   public void prePersist() {
+    super.prePersist();
+
     if (asyncAfter == null) {
       asyncAfter = false;
     }
@@ -62,12 +65,8 @@ public abstract class AbstractDelegateTaskNode extends Node implements DelegateT
       asyncBefore = false;
     }
 
-    if (asyncBefore == null) {
-      asyncBefore = false;
-    }
-
     if (inputVariables == null) {
-      inputVariables = new HashSet<EmbeddedVariable>();
+      inputVariables = new HashSet<>();
     }
   }
 

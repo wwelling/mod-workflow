@@ -25,8 +25,11 @@ public class ReceiveTask extends AbstractDelegateTaskNode implements Wait {
     message = "";
   }
 
+  @Override
   @PrePersist
   public void prePersist() {
+    super.prePersist();
+
     if (message == null) {
       message = "";
     }

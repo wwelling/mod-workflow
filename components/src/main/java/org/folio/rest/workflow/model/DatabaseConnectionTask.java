@@ -40,8 +40,11 @@ public class DatabaseConnectionTask extends AbstractDelegateTaskNode implements 
     url = "";
   }
 
+  @Override
   @PrePersist
   public void prePersist() {
+    super.prePersist();
+
     if (designation == null) {
       designation = "";
     }

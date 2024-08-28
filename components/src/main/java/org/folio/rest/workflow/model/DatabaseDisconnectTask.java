@@ -21,8 +21,11 @@ public class DatabaseDisconnectTask extends AbstractDelegateTaskNode implements 
     designation = "";
   }
 
+  @Override
   @PrePersist
   public void prePersist() {
+    super.prePersist();
+
     if (designation == null) {
       designation = "";
     }

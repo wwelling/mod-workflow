@@ -56,7 +56,6 @@ public class EmbeddedProcessor implements HasEmbeddedProcessorCommon {
 
   @PrePersist
   public void prePersist() {
-
     if (buffer == null) {
       buffer = 0;
     }
