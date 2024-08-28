@@ -9,10 +9,11 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.folio.rest.workflow.enums.DirectoryAction;
+import org.folio.rest.workflow.model.components.DelegateTask;
 import org.folio.rest.workflow.model.has.common.HasDirectoryTaskCommon;
 
 @Entity
-public class DirectoryTask extends AbstractDelegateTaskNode implements HasDirectoryTaskCommon {
+public class DirectoryTask extends AbstractTask implements DelegateTask, HasDirectoryTaskCommon {
 
   @Getter
   @Setter

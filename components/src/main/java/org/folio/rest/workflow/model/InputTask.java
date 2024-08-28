@@ -18,7 +18,7 @@ import org.folio.rest.workflow.model.converter.StringListConverter;
 import org.hibernate.annotations.ColumnDefault;
 
 @Entity
-public class InputTask extends AbstractDelegateTaskNode {
+public class InputTask extends AbstractTask {
 
   @Getter
   @Setter

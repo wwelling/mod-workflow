@@ -83,6 +83,7 @@ paths:
               - $ref: '#/components/schemas/FileTaskRequestBody'
               - $ref: '#/components/schemas/FtpTaskRequestBody'
               - $ref: '#/components/schemas/InclusiveGatewayRequestBody'
+              - $ref: '#/components/schemas/InputTaskRequestBody'
               - $ref: '#/components/schemas/MoveToLastGatewayRequestBody'
               - $ref: '#/components/schemas/MoveToNodeRequestBody'
               - $ref: '#/components/schemas/ParallelGatewayRequestBody'
@@ -151,6 +152,7 @@ paths:
               - $ref: '#/components/schemas/FileTaskRequestBody'
               - $ref: '#/components/schemas/FtpTaskRequestBody'
               - $ref: '#/components/schemas/InclusiveGatewayRequestBody'
+              - $ref: '#/components/schemas/InputTaskRequestBody'
               - $ref: '#/components/schemas/MoveToLastGatewayRequestBody'
               - $ref: '#/components/schemas/MoveToNodeRequestBody'
               - $ref: '#/components/schemas/ParallelGatewayRequestBody'
@@ -222,6 +224,7 @@ paths:
               - $ref: '#/components/schemas/FileTaskRequestBody'
               - $ref: '#/components/schemas/FtpTaskRequestBody'
               - $ref: '#/components/schemas/InclusiveGatewayRequestBody'
+              - $ref: '#/components/schemas/InputTaskRequestBody'
               - $ref: '#/components/schemas/MoveToLastGatewayRequestBody'
               - $ref: '#/components/schemas/MoveToNodeRequestBody'
               - $ref: '#/components/schemas/ParallelGatewayRequestBody'
@@ -12414,55 +12417,6 @@ paths:
             application/json:
               schema:
                 type: object
-  /admin/flyway:
-    get:
-      tags:
-      - Actuator
-      summary: Actuator web endpoint 'flyway'
-      operationId: flyway
-      responses:
-        "500":
-          description: Internal Server Error
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ResponseErrors'
-        "400":
-          description: Bad Request
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ResponseErrors'
-        "404":
-          description: Not Found
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ResponseErrors'
-        "403":
-          description: Forbidden
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ResponseErrors'
-        "204":
-          description: No Content
-          content:
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ResponseErrors'
-        "200":
-          description: OK
-          content:
-            application/vnd.spring-boot.actuator.v3+json:
-              schema:
-                type: object
-            application/vnd.spring-boot.actuator.v2+json:
-              schema:
-                type: object
-            application/json:
-              schema:
-                type: object
   /actions/:
     get:
       tags:
@@ -12968,79 +12922,6 @@ components:
       properties:
         _links:
           $ref: '#/components/schemas/Links'
-    EntityModelTrigger:
-      required:
-      - method
-      - name
-      - pathPattern
-      type: object
-      properties:
-        name:
-          maxLength: 64
-          minLength: 4
-          type: string
-        description:
-          maxLength: 256
-          minLength: 0
-          type: string
-        pathPattern:
-          maxLength: 256
-          minLength: 2
-          type: string
-        method:
-          type: string
-          enum:
-          - GET
-          - HEAD
-          - POST
-          - PUT
-          - PATCH
-          - DELETE
-          - OPTIONS
-          - TRACE
-        _links:
-          $ref: '#/components/schemas/Links'
-    PageMetadata:
-      type: object
-      properties:
-        size:
-          type: integer
-          format: int64
-        totalElements:
-          type: integer
-          format: int64
-        totalPages:
-          type: integer
-          format: int64
-        number:
-          type: integer
-          format: int64
-    PagedModelEntityModelTrigger:
-      type: object
-      properties:
-        _embedded:
-          type: object
-          properties:
-            triggers:
-              type: array
-              items:
-                $ref: '#/components/schemas/EntityModelTrigger'
-        _links:
-          $ref: '#/components/schemas/Links'
-        page:
-          $ref: '#/components/schemas/PageMetadata'
-    CollectionModelEntityModelTrigger:
-      type: object
-      properties:
-        _embedded:
-          type: object
-          properties:
-            triggers:
-              type: array
-              items:
-                $ref: '#/components/schemas/EntityModelTrigger'
-        _links:
-          $ref: '#/components/schemas/Links'
     CompressFileTask:
       required:
       - name
@@ -13049,6 +12930,10 @@ components:
       - $ref: '#/components/schemas/Node'
       - type: object
         properties:
+          asyncAfter:
+            type: boolean
+          asyncBefore:
+            type: boolean
           inputVariables:
             uniqueItems: true
             type: array
@@ -13056,10 +12941,6 @@ components:
               $ref: '#/components/schemas/EmbeddedVariable'
           outputVariable:
             $ref: '#/components/schemas/EmbeddedVariable'
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
           source:
             type: string
           destination:
@@ -13085,13 +12966,13 @@ components:
       - $ref: '#/components/schemas/Node'
       - type: object
         properties:
-          expression:
-            maxLength: 128
-            minLength: 4
-            type: string
           answer:
             maxLength: 64
             minLength: 2
+            type: string
+          expression:
+            maxLength: 128
+            minLength: 4
             type: string
     ConnectTo:
       required:
@@ -13112,6 +12993,10 @@ components:
       - $ref: '#/components/schemas/Node'
       - type: object
         properties:
+          asyncAfter:
+            type: boolean
+          asyncBefore:
+            type: boolean
           inputVariables:
             uniqueItems: true
             type: array
@@ -13119,17 +13004,13 @@ components:
               $ref: '#/components/schemas/EmbeddedVariable'
           outputVariable:
             $ref: '#/components/schemas/EmbeddedVariable'
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
           designation:
+            type: string
+          password:
             type: string
           url:
             type: string
           username:
-            type: string
-          password:
             type: string
     DatabaseDisconnectTask:
       required:
@@ -13139,6 +13020,10 @@ components:
       - $ref: '#/components/schemas/Node'
       - type: object
         properties:
+          asyncAfter:
+            type: boolean
+          asyncBefore:
+            type: boolean
           inputVariables:
             uniqueItems: true
             type: array
@@ -13146,10 +13031,6 @@ components:
               $ref: '#/components/schemas/EmbeddedVariable'
           outputVariable:
             $ref: '#/components/schemas/EmbeddedVariable'
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
           designation:
             type: string
     DatabaseQueryTask:
@@ -13160,6 +13041,10 @@ components:
       - $ref: '#/components/schemas/Node'
       - type: object
         properties:
+          asyncAfter:
+            type: boolean
+          asyncBefore:
+            type: boolean
           inputVariables:
             uniqueItems: true
             type: array
@@ -13167,15 +13052,11 @@ components:
               $ref: '#/components/schemas/EmbeddedVariable'
           outputVariable:
             $ref: '#/components/schemas/EmbeddedVariable'
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
           designation:
             type: string
-          query:
-            type: string
           outputPath:
+            type: string
+          query:
             type: string
           resultType:
             type: string
@@ -13196,6 +13077,10 @@ components:
       - $ref: '#/components/schemas/Node'
       - type: object
         properties:
+          asyncAfter:
+            type: boolean
+          asyncBefore:
+            type: boolean
           inputVariables:
             uniqueItems: true
             type: array
@@ -13203,10 +13088,6 @@ components:
               $ref: '#/components/schemas/EmbeddedVariable'
           outputVariable:
             $ref: '#/components/schemas/EmbeddedVariable'
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
           path:
             type: string
           workflow:
@@ -13230,6 +13111,10 @@ components:
       - $ref: '#/components/schemas/Node'
       - type: object
         properties:
+          asyncAfter:
+            type: boolean
+          asyncBefore:
+            type: boolean
           inputVariables:
             uniqueItems: true
             type: array
@@ -13237,35 +13122,31 @@ components:
               $ref: '#/components/schemas/EmbeddedVariable'
           outputVariable:
             $ref: '#/components/schemas/EmbeddedVariable'
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
-          mailTo:
-            maxLength: 256
-            minLength: 3
+          attachmentPath:
             type: string
-          mailCc:
+          includeAttachment:
             type: string
           mailBcc:
+            type: string
+          mailCc:
             type: string
           mailFrom:
             maxLength: 256
             minLength: 3
             type: string
-          mailSubject:
-            maxLength: 256
-            minLength: 2
-            type: string
           mailText:
             maxLength: 2147483647
             minLength: 2
             type: string
+          mailTo:
+            maxLength: 256
+            minLength: 3
+            type: string
           mailMarkup:
             type: string
-          attachmentPath:
-            type: string
-          includeAttachment:
+          mailSubject:
+            maxLength: 256
+            minLength: 2
             type: string
     EmbeddedLoopReference:
       required:
@@ -13274,11 +13155,11 @@ components:
       properties:
         cardinalityExpression:
           type: string
+        completeConditionExpression:
+          type: string
         dataInputRefExpression:
           type: string
         inputDataName:
-          type: string
-        completeConditionExpression:
           type: string
         parallel:
           type: boolean
@@ -13289,6 +13170,18 @@ components:
       - scriptType
       type: object
       properties:
+        buffer:
+          type: integer
+          format: int32
+        code:
+          type: string
+        delay:
+          type: integer
+          format: int32
+        functionName:
+          maxLength: 128
+          minLength: 4
+          type: string
         scriptType:
           type: string
           enum:
@@ -13297,18 +13190,6 @@ components:
           - JS
           - PYTHON
           - RUBY
-        functionName:
-          maxLength: 128
-          minLength: 4
-          type: string
-        code:
-          type: string
-        buffer:
-          type: integer
-          format: int32
-        delay:
-          type: integer
-          format: int32
     EmbeddedRequest:
       required:
       - accept
@@ -13317,7 +13198,15 @@ components:
       - url
       type: object
       properties:
-        url:
+        accept:
+          type: string
+        bodyTemplate:
+          type: string
+        contentType:
+          type: string
+        iterable:
+          type: boolean
+        iterableKey:
           type: string
         method:
           type: string
@@ -13330,17 +13219,9 @@ components:
           - DELETE
           - OPTIONS
           - TRACE
-        contentType:
-          type: string
-        accept:
-          type: string
-        bodyTemplate:
-          type: string
-        iterable:
-          type: boolean
-        iterableKey:
-          type: string
         responseKey:
+          type: string
+        url:
           type: string
     EmbeddedVariable:
       required:
@@ -13376,10 +13257,14 @@ components:
       - $ref: '#/components/schemas/Node'
       - type: object
         properties:
-          asyncBefore:
-            type: boolean
           asyncAfter:
             type: boolean
+          asyncBefore:
+            type: boolean
+          nodes:
+            type: array
+            items:
+              $ref: '#/components/schemas/Node'
     ExclusiveGateway:
       required:
       - name
@@ -13395,10 +13280,6 @@ components:
             - CONVERGING
             - DIVERGING
             - MIXED
-          nodes:
-            type: array
-            items:
-              $ref: '#/components/schemas/Node'
     FileTask:
       required:
       - name
@@ -13407,6 +13288,10 @@ components:
       - $ref: '#/components/schemas/Node'
       - type: object
         properties:
+          asyncAfter:
+            type: boolean
+          asyncBefore:
+            type: boolean
           inputVariables:
             uniqueItems: true
             type: array
@@ -13414,10 +13299,8 @@ components:
               $ref: '#/components/schemas/EmbeddedVariable'
           outputVariable:
             $ref: '#/components/schemas/EmbeddedVariable'
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
+          line:
+            type: string
           op:
             type: string
             enum:
@@ -13435,8 +13318,6 @@ components:
             type: string
           target:
             type: string
-          line:
-            type: string
     FtpTask:
       required:
       - name
@@ -13445,6 +13326,10 @@ components:
       - $ref: '#/components/schemas/Node'
       - type: object
         properties:
+          asyncAfter:
+            type: boolean
+          asyncBefore:
+            type: boolean
           inputVariables:
             uniqueItems: true
             type: array
@@ -13452,29 +13337,25 @@ components:
               $ref: '#/components/schemas/EmbeddedVariable'
           outputVariable:
             $ref: '#/components/schemas/EmbeddedVariable'
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
-          originPath:
-            type: string
           destinationPath:
+            type: string
+          host:
             type: string
           op:
             type: string
             enum:
             - GET
             - PUT
-          scheme:
+          originPath:
             type: string
-          host:
+          password:
             type: string
           port:
             type: integer
             format: int32
-          username:
+          scheme:
             type: string
-          password:
+          username:
             type: string
           basePath:
             type: string
@@ -13493,6 +13374,66 @@ components:
             - CONVERGING
             - DIVERGING
             - MIXED
+    InputTask:
+      required:
+      - inputType
+      - name
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Node'
+      - type: object
+        properties:
+          asyncAfter:
+            type: boolean
+          asyncBefore:
+            type: boolean
+          inputVariables:
+            uniqueItems: true
+            type: array
+            items:
+              $ref: '#/components/schemas/EmbeddedVariable'
+          outputVariable:
+            $ref: '#/components/schemas/EmbeddedVariable'
+          attributes:
+            type: array
+            items:
+              type: string
+              enum:
+              - MAX
+              - MAXLENGTH
+              - MIN
+              - PATTERN
+              - SIZE
+              - STEP
+          defaultValue:
+            type: string
+          inputType:
+            type: string
+            enum:
+            - CHECKBOX
+            - COLOR
+            - DATE
+            - DATETIME
+            - EMAIL
+            - FILE
+            - IMAGE
+            - MONTH
+            - NUMBER
+            - PASSWORD
+            - RADIO
+            - RANGE
+            - SELECT
+            - TELEPHONE
+            - TEXT
+            - TIME
+            - URL
+            - WEEK
+          options:
+            type: array
+            items:
+              type: string
+          required:
+            type: boolean
     MoveToLastGateway:
       required:
       - name
@@ -13564,6 +13505,10 @@ components:
       - $ref: '#/components/schemas/Node'
       - type: object
         properties:
+          asyncAfter:
+            type: boolean
+          asyncBefore:
+            type: boolean
           inputVariables:
             uniqueItems: true
             type: array
@@ -13571,10 +13516,6 @@ components:
               $ref: '#/components/schemas/EmbeddedVariable'
           outputVariable:
             $ref: '#/components/schemas/EmbeddedVariable'
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
           processor:
             $ref: '#/components/schemas/EmbeddedProcessor'
     ReceiveTask:
@@ -13586,14 +13527,21 @@ components:
       - $ref: '#/components/schemas/Node'
       - type: object
         properties:
+          asyncAfter:
+            type: boolean
+          asyncBefore:
+            type: boolean
+          inputVariables:
+            uniqueItems: true
+            type: array
+            items:
+              $ref: '#/components/schemas/EmbeddedVariable'
+          outputVariable:
+            $ref: '#/components/schemas/EmbeddedVariable'
           message:
             maxLength: 256
             minLength: 4
             type: string
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
     RequestTask:
       required:
       - name
@@ -13602,22 +13550,22 @@ components:
       - $ref: '#/components/schemas/Node'
       - type: object
         properties:
+          asyncAfter:
+            type: boolean
+          asyncBefore:
+            type: boolean
           inputVariables:
-            uniqueItems: true
-            type: array
-            items:
-              $ref: '#/components/schemas/EmbeddedVariable'
-          headerOutputVariables:
             uniqueItems: true
             type: array
             items:
               $ref: '#/components/schemas/EmbeddedVariable'
           outputVariable:
             $ref: '#/components/schemas/EmbeddedVariable'
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
+          headerOutputVariables:
+            uniqueItems: true
+            type: array
+            items:
+              $ref: '#/components/schemas/EmbeddedVariable'
           request:
             $ref: '#/components/schemas/EmbeddedRequest'
     ScriptTask:
@@ -13629,16 +13577,23 @@ components:
       - $ref: '#/components/schemas/Node'
       - type: object
         properties:
-          scriptFormat:
-            type: string
+          asyncAfter:
+            type: boolean
+          asyncBefore:
+            type: boolean
+          inputVariables:
+            uniqueItems: true
+            type: array
+            items:
+              $ref: '#/components/schemas/EmbeddedVariable'
+          outputVariable:
+            $ref: '#/components/schemas/EmbeddedVariable'
           code:
             type: string
           resultVariable:
             type: string
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
+          scriptFormat:
+            type: string
     StartEvent:
       required:
       - name
@@ -13648,6 +13603,14 @@ components:
       - $ref: '#/components/schemas/Node'
       - type: object
         properties:
+          asyncBefore:
+            type: boolean
+          expression:
+            maxLength: 256
+            minLength: 4
+            type: string
+          interrupting:
+            type: boolean
           type:
             type: string
             enum:
@@ -13655,14 +13618,6 @@ components:
             - SCHEDULED
             - SIGNAL
             - NONE
-          expression:
-            maxLength: 256
-            minLength: 4
-            type: string
-          interrupting:
-            type: boolean
-          asyncBefore:
-            type: boolean
     Subprocess:
       required:
       - name
@@ -13672,17 +13627,17 @@ components:
       - $ref: '#/components/schemas/Node'
       - type: object
         properties:
+          asyncAfter:
+            type: boolean
+          asyncBefore:
+            type: boolean
+          loopRef:
+            $ref: '#/components/schemas/EmbeddedLoopReference'
           type:
             type: string
             enum:
             - EMBEDDED
             - TRANSACTION
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
-          loopRef:
-            $ref: '#/components/schemas/EmbeddedLoopReference'
           multiInstance:
             type: boolean
     EntityModelNode:
@@ -13705,6 +13660,21 @@ components:
           type: string
         _links:
           $ref: '#/components/schemas/Links'
+    PageMetadata:
+      type: object
+      properties:
+        size:
+          type: integer
+          format: int64
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int64
+        number:
+          type: integer
+          format: int64
     PagedModelEntityModelNode:
       type: object
       properties:
@@ -13724,9 +13694,9 @@ components:
     Setup:
       type: object
       properties:
-        asyncBefore:
-          type: boolean
         asyncAfter:
+          type: boolean
+        asyncBefore:
           type: boolean
     Workflow:
       required:
@@ -13736,28 +13706,26 @@ components:
       properties:
         id:
           type: string
-        name:
-          maxLength: 64
-          minLength: 4
+        active:
+          type: boolean
+        deploymentId:
           type: string
         description:
           maxLength: 512
           minLength: 0
           type: string
-        versionTag:
-          maxLength: 64
-          minLength: 1
-          type: string
         historyTimeToLive:
           minimum: 0
           type: integer
           format: int32
-        active:
-          type: boolean
-        deploymentId:
+        initialContext:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/JsonNode'
+        name:
+          maxLength: 64
+          minLength: 4
           type: string
-        setup:
-          $ref: '#/components/schemas/Setup'
         nodes:
           type: array
           items:
@@ -13776,6 +13744,7 @@ components:
             - $ref: '#/components/schemas/FileTask'
             - $ref: '#/components/schemas/FtpTask'
             - $ref: '#/components/schemas/InclusiveGateway'
+            - $ref: '#/components/schemas/InputTask'
             - $ref: '#/components/schemas/MoveToLastGateway'
             - $ref: '#/components/schemas/MoveToNode'
             - $ref: '#/components/schemas/ParallelGateway'
@@ -13785,42 +13754,44 @@ components:
             - $ref: '#/components/schemas/ScriptTask'
             - $ref: '#/components/schemas/StartEvent'
             - $ref: '#/components/schemas/Subprocess'
-        initialContext:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/JsonNode'
+        setup:
+          $ref: '#/components/schemas/Setup'
+        versionTag:
+          maxLength: 64
+          minLength: 1
+          type: string
     EntityModelWorkflow:
       required:
       - name
       - versionTag
       type: object
       properties:
-        name:
-          maxLength: 64
-          minLength: 4
+        active:
+          type: boolean
+        deploymentId:
           type: string
         description:
           maxLength: 512
           minLength: 0
           type: string
-        versionTag:
-          maxLength: 64
-          minLength: 1
-          type: string
         historyTimeToLive:
           minimum: 0
           type: integer
           format: int32
-        active:
-          type: boolean
-        deploymentId:
-          type: string
-        setup:
-          $ref: '#/components/schemas/Setup'
         initialContext:
           type: object
           additionalProperties:
             $ref: '#/components/schemas/JsonNode'
+        name:
+          maxLength: 64
+          minLength: 4
+          type: string
+        setup:
+          $ref: '#/components/schemas/Setup'
+        versionTag:
+          maxLength: 64
+          minLength: 1
+          type: string
         _links:
           $ref: '#/components/schemas/Links'
     PagedModelEntityModelWorkflow:
@@ -13861,6 +13832,7 @@ components:
                 - $ref: '#/components/schemas/FileTaskResponse'
                 - $ref: '#/components/schemas/FtpTaskResponse'
                 - $ref: '#/components/schemas/InclusiveGatewayResponse'
+                - $ref: '#/components/schemas/InputTaskResponse'
                 - $ref: '#/components/schemas/MoveToLastGatewayResponse'
                 - $ref: '#/components/schemas/MoveToNodeResponse'
                 - $ref: '#/components/schemas/ParallelGatewayResponse'
@@ -13882,6 +13854,64 @@ components:
               type: array
               items:
                 type: object
+        _links:
+          $ref: '#/components/schemas/Links'
+    EntityModelTrigger:
+      required:
+      - method
+      - name
+      - pathPattern
+      type: object
+      properties:
+        name:
+          maxLength: 64
+          minLength: 4
+          type: string
+        description:
+          maxLength: 256
+          minLength: 0
+          type: string
+        pathPattern:
+          maxLength: 256
+          minLength: 2
+          type: string
+        method:
+          type: string
+          enum:
+          - GET
+          - HEAD
+          - POST
+          - PUT
+          - PATCH
+          - DELETE
+          - OPTIONS
+          - TRACE
+        _links:
+          $ref: '#/components/schemas/Links'
+    PagedModelEntityModelTrigger:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          properties:
+            triggers:
+              type: array
+              items:
+                $ref: '#/components/schemas/EntityModelTrigger'
+        _links:
+          $ref: '#/components/schemas/Links'
+        page:
+          $ref: '#/components/schemas/PageMetadata'
+    CollectionModelEntityModelTrigger:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          properties:
+            triggers:
+              type: array
+              items:
+                $ref: '#/components/schemas/EntityModelTrigger'
         _links:
           $ref: '#/components/schemas/Links'
     TriggerRequestBody:
@@ -13924,6 +13954,10 @@ components:
       - $ref: '#/components/schemas/NodeRequestBody'
       - type: object
         properties:
+          asyncAfter:
+            type: boolean
+          asyncBefore:
+            type: boolean
           inputVariables:
             uniqueItems: true
             type: array
@@ -13931,10 +13965,6 @@ components:
               $ref: '#/components/schemas/EmbeddedVariable'
           outputVariable:
             $ref: '#/components/schemas/EmbeddedVariable'
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
           source:
             type: string
           destination:
@@ -13960,13 +13990,13 @@ components:
       - $ref: '#/components/schemas/NodeRequestBody'
       - type: object
         properties:
-          expression:
-            maxLength: 128
-            minLength: 4
-            type: string
           answer:
             maxLength: 64
             minLength: 2
+            type: string
+          expression:
+            maxLength: 128
+            minLength: 4
             type: string
     ConnectToRequestBody:
       required:
@@ -13987,6 +14017,10 @@ components:
       - $ref: '#/components/schemas/NodeRequestBody'
       - type: object
         properties:
+          asyncAfter:
+            type: boolean
+          asyncBefore:
+            type: boolean
           inputVariables:
             uniqueItems: true
             type: array
@@ -13994,17 +14028,13 @@ components:
               $ref: '#/components/schemas/EmbeddedVariable'
           outputVariable:
             $ref: '#/components/schemas/EmbeddedVariable'
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
           designation:
+            type: string
+          password:
             type: string
           url:
             type: string
           username:
-            type: string
-          password:
             type: string
     DatabaseDisconnectTaskRequestBody:
       required:
@@ -14014,6 +14044,10 @@ components:
       - $ref: '#/components/schemas/NodeRequestBody'
       - type: object
         properties:
+          asyncAfter:
+            type: boolean
+          asyncBefore:
+            type: boolean
           inputVariables:
             uniqueItems: true
             type: array
@@ -14021,10 +14055,6 @@ components:
               $ref: '#/components/schemas/EmbeddedVariable'
           outputVariable:
             $ref: '#/components/schemas/EmbeddedVariable'
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
           designation:
             type: string
     DatabaseQueryTaskRequestBody:
@@ -14035,6 +14065,10 @@ components:
       - $ref: '#/components/schemas/NodeRequestBody'
       - type: object
         properties:
+          asyncAfter:
+            type: boolean
+          asyncBefore:
+            type: boolean
           inputVariables:
             uniqueItems: true
             type: array
@@ -14042,15 +14076,11 @@ components:
               $ref: '#/components/schemas/EmbeddedVariable'
           outputVariable:
             $ref: '#/components/schemas/EmbeddedVariable'
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
           designation:
             type: string
-          query:
-            type: string
           outputPath:
+            type: string
+          query:
             type: string
           resultType:
             type: string
@@ -14071,6 +14101,10 @@ components:
       - $ref: '#/components/schemas/NodeRequestBody'
       - type: object
         properties:
+          asyncAfter:
+            type: boolean
+          asyncBefore:
+            type: boolean
           inputVariables:
             uniqueItems: true
             type: array
@@ -14078,10 +14112,6 @@ components:
               $ref: '#/components/schemas/EmbeddedVariable'
           outputVariable:
             $ref: '#/components/schemas/EmbeddedVariable'
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
           path:
             type: string
           workflow:
@@ -14105,6 +14135,10 @@ components:
       - $ref: '#/components/schemas/NodeRequestBody'
       - type: object
         properties:
+          asyncAfter:
+            type: boolean
+          asyncBefore:
+            type: boolean
           inputVariables:
             uniqueItems: true
             type: array
@@ -14112,35 +14146,31 @@ components:
               $ref: '#/components/schemas/EmbeddedVariable'
           outputVariable:
             $ref: '#/components/schemas/EmbeddedVariable'
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
-          mailTo:
-            maxLength: 256
-            minLength: 3
+          attachmentPath:
             type: string
-          mailCc:
+          includeAttachment:
             type: string
           mailBcc:
+            type: string
+          mailCc:
             type: string
           mailFrom:
             maxLength: 256
             minLength: 3
             type: string
-          mailSubject:
-            maxLength: 256
-            minLength: 2
-            type: string
           mailText:
             maxLength: 2147483647
             minLength: 2
             type: string
+          mailTo:
+            maxLength: 256
+            minLength: 3
+            type: string
           mailMarkup:
             type: string
-          attachmentPath:
-            type: string
-          includeAttachment:
+          mailSubject:
+            maxLength: 256
+            minLength: 2
             type: string
     EndEventRequestBody:
       required:
@@ -14156,9 +14186,9 @@ components:
       - $ref: '#/components/schemas/NodeRequestBody'
       - type: object
         properties:
-          asyncBefore:
-            type: boolean
           asyncAfter:
+            type: boolean
+          asyncBefore:
             type: boolean
     ExclusiveGatewayRequestBody:
       required:
@@ -14183,6 +14213,10 @@ components:
       - $ref: '#/components/schemas/NodeRequestBody'
       - type: object
         properties:
+          asyncAfter:
+            type: boolean
+          asyncBefore:
+            type: boolean
           inputVariables:
             uniqueItems: true
             type: array
@@ -14190,10 +14224,8 @@ components:
               $ref: '#/components/schemas/EmbeddedVariable'
           outputVariable:
             $ref: '#/components/schemas/EmbeddedVariable'
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
+          line:
+            type: string
           op:
             type: string
             enum:
@@ -14211,8 +14243,6 @@ components:
             type: string
           target:
             type: string
-          line:
-            type: string
     FtpTaskRequestBody:
       required:
       - name
@@ -14221,6 +14251,10 @@ components:
       - $ref: '#/components/schemas/NodeRequestBody'
       - type: object
         properties:
+          asyncAfter:
+            type: boolean
+          asyncBefore:
+            type: boolean
           inputVariables:
             uniqueItems: true
             type: array
@@ -14228,29 +14262,25 @@ components:
               $ref: '#/components/schemas/EmbeddedVariable'
           outputVariable:
             $ref: '#/components/schemas/EmbeddedVariable'
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
-          originPath:
-            type: string
           destinationPath:
+            type: string
+          host:
             type: string
           op:
             type: string
             enum:
             - GET
             - PUT
-          scheme:
+          originPath:
             type: string
-          host:
+          password:
             type: string
           port:
             type: integer
             format: int32
-          username:
+          scheme:
             type: string
-          password:
+          username:
             type: string
           basePath:
             type: string
@@ -14269,6 +14299,66 @@ components:
             - CONVERGING
             - DIVERGING
             - MIXED
+    InputTaskRequestBody:
+      required:
+      - inputType
+      - name
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/NodeRequestBody'
+      - type: object
+        properties:
+          asyncAfter:
+            type: boolean
+          asyncBefore:
+            type: boolean
+          inputVariables:
+            uniqueItems: true
+            type: array
+            items:
+              $ref: '#/components/schemas/EmbeddedVariable'
+          outputVariable:
+            $ref: '#/components/schemas/EmbeddedVariable'
+          attributes:
+            type: array
+            items:
+              type: string
+              enum:
+              - MAX
+              - MAXLENGTH
+              - MIN
+              - PATTERN
+              - SIZE
+              - STEP
+          defaultValue:
+            type: string
+          inputType:
+            type: string
+            enum:
+            - CHECKBOX
+            - COLOR
+            - DATE
+            - DATETIME
+            - EMAIL
+            - FILE
+            - IMAGE
+            - MONTH
+            - NUMBER
+            - PASSWORD
+            - RADIO
+            - RANGE
+            - SELECT
+            - TELEPHONE
+            - TEXT
+            - TIME
+            - URL
+            - WEEK
+          options:
+            type: array
+            items:
+              type: string
+          required:
+            type: boolean
     MoveToLastGatewayRequestBody:
       required:
       - name
@@ -14340,6 +14430,10 @@ components:
       - $ref: '#/components/schemas/NodeRequestBody'
       - type: object
         properties:
+          asyncAfter:
+            type: boolean
+          asyncBefore:
+            type: boolean
           inputVariables:
             uniqueItems: true
             type: array
@@ -14347,10 +14441,6 @@ components:
               $ref: '#/components/schemas/EmbeddedVariable'
           outputVariable:
             $ref: '#/components/schemas/EmbeddedVariable'
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
           processor:
             $ref: '#/components/schemas/EmbeddedProcessor'
     ReceiveTaskRequestBody:
@@ -14362,14 +14452,21 @@ components:
       - $ref: '#/components/schemas/NodeRequestBody'
       - type: object
         properties:
+          asyncAfter:
+            type: boolean
+          asyncBefore:
+            type: boolean
+          inputVariables:
+            uniqueItems: true
+            type: array
+            items:
+              $ref: '#/components/schemas/EmbeddedVariable'
+          outputVariable:
+            $ref: '#/components/schemas/EmbeddedVariable'
           message:
             maxLength: 256
             minLength: 4
             type: string
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
     RequestTaskRequestBody:
       required:
       - name
@@ -14378,22 +14475,22 @@ components:
       - $ref: '#/components/schemas/NodeRequestBody'
       - type: object
         properties:
+          asyncAfter:
+            type: boolean
+          asyncBefore:
+            type: boolean
           inputVariables:
-            uniqueItems: true
-            type: array
-            items:
-              $ref: '#/components/schemas/EmbeddedVariable'
-          headerOutputVariables:
             uniqueItems: true
             type: array
             items:
               $ref: '#/components/schemas/EmbeddedVariable'
           outputVariable:
             $ref: '#/components/schemas/EmbeddedVariable'
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
+          headerOutputVariables:
+            uniqueItems: true
+            type: array
+            items:
+              $ref: '#/components/schemas/EmbeddedVariable'
           request:
             $ref: '#/components/schemas/EmbeddedRequest'
     ScriptTaskRequestBody:
@@ -14405,16 +14502,23 @@ components:
       - $ref: '#/components/schemas/NodeRequestBody'
       - type: object
         properties:
-          scriptFormat:
-            type: string
+          asyncAfter:
+            type: boolean
+          asyncBefore:
+            type: boolean
+          inputVariables:
+            uniqueItems: true
+            type: array
+            items:
+              $ref: '#/components/schemas/EmbeddedVariable'
+          outputVariable:
+            $ref: '#/components/schemas/EmbeddedVariable'
           code:
             type: string
           resultVariable:
             type: string
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
+          scriptFormat:
+            type: string
     StartEventRequestBody:
       required:
       - name
@@ -14424,6 +14528,14 @@ components:
       - $ref: '#/components/schemas/NodeRequestBody'
       - type: object
         properties:
+          asyncBefore:
+            type: boolean
+          expression:
+            maxLength: 256
+            minLength: 4
+            type: string
+          interrupting:
+            type: boolean
           type:
             type: string
             enum:
@@ -14431,14 +14543,6 @@ components:
             - SCHEDULED
             - SIGNAL
             - NONE
-          expression:
-            maxLength: 256
-            minLength: 4
-            type: string
-          interrupting:
-            type: boolean
-          asyncBefore:
-            type: boolean
     SubprocessRequestBody:
       required:
       - name
@@ -14448,17 +14552,17 @@ components:
       - $ref: '#/components/schemas/NodeRequestBody'
       - type: object
         properties:
+          asyncAfter:
+            type: boolean
+          asyncBefore:
+            type: boolean
+          loopRef:
+            $ref: '#/components/schemas/EmbeddedLoopReference'
           type:
             type: string
             enum:
             - EMBEDDED
             - TRANSACTION
-          asyncBefore:
-            type: boolean
-          asyncAfter:
-            type: boolean
-          loopRef:
-            $ref: '#/components/schemas/EmbeddedLoopReference'
           multiInstance:
             type: boolean
     WorkflowRequestBody:
@@ -14469,36 +14573,36 @@ components:
       properties:
         id:
           type: string
-        name:
-          maxLength: 64
-          minLength: 4
+        active:
+          type: boolean
+        deploymentId:
           type: string
         description:
           maxLength: 512
           minLength: 0
           type: string
-        versionTag:
-          maxLength: 64
-          minLength: 1
-          type: string
         historyTimeToLive:
           minimum: 0
           type: integer
           format: int32
-        active:
-          type: boolean
-        deploymentId:
-          type: string
-        setup:
-          $ref: '#/components/schemas/Setup'
-        nodes:
-          type: array
-          items:
-            type: string
         initialContext:
           type: object
           additionalProperties:
             $ref: '#/components/schemas/JsonNode'
+        name:
+          maxLength: 64
+          minLength: 4
+          type: string
+        nodes:
+          type: array
+          items:
+            type: string
+        setup:
+          $ref: '#/components/schemas/Setup'
+        versionTag:
+          maxLength: 64
+          minLength: 1
+          type: string
     error:
       required:
       - message

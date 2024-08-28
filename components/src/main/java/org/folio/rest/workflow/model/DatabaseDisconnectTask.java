@@ -5,10 +5,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.PrePersist;
 import lombok.Getter;
 import lombok.Setter;
+import org.folio.rest.workflow.model.components.DelegateTask;
 import org.folio.rest.workflow.model.has.HasDesignation;
 
 @Entity
-public class DatabaseDisconnectTask extends AbstractDelegateTaskNode implements HasDesignation {
+public class DatabaseDisconnectTask extends AbstractTask implements DelegateTask, HasDesignation {
 
   @Getter
   @Setter

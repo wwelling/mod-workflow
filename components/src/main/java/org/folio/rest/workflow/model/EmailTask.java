@@ -6,11 +6,12 @@ import jakarta.persistence.PrePersist;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.folio.rest.workflow.model.components.DelegateTask;
 import org.folio.rest.workflow.model.has.common.HasEmailTaskCommon;
 import org.springframework.lang.NonNull;
 
 @Entity
-public class EmailTask extends AbstractDelegateTaskNode implements HasEmailTaskCommon {
+public class EmailTask extends AbstractTask implements DelegateTask, HasEmailTaskCommon {
 
   @Getter
   @Setter

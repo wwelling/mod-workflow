@@ -10,7 +10,7 @@ import lombok.Setter;
 import org.folio.rest.workflow.model.components.Wait;
 
 @Entity
-public class ReceiveTask extends AbstractDelegateTaskNode implements Wait {
+public class ReceiveTask extends AbstractTask implements Wait {
 
   @Getter
   @Setter

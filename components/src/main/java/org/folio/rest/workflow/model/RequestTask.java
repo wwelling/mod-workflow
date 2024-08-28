@@ -7,10 +7,11 @@ import java.util.HashSet;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
+import org.folio.rest.workflow.model.components.DelegateTask;
 import org.folio.rest.workflow.model.has.common.HasRequestTaskCommon;
 
 @Entity
-public class RequestTask extends AbstractDelegateTaskNode implements HasRequestTaskCommon {
+public class RequestTask extends AbstractTask implements DelegateTask, HasRequestTaskCommon {
 
   @Getter
   @Setter

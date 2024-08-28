@@ -8,12 +8,13 @@ import jakarta.persistence.PrePersist;
 import lombok.Getter;
 import lombok.Setter;
 import org.folio.rest.workflow.enums.DatabaseResultType;
+import org.folio.rest.workflow.model.components.DelegateTask;
 import org.folio.rest.workflow.model.has.HasDesignation;
 import org.folio.rest.workflow.model.has.common.HasDatabaseQueryTaskCommon;
 import org.hibernate.annotations.ColumnDefault;
 
 @Entity
-public class DatabaseQueryTask extends AbstractDelegateTaskNode implements HasDatabaseQueryTaskCommon, HasDesignation {
+public class DatabaseQueryTask extends AbstractTask implements DelegateTask, HasDatabaseQueryTaskCommon, HasDesignation {
 
   @Getter
   @Setter

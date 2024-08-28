@@ -9,17 +9,18 @@ import java.util.HashSet;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
-import org.folio.rest.workflow.model.components.DelegateTask;
+import org.folio.rest.workflow.model.components.Task;
 import org.folio.rest.workflow.model.converter.EmbeddedVariableConverter;
+import org.folio.rest.workflow.model.has.HasInputOutput;
 import org.hibernate.annotations.ColumnDefault;
 
 /**
  * Provides a superclass for any Node implementing a DelegateTask.
  *
- * This is intended to reduce repitition of getters and setters needed by the DelegateTask.
+ * This is intended to reduce repitition of getters and setters needed by the Task.
  */
 @MappedSuperclass
-public abstract class AbstractDelegateTaskNode extends Node implements DelegateTask {
+public abstract class AbstractTask extends Node implements HasInputOutput, Task {
 
   @Getter
   @Setter
@@ -44,7 +45,7 @@ public abstract class AbstractDelegateTaskNode extends Node implements DelegateT
   @Convert(converter = EmbeddedVariableConverter.class)
   private EmbeddedVariable outputVariable;
 
-  AbstractDelegateTaskNode() {
+  AbstractTask() {
     super();
 
     asyncAfter = false;

@@ -5,13 +5,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.PrePersist;
 import lombok.Getter;
 import lombok.Setter;
+import org.folio.rest.workflow.model.components.DelegateTask;
 import org.folio.rest.workflow.model.has.HasDesignation;
 import org.folio.rest.workflow.model.has.HasPassword;
 import org.folio.rest.workflow.model.has.HasUrl;
 import org.folio.rest.workflow.model.has.HasUsername;
 
 @Entity
-public class DatabaseConnectionTask extends AbstractDelegateTaskNode implements HasDesignation, HasPassword, HasUrl, HasUsername {
+public class DatabaseConnectionTask extends AbstractTask implements DelegateTask, HasDesignation, HasPassword, HasUrl, HasUsername {
 
   @Getter
   @Setter

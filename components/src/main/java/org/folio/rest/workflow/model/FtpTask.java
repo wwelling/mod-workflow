@@ -8,13 +8,14 @@ import jakarta.persistence.PrePersist;
 import lombok.Getter;
 import lombok.Setter;
 import org.folio.rest.workflow.enums.SftpOp;
+import org.folio.rest.workflow.model.components.DelegateTask;
 import org.folio.rest.workflow.model.has.HasPassword;
 import org.folio.rest.workflow.model.has.HasService;
 import org.folio.rest.workflow.model.has.HasUsername;
 import org.folio.rest.workflow.model.has.common.HasFtpTaskCommon;
 
 @Entity
-public class FtpTask extends AbstractDelegateTaskNode implements HasFtpTaskCommon, HasPassword, HasService, HasUsername {
+public class FtpTask extends AbstractTask implements DelegateTask, HasFtpTaskCommon, HasPassword, HasService, HasUsername {
 
   @Getter
   @Setter

@@ -10,7 +10,7 @@ import org.folio.rest.workflow.model.has.HasCode;
 import org.folio.rest.workflow.model.has.common.HasScriptTaskCommon;
 
 @Entity
-public class ScriptTask extends AbstractDelegateTaskNode implements HasCode, HasScriptTaskCommon {
+public class ScriptTask extends AbstractTask implements HasCode, HasScriptTaskCommon {
 
   @Getter
   @Setter

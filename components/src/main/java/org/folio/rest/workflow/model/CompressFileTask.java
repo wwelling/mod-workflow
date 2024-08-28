@@ -9,10 +9,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.folio.rest.workflow.enums.CompressFileContainer;
 import org.folio.rest.workflow.enums.CompressFileFormat;
+import org.folio.rest.workflow.model.components.DelegateTask;
 import org.folio.rest.workflow.model.has.common.HasCompressFileTaskCommon;
 
 @Entity
-public class CompressFileTask extends AbstractDelegateTaskNode implements HasCompressFileTaskCommon {
+public class CompressFileTask extends AbstractTask implements DelegateTask, HasCompressFileTaskCommon {
 
   @Getter
   @Setter
