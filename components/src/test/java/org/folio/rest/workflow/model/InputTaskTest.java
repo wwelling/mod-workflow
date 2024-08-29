@@ -5,9 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +22,7 @@ class InputTaskTest {
   @Mock
   private EmbeddedVariable embeddedVariable;
 
-  private List<EmbeddedInput> inputs;
+  private Set<EmbeddedInput> inputs;
 
   private Set<EmbeddedVariable> inputVariables;
 
@@ -32,7 +30,7 @@ class InputTaskTest {
 
   @BeforeEach
   void beforeEach() {
-    inputs = new ArrayList<>();
+    inputs = new HashSet<>();
     inputs.add(input);
 
     inputVariables = new HashSet<>();

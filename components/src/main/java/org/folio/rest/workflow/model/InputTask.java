@@ -3,8 +3,8 @@ package org.folio.rest.workflow.model;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrePersist;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,12 +14,12 @@ public class InputTask extends AbstractTask {
   @Getter
   @Setter
   @ElementCollection
-  private List<EmbeddedInput> inputs;
+  private Set<EmbeddedInput> inputs;
 
   public InputTask() {
     super();
 
-    inputs = new ArrayList<>();
+    inputs = new HashSet<>();
   }
 
   @Override
@@ -28,7 +28,7 @@ public class InputTask extends AbstractTask {
     super.prePersist();
 
     if (inputs == null) {
-      inputs = new ArrayList<>();
+      inputs = new HashSet<>();
     }
   }
 
