@@ -19,4 +19,5 @@ public interface HasEmbeddedLoopReferenceCommon {
   public void setDataInputRefExpression(String dataInputRefExpression);
   public void setInputDataName(String inputDataName);
   public void setParallel(Boolean parallel);
+
 }

@@ -22,4 +22,5 @@ public interface HasEmbeddedRequestCommon {
   public void setIterableKey(String iterableKey);
   public void setMethod(HttpMethod method);
   public void setResponseKey(String responseKey);
+
 }

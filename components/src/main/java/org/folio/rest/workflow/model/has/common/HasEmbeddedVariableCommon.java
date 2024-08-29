@@ -18,4 +18,5 @@ public interface HasEmbeddedVariableCommon {
   public void setType(VariableType type);
   public void setKey(String key);
   public void setSpin(Boolean spin);
+
 }

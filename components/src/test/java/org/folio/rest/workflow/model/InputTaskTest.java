@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.folio.rest.workflow.enums.InputAttribute;
-import org.folio.rest.workflow.enums.InputType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,24 +18,27 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class InputTaskTest {
 
-  private List<InputAttribute> attributes;
+  @Mock
+  private EmbeddedInput input;
 
   @Mock
   private EmbeddedVariable embeddedVariable;
+
+  private List<EmbeddedInput> inputs;
 
   private Set<EmbeddedVariable> inputVariables;
 
   private InputTask inputTask;
 
-  private List<String> options;
-
   @BeforeEach
   void beforeEach() {
-    attributes = new ArrayList<>();
-    inputTask = new InputTask();
+    inputs = new ArrayList<>();
+    inputs.add(input);
+
     inputVariables = new HashSet<>();
     inputVariables.add(embeddedVariable);
-    options = new ArrayList<>();
+
+    inputTask = new InputTask();
   }
 
   @Test
@@ -161,78 +162,18 @@ class InputTaskTest {
   }
 
   @Test
-  void getAttributesWorksTest() {
-    setField(inputTask, "attributes", attributes);
+  void getInputsWorksTest() {
+    setField(inputTask, "inputs", inputs);
 
-    assertEquals(attributes, inputTask.getAttributes());
+    assertEquals(inputs, inputTask.getInputs());
   }
 
   @Test
-  void setAttributesWorksTest() {
-    setField(inputTask, "attributes", null);
+  void setInputsWorksTest() {
+    setField(inputTask, "inputs", null);
 
-    inputTask.setAttributes(attributes);
-    assertEquals(attributes, getField(inputTask, "attributes"));
-  }
-
-  @Test
-  void getDefaultValueWorksTest() {
-    setField(inputTask, "defaultValue", VALUE);
-
-    assertEquals(VALUE, inputTask.getDefaultValue());
-  }
-
-  @Test
-  void setDefaultValueWorksTest() {
-    setField(inputTask, "defaultValue", null);
-
-    inputTask.setDefaultValue(VALUE);
-    assertEquals(VALUE, getField(inputTask, "defaultValue"));
-  }
-
-  @Test
-  void getInputTypeWorksTest() {
-    setField(inputTask, "inputType", InputType.EMAIL);
-
-    assertEquals(InputType.EMAIL, inputTask.getInputType());
-  }
-
-  @Test
-  void setInputTypeWorksTest() {
-    setField(inputTask, "inputType", null);
-
-    inputTask.setInputType(InputType.CHECKBOX);
-    assertEquals(InputType.CHECKBOX, getField(inputTask, "inputType"));
-  }
-
-  @Test
-  void getOptionsWorksTest() {
-    setField(inputTask, "options", options);
-
-    assertEquals(options, inputTask.getOptions());
-  }
-
-  @Test
-  void setOptionsWorksTest() {
-    setField(inputTask, "options", null);
-
-    inputTask.setOptions(options);
-    assertEquals(options, getField(inputTask, "options"));
-  }
-
-  @Test
-  void getRequiredWorksTest() {
-    setField(inputTask, "required", true);
-
-    assertEquals(true, inputTask.getRequired());
-  }
-
-  @Test
-  void setRequiredWorksTest() {
-    setField(inputTask, "required", false);
-
-    inputTask.setRequired(true);
-    assertEquals(true, getField(inputTask, "required"));
+    inputTask.setInputs(inputs);
+    assertEquals(inputs, getField(inputTask, "inputs"));
   }
 
 }

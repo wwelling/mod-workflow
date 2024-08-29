@@ -18,4 +18,5 @@ public interface HasEmbeddedProcessorCommon {
   public void setDelay(Integer delay);
   public void setFunctionName(String functionName);
   public void setScriptType(ScriptType scriptType);
+
 }
