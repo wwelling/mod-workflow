@@ -2,21 +2,15 @@ package org.folio.rest.workflow.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.PrePersist;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import org.folio.rest.workflow.model.components.Task;
-import org.folio.rest.workflow.model.has.HasAsync;
 import org.folio.rest.workflow.model.has.HasCode;
 import org.folio.rest.workflow.model.has.common.HasScriptTaskCommon;
 
 @Entity
-public class ScriptTask extends Node implements HasCode, HasAsync, HasScriptTaskCommon, Task {
-
-  @Getter
-  @Setter
-  @Column(nullable = false)
-  private String scriptFormat;
+public class ScriptTask extends AbstractTask implements HasCode, HasScriptTaskCommon {
 
   @Getter
   @Setter
@@ -32,19 +26,27 @@ public class ScriptTask extends Node implements HasCode, HasAsync, HasScriptTask
   @Getter
   @Setter
   @Column(nullable = false)
-  private boolean asyncBefore;
-
-  @Getter
-  @Setter
-  @Column(nullable = false)
-  private boolean asyncAfter;
+  private String scriptFormat;
 
   public ScriptTask() {
     super();
 
+    code = "";
     scriptFormat = "javaScript";
-    asyncBefore = false;
-    asyncAfter = false;
+  }
+
+  @Override
+  @PrePersist
+  public void prePersist() {
+    super.prePersist();
+
+    if (code == null) {
+      code = "";
+    }
+
+    if (scriptFormat == null) {
+      scriptFormat = "javaScript";
+    }
   }
 
   public boolean hasResultVariable() {

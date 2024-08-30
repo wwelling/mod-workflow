@@ -20,7 +20,7 @@ class SetupTest {
   void getAsyncBeforeWorksTest() {
     setField(setup, "asyncBefore", true);
 
-    assertEquals(true, setup.isAsyncBefore());
+    assertEquals(true, setup.getAsyncBefore());
   }
 
   @Test
@@ -35,7 +35,7 @@ class SetupTest {
   void getAsyncAfterWorksTest() {
     setField(setup, "asyncAfter", true);
 
-    assertEquals(true, setup.isAsyncAfter());
+    assertEquals(true, setup.getAsyncAfter());
   }
 
   @Test

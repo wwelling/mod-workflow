@@ -1,8 +1,6 @@
 package org.folio.rest.workflow.model;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderColumn;
@@ -11,18 +9,29 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
-import org.folio.rest.workflow.enums.Direction;
-import org.folio.rest.workflow.model.components.Gateway;
+import org.folio.rest.workflow.model.has.HasAsync;
 import org.folio.rest.workflow.model.has.HasNodes;
+import org.hibernate.annotations.ColumnDefault;
 
+/**
+ * Provides a superclass for any Node implementing a process, such as Subprocess.
+ *
+ * This is intended to reduce repitition of getters and setters needed by the DelegateTask.
+ */
 @MappedSuperclass
-public abstract class AbstractGateway extends Node implements Gateway, HasNodes {
+public abstract class AbstractProcess extends Node implements HasAsync, HasNodes {
 
   @Getter
   @Setter
   @Column(nullable = false)
-  @Enumerated(EnumType.STRING)
-  private Direction direction;
+  @ColumnDefault("false")
+  private Boolean asyncAfter;
+
+  @Getter
+  @Setter
+  @Column(nullable = false)
+  @ColumnDefault("false")
+  private Boolean asyncBefore;
 
   @Getter
   @Setter
@@ -30,10 +39,11 @@ public abstract class AbstractGateway extends Node implements Gateway, HasNodes 
   @OrderColumn
   private List<Node> nodes;
 
-  AbstractGateway() {
+  AbstractProcess() {
     super();
 
-    direction = Direction.UNSPECIFIED;
+    asyncAfter = false;
+    asyncBefore = false;
     nodes = new ArrayList<>();
   }
 
@@ -42,8 +52,12 @@ public abstract class AbstractGateway extends Node implements Gateway, HasNodes 
   public void prePersist() {
     super.prePersist();
 
-    if (direction == null) {
-      direction = Direction.UNSPECIFIED;
+    if (asyncAfter == null) {
+      asyncAfter = false;
+    }
+
+    if (asyncBefore == null) {
+      asyncBefore = false;
     }
 
     if (nodes == null) {

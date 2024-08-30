@@ -121,6 +121,6 @@ class AbstractGatewayTest {
     assertEquals(nodes, getField(abstractGateway, "nodes"));
   }
 
-  private static class Impl extends AbstractGateway { };
+  private static class Impl extends AbstractGateway { }
 
 }

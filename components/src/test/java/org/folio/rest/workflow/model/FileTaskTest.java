@@ -125,7 +125,7 @@ class FileTaskTest {
   void getAsyncBeforeWorksTest() {
     setField(fileTask, "asyncBefore", true);
 
-    assertEquals(true, fileTask.isAsyncBefore());
+    assertEquals(true, fileTask.getAsyncBefore());
   }
 
   @Test
@@ -140,7 +140,7 @@ class FileTaskTest {
   void getAsyncAfterWorksTest() {
     setField(fileTask, "asyncAfter", true);
 
-    assertEquals(true, fileTask.isAsyncAfter());
+    assertEquals(true, fileTask.getAsyncAfter());
   }
 
   @Test

@@ -7,11 +7,11 @@ public interface HasService extends HasUsername {
 
   public String getBasePath();
   public String getHost();
-  public int getPort();
+  public Integer getPort();
   public String getScheme();
 
   public void setBasePath(String basePath);
   public void setHost(String host);
-  public void setPort(int port);
+  public void setPort(Integer port);
   public void setScheme(String scheme);
 }

@@ -124,7 +124,7 @@ class EmailTaskTest {
   void getAsyncBeforeWorksTest() {
     setField(emailTask, "asyncBefore", true);
 
-    assertEquals(true, emailTask.isAsyncBefore());
+    assertEquals(true, emailTask.getAsyncBefore());
   }
 
   @Test
@@ -139,7 +139,7 @@ class EmailTaskTest {
   void getAsyncAfterWorksTest() {
     setField(emailTask, "asyncAfter", true);
 
-    assertEquals(true, emailTask.isAsyncAfter());
+    assertEquals(true, emailTask.getAsyncAfter());
   }
 
   @Test

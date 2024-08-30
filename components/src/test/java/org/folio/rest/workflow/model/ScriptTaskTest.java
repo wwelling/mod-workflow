@@ -5,10 +5,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 
 class ScriptTaskTest {
+
+  @Mock
+  private EmbeddedVariable embeddedVariable;
+
+  private Set<EmbeddedVariable> inputVariables;
 
   private ScriptTask scriptTask;
 
@@ -78,10 +85,40 @@ class ScriptTaskTest {
   }
 
   @Test
+  void getInputVariablesWorksTest() {
+    setField(scriptTask, "inputVariables", inputVariables);
+
+    assertEquals(inputVariables, scriptTask.getInputVariables());
+  }
+
+  @Test
+  void setInputVariablesWorksTest() {
+    setField(scriptTask, "inputVariables", null);
+
+    scriptTask.setInputVariables(inputVariables);
+    assertEquals(inputVariables, getField(scriptTask, "inputVariables"));
+  }
+
+  @Test
+  void getOutputVariableWorksTest() {
+    setField(scriptTask, "outputVariable", embeddedVariable);
+
+    assertEquals(embeddedVariable, scriptTask.getOutputVariable());
+  }
+
+  @Test
+  void setOutputVariableWorksTest() {
+    setField(scriptTask, "outputVariable", null);
+
+    scriptTask.setOutputVariable(embeddedVariable);
+    assertEquals(embeddedVariable, getField(scriptTask, "outputVariable"));
+  }
+
+  @Test
   void getAsyncBeforeWorksTest() {
     setField(scriptTask, "asyncBefore", true);
 
-    assertEquals(true, scriptTask.isAsyncBefore());
+    assertEquals(true, scriptTask.getAsyncBefore());
   }
 
   @Test
@@ -96,7 +133,7 @@ class ScriptTaskTest {
   void getAsyncAfterWorksTest() {
     setField(scriptTask, "asyncAfter", true);
 
-    assertEquals(true, scriptTask.isAsyncAfter());
+    assertEquals(true, scriptTask.getAsyncAfter());
   }
 
   @Test

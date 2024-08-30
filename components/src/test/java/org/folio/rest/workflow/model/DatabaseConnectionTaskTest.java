@@ -124,7 +124,7 @@ class DatabaseConnectionTaskTest {
   void getAsyncBeforeWorksTest() {
     setField(databaseConnectionTask, "asyncBefore", true);
 
-    assertEquals(true, databaseConnectionTask.isAsyncBefore());
+    assertEquals(true, databaseConnectionTask.getAsyncBefore());
   }
 
   @Test
@@ -139,7 +139,7 @@ class DatabaseConnectionTaskTest {
   void getAsyncAfterWorksTest() {
     setField(databaseConnectionTask, "asyncAfter", true);
 
-    assertEquals(true, databaseConnectionTask.isAsyncAfter());
+    assertEquals(true, databaseConnectionTask.getAsyncAfter());
   }
 
   @Test

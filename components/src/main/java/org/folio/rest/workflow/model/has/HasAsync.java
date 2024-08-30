@@ -7,10 +7,10 @@ package org.folio.rest.workflow.model.has;
  */
 public interface HasAsync {
 
-  public boolean isAsyncAfter();
-  public boolean isAsyncBefore();
+  public Boolean getAsyncAfter();
+  public Boolean getAsyncBefore();
 
-  public void setAsyncAfter(boolean asyncAfter);
-  public void setAsyncBefore(boolean asyncBefore);
+  public void setAsyncAfter(Boolean asyncAfter);
+  public void setAsyncBefore(Boolean asyncBefore);
 
 }

@@ -127,7 +127,7 @@ class RequestTaskTest {
   void getAsyncBeforeWorksTest() {
     setField(requestTask, "asyncBefore", true);
 
-    assertEquals(true, requestTask.isAsyncBefore());
+    assertEquals(true, requestTask.getAsyncBefore());
   }
 
   @Test
@@ -142,7 +142,7 @@ class RequestTaskTest {
   void getAsyncAfterWorksTest() {
     setField(requestTask, "asyncAfter", true);
 
-    assertEquals(true, requestTask.isAsyncAfter());
+    assertEquals(true, requestTask.getAsyncAfter());
   }
 
   @Test
