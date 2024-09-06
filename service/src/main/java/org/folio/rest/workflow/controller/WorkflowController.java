@@ -11,6 +11,7 @@ import org.folio.rest.workflow.exception.WorkflowEngineServiceException;
 import org.folio.rest.workflow.exception.WorkflowImportException;
 import org.folio.rest.workflow.exception.WorkflowNotFoundException;
 import org.folio.rest.workflow.model.Workflow;
+import org.folio.rest.workflow.model.repo.WorkflowRepo;
 import org.folio.rest.workflow.service.WorkflowCqlService;
 import org.folio.rest.workflow.service.WorkflowEngineService;
 import org.folio.rest.workflow.service.WorkflowImportService;
@@ -42,11 +43,14 @@ public class WorkflowController {
 
   private WorkflowImportService workflowImportService;
 
+  private WorkflowRepo workflowRepo;
+
   @Autowired
-  public WorkflowController(WorkflowEngineService workflowEngineService, WorkflowCqlService workflowCqlService, WorkflowImportService workflowImportService) {
+  public WorkflowController(WorkflowEngineService workflowEngineService, WorkflowCqlService workflowCqlService, WorkflowImportService workflowImportService, WorkflowRepo workflowRepo) {
     this.workflowEngineService = workflowEngineService;
     this.workflowCqlService = workflowCqlService;
     this.workflowImportService = workflowImportService;
+    this.workflowRepo = workflowRepo;
   }
 
   @PostMapping(value = { "/import", "/import/" }, produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
@@ -73,6 +77,15 @@ public class WorkflowController {
   ) {
     log.debug("Performing CQL search: {}, offset, limit", query, offset, limit);
     return workflowCqlService.findByCql(query, offset, limit);
+  }
+
+  @GetMapping(value = {"/{id}", "/{id}"}, produces = { MediaType.APPLICATION_JSON_VALUE })
+  public Workflow getWorkflow(
+    @PathVariable String id,
+    @TenantHeader String tenant,
+    @TokenHeader String token
+  ) {
+    return workflowRepo.getReferenceById(id);
   }
 
   @PutMapping(value = {"/{id}/activate", "/{id}/activate/"}, produces = { MediaType.APPLICATION_JSON_VALUE })
