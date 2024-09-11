@@ -12,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapKeyColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderColumn;
+import jakarta.persistence.PrePersist;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -30,6 +31,7 @@ import org.folio.rest.workflow.model.has.HasNodes;
 import org.folio.rest.workflow.model.has.HasVersionTag;
 import org.folio.rest.workflow.model.has.common.HasWorkflowCommon;
 import org.folio.spring.domain.model.AbstractBaseEntity;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
@@ -37,10 +39,14 @@ public class Workflow extends AbstractBaseEntity implements HasDeploymentId, Has
 
   @Getter
   @Setter
-  @NotNull
-  @Size(min = 4, max = 64)
+  @Column(nullable = true)
+  @ColumnDefault("false")
+  private Boolean active;
+
+  @Getter
+  @Setter
   @Column(unique = true)
-  private String name;
+  private String deploymentId;
 
   @Getter
   @Setter
@@ -50,37 +56,9 @@ public class Workflow extends AbstractBaseEntity implements HasDeploymentId, Has
 
   @Getter
   @Setter
-  @NotNull
-  @Size(min = 1, max = 64)
-  @Column(nullable = false)
-  private String versionTag;
-
-  @Getter
-  @Setter
   @Min(0)
   @Column(nullable = false)
   private Integer historyTimeToLive;
-
-  @Getter
-  @Setter
-  @Column(nullable = false)
-  private boolean active;
-
-  @Getter
-  @Setter
-  @Column(unique = true)
-  private String deploymentId;
-
-  @Getter
-  @Setter
-  @Embedded
-  private Setup setup;
-
-  @Getter
-  @Setter
-  @OneToMany
-  @OrderColumn
-  private List<Node> nodes;
 
   @Getter
   @Setter
@@ -91,13 +69,67 @@ public class Workflow extends AbstractBaseEntity implements HasDeploymentId, Has
   @Convert(converter = JsonNodeConverter.class, attributeName = "value")
   private Map<String, JsonNode> initialContext;
 
+  @Getter
+  @Setter
+  @NotNull
+  @Size(min = 4, max = 64)
+  @Column(nullable = false, unique = true)
+  private String name;
+
+  @Getter
+  @Setter
+  @OneToMany
+  @OrderColumn
+  private List<Node> nodes;
+
+  @Getter
+  @Setter
+  @Embedded
+  private Setup setup;
+
+  @Getter
+  @Setter
+  @NotNull
+  @Size(min = 1, max = 64)
+  @Column(nullable = false)
+  private String versionTag;
+
   public Workflow() {
     super();
 
     active = false;
-    nodes = new ArrayList<Node>();
-    initialContext = new HashMap<String, JsonNode>();
+    name = "";
     historyTimeToLive = 0;
+    initialContext = new HashMap<>();
+    nodes = new ArrayList<>();
+    versionTag = "";
+  }
+
+  @PrePersist
+  public void prePersist() {
+    if (active == null) {
+      active = false;
+    }
+
+    if (historyTimeToLive == null) {
+      historyTimeToLive = 0;
+    }
+
+    if (name == null) {
+      name = "";
+    }
+
+    if (initialContext == null) {
+      initialContext = new HashMap<>();
+    }
+
+    if (nodes == null) {
+      nodes = new ArrayList<>();
+    }
+
+    if (versionTag == null) {
+      versionTag = "";
+    }
   }
 
 }

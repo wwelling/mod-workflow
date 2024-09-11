@@ -4,6 +4,7 @@ import static org.folio.spring.test.mock.MockMvcConstant.OKAPI_TENANT;
 import static org.folio.spring.test.mock.MockMvcConstant.OKAPI_TOKEN;
 import static org.folio.spring.test.mock.MockMvcConstant.UUID;
 import static org.folio.spring.test.mock.MockMvcConstant.VALUE;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -19,11 +20,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.folio.rest.workflow.dto.WorkflowDto;
 import org.folio.rest.workflow.dto.WorkflowOperationalDto;
 import org.folio.rest.workflow.exception.WorkflowEngineServiceException;
+import org.folio.rest.workflow.exception.WorkflowNotFoundException;
 import org.folio.rest.workflow.model.Workflow;
 import org.folio.rest.workflow.model.repo.WorkflowRepo;
 import org.junit.jupiter.api.BeforeEach;
@@ -102,7 +103,6 @@ class WorkflowEngineServiceTest {
     ResponseEntity<Workflow> responseEntity = new ResponseEntity<>(HttpStatus.OK);
     setField(responseEntity, "body", workflow);
 
-    when(workflowRepo.existsById(anyString())).thenReturn(true);
     when(workflowRepo.getViewById(anyString(), ArgumentMatchers.<Class<WorkflowDto>>any())).thenReturn(workflowDto);
     when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<Workflow>>any())).thenReturn(responseEntity);
     when(workflowRepo.save(any())).thenReturn(workflow);
@@ -119,7 +119,6 @@ class WorkflowEngineServiceTest {
     ResponseEntity<Workflow> responseEntity = new ResponseEntity<>(HttpStatus.OK);
     setField(responseEntity, "body", workflow);
 
-    when(workflowRepo.existsById(anyString())).thenReturn(true);
     when(workflowRepo.getViewById(anyString(), ArgumentMatchers.<Class<WorkflowDto>>any())).thenReturn(workflowDto);
     when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<Workflow>>any())).thenReturn(responseEntity);
     when(workflowRepo.save(any())).thenReturn(workflow);
@@ -132,23 +131,11 @@ class WorkflowEngineServiceTest {
   }
 
   @Test
-  void deleteWorksWithoutDeactivateTest() throws WorkflowEngineServiceException {
-    when(workflowRepo.existsById(anyString())).thenReturn(false);
-    doNothing().when(workflowRepo).deleteById(anyString());
-
-    workflowEngineService.delete(UUID, OKAPI_TENANT, OKAPI_TOKEN);
-
-    verify(workflowRepo, never()).save(any());
-    verify(workflowRepo).deleteById(anyString());
-  }
-
-  @Test
-  void deleteThrowsExceptionUnableGetUpdatedTest() throws IOException, WorkflowEngineServiceException {
+  void deleteThrowsExceptionUnableGetUpdatedTest() {
     WorkflowDto workflowDto = (WorkflowDto) workflow;
     ResponseEntity<Workflow> responseEntity = new ResponseEntity<>(HttpStatus.ACCEPTED);
     setField(responseEntity, "body", workflow);
 
-    when(workflowRepo.existsById(anyString())).thenReturn(true);
     when(workflowRepo.getViewById(anyString(), ArgumentMatchers.<Class<WorkflowDto>>any())).thenReturn(workflowDto);
     when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<Workflow>>any())).thenReturn(responseEntity);
 
@@ -161,12 +148,11 @@ class WorkflowEngineServiceTest {
   }
 
   @Test
-  void deleteThrowsExceptionFailedToSendTest() throws IOException, WorkflowEngineServiceException {
+  void deleteThrowsExceptionFailedToSaveTest() {
     WorkflowDto workflowDto = (WorkflowDto) workflow;
     ResponseEntity<Workflow> responseEntity = new ResponseEntity<>(HttpStatus.OK);
     setField(responseEntity, "body", workflow);
 
-    when(workflowRepo.existsById(anyString())).thenReturn(true);
     when(workflowRepo.getViewById(anyString(), ArgumentMatchers.<Class<WorkflowDto>>any())).thenReturn(workflowDto);
     when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<Workflow>>any())).thenReturn(responseEntity);
     when(workflowRepo.save(any())).thenThrow(new RuntimeException("Trigger Failure"));
@@ -180,12 +166,11 @@ class WorkflowEngineServiceTest {
   }
 
   @Test
-  void deleteThrowsExceptionFailedToSendWithNullResponseBodyTest() throws IOException, WorkflowEngineServiceException {
+  void deleteThrowsExceptionFailedToSendWithNullResponseBodyTest() {
     WorkflowDto workflowDto = (WorkflowDto) workflow;
     ResponseEntity<Workflow> responseEntity = new ResponseEntity<>(HttpStatus.OK);
     setField(responseEntity, "body", null);
 
-    when(workflowRepo.existsById(anyString())).thenReturn(true);
     when(workflowRepo.getViewById(anyString(), ArgumentMatchers.<Class<WorkflowDto>>any())).thenReturn(workflowDto);
     when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<Workflow>>any())).thenReturn(responseEntity);
 
@@ -195,6 +180,22 @@ class WorkflowEngineServiceTest {
 
     verify(workflowRepo, never()).save(any());
     verify(workflowRepo, never()).deleteById(anyString());
+  }
+
+  @Test
+  void existsWorksTest() {
+    when(workflowRepo.existsById(anyString())).thenReturn(true);
+
+    assertDoesNotThrow(() -> workflowEngineService.exists(UUID));
+  }
+
+  @Test
+  void existsThrowsExceptionWorkflowNotFoundTest() {
+    when(workflowRepo.existsById(anyString())).thenReturn(false);
+
+    assertThrows(WorkflowNotFoundException.class, () -> {
+      workflowEngineService.exists(UUID);
+    });
   }
 
   @Test

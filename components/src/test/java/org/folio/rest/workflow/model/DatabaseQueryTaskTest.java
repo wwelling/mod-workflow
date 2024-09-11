@@ -125,7 +125,7 @@ class DatabaseQueryTaskTest {
   void getAsyncBeforeWorksTest() {
     setField(databaseQueryTask, "asyncBefore", true);
 
-    assertEquals(true, databaseQueryTask.isAsyncBefore());
+    assertEquals(true, databaseQueryTask.getAsyncBefore());
   }
 
   @Test
@@ -140,7 +140,7 @@ class DatabaseQueryTaskTest {
   void getAsyncAfterWorksTest() {
     setField(databaseQueryTask, "asyncAfter", true);
 
-    assertEquals(true, databaseQueryTask.isAsyncAfter());
+    assertEquals(true, databaseQueryTask.getAsyncAfter());
   }
 
   @Test
@@ -220,7 +220,7 @@ class DatabaseQueryTaskTest {
 
   @Test
   void setIncludeHeaderWorksTest() {
-    setField(databaseQueryTask, "includeHeader", null);
+    setField(databaseQueryTask, "includeHeader", false);
 
     databaseQueryTask.setIncludeHeader(true);
     assertEquals(true, getField(databaseQueryTask, "includeHeader"));

@@ -7,6 +7,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.PrePersist;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -22,29 +23,11 @@ import org.folio.spring.domain.model.AbstractBaseEntity;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "deserializeAs")
 @JsonSubTypes({
 
-    @JsonSubTypes.Type(value = StartEvent.class, name = "StartEvent"),
-
-    @JsonSubTypes.Type(value = EndEvent.class, name = "EndEvent"),
-
-    @JsonSubTypes.Type(value = ExclusiveGateway.class, name = "ExclusiveGateway"),
-
-    @JsonSubTypes.Type(value = InclusiveGateway.class, name = "InclusiveGateway"),
-
-    @JsonSubTypes.Type(value = MoveToLastGateway.class, name = "MoveToLastGateway"),
-
-    @JsonSubTypes.Type(value = ParallelGateway.class, name = "ParallelGateway"),
+    @JsonSubTypes.Type(value = CompressFileTask.class, name = "CompressFileTask"),
 
     @JsonSubTypes.Type(value = Condition.class, name = "Condition"),
 
     @JsonSubTypes.Type(value = ConnectTo.class, name = "ConnectTo"),
-
-    @JsonSubTypes.Type(value = MoveToNode.class, name = "MoveToNode"),
-
-    @JsonSubTypes.Type(value = Subprocess.class, name = "Subprocess"),
-
-    @JsonSubTypes.Type(value = EventSubprocess.class, name = "EventSubprocess"),
-
-    @JsonSubTypes.Type(value = CompressFileTask.class, name = "CompressFileTask"),
 
     @JsonSubTypes.Type(value = DatabaseConnectionTask.class, name = "DatabaseConnectionTask"),
 
@@ -52,21 +35,41 @@ import org.folio.spring.domain.model.AbstractBaseEntity;
 
     @JsonSubTypes.Type(value = DatabaseQueryTask.class, name = "DatabaseQueryTask"),
 
+    @JsonSubTypes.Type(value = DirectoryTask.class, name = "DirectoryTask"),
+
     @JsonSubTypes.Type(value = EmailTask.class, name = "EmailTask"),
+
+    @JsonSubTypes.Type(value = EndEvent.class, name = "EndEvent"),
+
+    @JsonSubTypes.Type(value = EventSubprocess.class, name = "EventSubprocess"),
+
+    @JsonSubTypes.Type(value = ExclusiveGateway.class, name = "ExclusiveGateway"),
 
     @JsonSubTypes.Type(value = FileTask.class, name = "FileTask"),
 
     @JsonSubTypes.Type(value = FtpTask.class, name = "FtpTask"),
 
-    @JsonSubTypes.Type(value = RequestTask.class, name = "RequestTask"),
+    @JsonSubTypes.Type(value = InclusiveGateway.class, name = "InclusiveGateway"),
 
-    @JsonSubTypes.Type(value = DirectoryTask.class, name = "DirectoryTask"),
+    @JsonSubTypes.Type(value = InputTask.class, name = "InputTask"),
 
-    @JsonSubTypes.Type(value = ReceiveTask.class, name = "ReceiveTask"),
+    @JsonSubTypes.Type(value = MoveToLastGateway.class, name = "MoveToLastGateway"),
+
+    @JsonSubTypes.Type(value = MoveToNode.class, name = "MoveToNode"),
+
+    @JsonSubTypes.Type(value = ParallelGateway.class, name = "ParallelGateway"),
 
     @JsonSubTypes.Type(value = ProcessorTask.class, name = "ProcessorTask"),
 
-    @JsonSubTypes.Type(value = ScriptTask.class, name = "ScriptTask")
+    @JsonSubTypes.Type(value = ReceiveTask.class, name = "ReceiveTask"),
+
+    @JsonSubTypes.Type(value = RequestTask.class, name = "RequestTask"),
+
+    @JsonSubTypes.Type(value = ScriptTask.class, name = "ScriptTask"),
+
+    @JsonSubTypes.Type(value = StartEvent.class, name = "StartEvent"),
+
+    @JsonSubTypes.Type(value = Subprocess.class, name = "Subprocess")
 
 })
 public abstract class Node extends AbstractBaseEntity implements HasId, HasInformational, HasName, HasNodeCommon {
@@ -91,6 +94,15 @@ public abstract class Node extends AbstractBaseEntity implements HasId, HasInfor
 
   public Node() {
     super();
+
+    name = "";
+  }
+
+  @PrePersist
+  public void prePersist() {
+    if (name == null) {
+      name = "";
+    }
   }
 
   public String getIdentifier() {

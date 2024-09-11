@@ -4,65 +4,67 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.PrePersist;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 import org.folio.rest.workflow.enums.StartEventType;
 import org.folio.rest.workflow.model.components.Event;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 public class StartEvent extends Node implements Event {
 
+  @Getter
+  @Setter
+  @Column(nullable = false)
+  @ColumnDefault("false")
+  private Boolean asyncBefore;
+
+  @Getter
+  @Setter
+  @Size(min = 4, max = 256)
+  @Column(nullable = true)
+  private String expression;
+
+  @Getter
+  @Setter
+  @Column(nullable = false)
+  @ColumnDefault("false")
+  private Boolean interrupting;
+
+  @Getter
+  @Setter
   @NotNull
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
   private StartEventType type;
 
-  @Size(min = 4, max = 256)
-  @Column(nullable = true)
-  private String expression;
-
-  @Column(nullable = false)
-  private boolean interrupting;
-
-  @Column(nullable = false)
-  private boolean asyncBefore;
-
   public StartEvent() {
     super();
-    interrupting = false;
+
     asyncBefore = false;
+    interrupting = false;
+    type = StartEventType.NONE;
   }
 
-  public StartEventType getType() {
-    return type;
-  }
+  @Override
+  @PrePersist
+  public void prePersist() {
+    super.prePersist();
 
-  public void setType(StartEventType type) {
-    this.type = type;
-  }
+    if (asyncBefore == null) {
+      asyncBefore = false;
+    }
 
-  public String getExpression() {
-    return expression;
-  }
+    if (interrupting == null) {
+      interrupting = false;
+    }
 
-  public void setExpression(String expression) {
-    this.expression = expression;
-  }
-
-  public boolean isInterrupting() {
-    return interrupting;
-  }
-
-  public void setInterrupting(boolean interrupting) {
-    this.interrupting = interrupting;
-  }
-
-  public boolean isAsyncBefore() {
-    return asyncBefore;
-  }
-
-  public void setAsyncBefore(boolean asyncBefore) {
-    this.asyncBefore = asyncBefore;
+    if (type == null) {
+      type = StartEventType.NONE;
+    }
   }
 
 }

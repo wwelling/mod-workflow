@@ -98,7 +98,7 @@ class SubprocessTest {
   void getAsyncBeforeWorksTest() {
     setField(subprocess, "asyncBefore", true);
 
-    assertEquals(true, subprocess.isAsyncBefore());
+    assertEquals(true, subprocess.getAsyncBefore());
   }
 
   @Test
@@ -113,7 +113,7 @@ class SubprocessTest {
   void getAsyncAfterWorksTest() {
     setField(subprocess, "asyncAfter", true);
 
-    assertEquals(true, subprocess.isAsyncAfter());
+    assertEquals(true, subprocess.getAsyncAfter());
   }
 
   @Test

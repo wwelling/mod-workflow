@@ -125,7 +125,7 @@ class FtpTaskTest {
   void getAsyncBeforeWorksTest() {
     setField(ftpTask, "asyncBefore", true);
 
-    assertEquals(true, ftpTask.isAsyncBefore());
+    assertEquals(true, ftpTask.getAsyncBefore());
   }
 
   @Test
@@ -140,7 +140,7 @@ class FtpTaskTest {
   void getAsyncAfterWorksTest() {
     setField(ftpTask, "asyncAfter", true);
 
-    assertEquals(true, ftpTask.isAsyncAfter());
+    assertEquals(true, ftpTask.getAsyncAfter());
   }
 
   @Test
