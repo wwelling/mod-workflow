@@ -79,7 +79,7 @@ public class WorkflowController {
     return workflowCqlService.findByCql(query, offset, limit);
   }
 
-  @GetMapping(value = {"/{id}", "/{id}"}, produces = { MediaType.APPLICATION_JSON_VALUE })
+  @GetMapping(value = {"/{id}", "/{id}/"}, produces = { MediaType.APPLICATION_JSON_VALUE })
   public Workflow getWorkflow(
     @PathVariable String id,
     @TenantHeader String tenant,
