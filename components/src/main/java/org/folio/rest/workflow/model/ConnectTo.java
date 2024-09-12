@@ -2,6 +2,7 @@ package org.folio.rest.workflow.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.PrePersist;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +19,18 @@ public class ConnectTo extends Node implements Navigation {
 
   public ConnectTo() {
     super();
+
+    nodeId = "";
+  }
+
+  @Override
+  @PrePersist
+  public void prePersist() {
+    super.prePersist();
+
+    if (nodeId == null) {
+      nodeId = "";
+    }
   }
 
 }

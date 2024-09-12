@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.PrePersist;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -16,10 +17,19 @@ public class EmbeddedProcessor implements HasEmbeddedProcessorCommon {
 
   @Getter
   @Setter
-  @NotNull
   @Column(nullable = false)
-  @Enumerated(EnumType.STRING)
-  private ScriptType scriptType;
+  private Integer buffer;
+
+  @Getter
+  @Setter
+  @NotNull
+  @Column(columnDefinition = "TEXT", nullable = false)
+  private String code;
+
+  @Getter
+  @Setter
+  @Column(nullable = false)
+  private Integer delay;
 
   @Getter
   @Setter
@@ -31,24 +41,36 @@ public class EmbeddedProcessor implements HasEmbeddedProcessorCommon {
   @Getter
   @Setter
   @NotNull
-  @Column(columnDefinition = "TEXT", nullable = false)
-  private String code;
-
-  @Getter
-  @Setter
   @Column(nullable = false)
-  private int buffer;
-
-  @Getter
-  @Setter
-  @Column(nullable = false)
-  private int delay;
+  @Enumerated(EnumType.STRING)
+  private ScriptType scriptType;
 
   public EmbeddedProcessor() {
     super();
 
     buffer = 0;
+    code = "";
     delay = 0;
+    functionName = "";
+  }
+
+  @PrePersist
+  public void prePersist() {
+    if (buffer == null) {
+      buffer = 0;
+    }
+
+    if (code == null) {
+      code = "";
+    }
+
+    if (delay == null) {
+      delay = 0;
+    }
+
+    if (functionName == null) {
+      functionName = "";
+    }
   }
 
 }

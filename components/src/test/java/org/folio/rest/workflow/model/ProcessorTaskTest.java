@@ -127,7 +127,7 @@ class ProcessorTaskTest {
   void getAsyncBeforeWorksTest() {
     setField(processorTask, "asyncBefore", true);
 
-    assertEquals(true, processorTask.isAsyncBefore());
+    assertEquals(true, processorTask.getAsyncBefore());
   }
 
   @Test
@@ -142,7 +142,7 @@ class ProcessorTaskTest {
   void getAsyncAfterWorksTest() {
     setField(processorTask, "asyncAfter", true);
 
-    assertEquals(true, processorTask.isAsyncAfter());
+    assertEquals(true, processorTask.getAsyncAfter());
   }
 
   @Test

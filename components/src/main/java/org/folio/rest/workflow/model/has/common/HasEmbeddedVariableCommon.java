@@ -11,11 +11,12 @@ public interface HasEmbeddedVariableCommon {
   public Boolean getAsTransient();
   public VariableType getType();
   public String getKey();
-  public boolean isSpin();
+  public Boolean getSpin();
 
   public void setAsJson(Boolean asJson);
   public void setAsTransient(Boolean asTransient);
   public void setType(VariableType type);
   public void setKey(String key);
-  public void setSpin(boolean spin);
+  public void setSpin(Boolean spin);
+
 }

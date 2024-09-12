@@ -130,7 +130,7 @@ class WorkflowDtoTest {
   void getActiveWorksTest() {
     setField(workflowDto, "active", true);
 
-    assertEquals(true, workflowDto.isActive());
+    assertEquals(true, workflowDto.getActive());
   }
 
   @Test

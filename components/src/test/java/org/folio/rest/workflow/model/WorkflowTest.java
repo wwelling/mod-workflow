@@ -127,7 +127,7 @@ class WorkflowTest {
   void getActiveWorksTest() {
     setField(workflow, "active", true);
 
-    assertEquals(true, workflow.isActive());
+    assertEquals(true, workflow.getActive());
   }
 
   @Test

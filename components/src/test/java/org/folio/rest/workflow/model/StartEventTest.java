@@ -112,7 +112,7 @@ class StartEventTest {
   void getInterruptingWorksTest() {
     setField(startEvent, "interrupting", true);
 
-    assertEquals(true, startEvent.isInterrupting());
+    assertEquals(true, startEvent.getInterrupting());
   }
 
   @Test
@@ -127,7 +127,7 @@ class StartEventTest {
   void getAsyncBeforeWorksTest() {
     setField(startEvent, "asyncBefore", true);
 
-    assertEquals(true, startEvent.isAsyncBefore());
+    assertEquals(true, startEvent.getAsyncBefore());
   }
 
   @Test

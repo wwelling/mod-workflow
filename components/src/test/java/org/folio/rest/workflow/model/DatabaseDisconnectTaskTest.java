@@ -124,7 +124,7 @@ class DatabaseDisconnectTaskTest {
   void getAsyncBeforeWorksTest() {
     setField(databaseDisconnectTask, "asyncBefore", true);
 
-    assertEquals(true, databaseDisconnectTask.isAsyncBefore());
+    assertEquals(true, databaseDisconnectTask.getAsyncBefore());
   }
 
   @Test
@@ -139,7 +139,7 @@ class DatabaseDisconnectTaskTest {
   void getAsyncAfterWorksTest() {
     setField(databaseDisconnectTask, "asyncAfter", true);
 
-    assertEquals(true, databaseDisconnectTask.isAsyncAfter());
+    assertEquals(true, databaseDisconnectTask.getAsyncAfter());
   }
 
   @Test

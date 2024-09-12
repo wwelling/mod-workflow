@@ -7,15 +7,16 @@ import org.folio.rest.workflow.enums.ScriptType;
  */
 public interface HasEmbeddedProcessorCommon {
 
-  public int getBuffer();
+  public Integer getBuffer();
   public String getCode();
-  public int getDelay();
+  public Integer getDelay();
   public String getFunctionName();
   public ScriptType getScriptType();
 
-  public void setBuffer(int buffer);
+  public void setBuffer(Integer buffer);
   public void setCode(String code);
-  public void setDelay(int delay);
+  public void setDelay(Integer delay);
   public void setFunctionName(String functionName);
   public void setScriptType(ScriptType scriptType);
+
 }

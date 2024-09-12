@@ -126,7 +126,7 @@ class CompressFileTest {
   void getAsyncBeforeWorksTest() {
     setField(compressFileTask, "asyncBefore", true);
 
-    assertEquals(true, compressFileTask.isAsyncBefore());
+    assertEquals(true, compressFileTask.getAsyncBefore());
   }
 
   @Test
@@ -141,7 +141,7 @@ class CompressFileTest {
   void getAsyncAfterWorksTest() {
     setField(compressFileTask, "asyncAfter", true);
 
-    assertEquals(true, compressFileTask.isAsyncAfter());
+    assertEquals(true, compressFileTask.getAsyncAfter());
   }
 
   @Test

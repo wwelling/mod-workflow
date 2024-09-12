@@ -9,14 +9,15 @@ public interface HasEmbeddedLoopReferenceCommon {
   public String getCompleteConditionExpression();
   public String getDataInputRefExpression();
   public String getInputDataName();
+  public Boolean getParallel();
   public boolean hasCardinalityExpression();
   public boolean hasCompleteConditionExpression();
   public boolean hasDataInput();
-  public boolean isParallel();
 
   public void setCardinalityExpression(String cardinalityExpression);
   public void setCompleteConditionExpression(String completeConditionExpression);
   public void setDataInputRefExpression(String dataInputRefExpression);
   public void setInputDataName(String inputDataName);
-  public void setParallel(boolean parallel);
+  public void setParallel(Boolean parallel);
+
 }
