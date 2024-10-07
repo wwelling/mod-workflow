@@ -354,13 +354,13 @@ class WorkflowImportServiceTest {
    * The Broker is not needed, so mock it into nothingness.
    * The `allow-bean-definition-overriding` must be set to true.
    */
-  @TestConfiguration
-  public static class JmsBrokerConfig {
+  // @TestConfiguration
+  // public static class JmsBrokerConfig {
 
-    @Bean
-    public BrokerService broker() {
-      return Mockito.mock(BrokerService.class);
-    }
-  }
+  //   @Bean
+  //   public BrokerService broker() {
+  //     return Mockito.mock(BrokerService.class);
+  //   }
+  // }
 
 }
