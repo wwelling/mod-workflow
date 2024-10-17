@@ -20,7 +20,6 @@ public class EventProducer {
   }
 
   public void send(Event event) {
-    // CAUTION: send not implemented
     logger.info("Send []: {}, {}", event.getMethod(), event.getPath());
     this.eventTemplate.send("workflow.events", event);
   }
