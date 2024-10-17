@@ -93,12 +93,6 @@ springdoc:
     path: /swagger-ui
   writer-with-default-pretty-printer: true
 
-event:
-  uploads:
-    path: events
-  queue:
-    name: event.queue
-
 folio:
   tenant.validation: false
 
