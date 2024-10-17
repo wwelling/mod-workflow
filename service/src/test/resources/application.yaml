@@ -32,6 +32,9 @@ spring:
     returnBodyOnCreate: true
     returnBodyOnUpdate: true
 
+  kafka:
+    bootstrap-servers: ${KAFKA_HOST:localhost}:${KAFKA_PORT:9092}
+
   main:
     # Enable overriding of bean definition so that unit tests can do this (see WorkflowImportServiceTest).
     allow-bean-definition-overriding: true
