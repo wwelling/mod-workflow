@@ -96,6 +96,11 @@ springdoc:
     path: /swagger-ui
   writer-with-default-pretty-printer: true
 
+# use to store uploads shared over kafka
+event:
+  uploads:
+    path: events
+
 folio:
   tenant.validation: false
 
