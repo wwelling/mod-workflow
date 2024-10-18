@@ -30,6 +30,37 @@
       ]
     },
     {
+      "id": "workflow-nodes",
+      "version": "1.0",
+      "handlers": [
+        {
+          "methods": ["GET"],
+          "pathPattern": "/nodes",
+          "permissionsRequired": ["workflow.nodes.collection.get"]
+        },
+        {
+          "methods": ["POST"],
+          "pathPattern": "/nodes",
+          "permissionsRequired": ["workflow.nodes.item.post"]
+        },
+        {
+          "methods": ["DELETE"],
+          "pathPattern": "/nodes/{id}",
+          "permissionsRequired": ["workflow.nodes.item.delete"]
+        },
+        {
+          "methods": ["GET"],
+          "pathPattern": "/nodes/{id}",
+          "permissionsRequired": ["workflow.nodes.item.get"]
+        },
+        {
+          "methods": ["PUT"],
+          "pathPattern": "/nodes/{id}",
+          "permissionsRequired": ["workflow.nodes.item.put"]
+        }
+      ]
+    },
+    {
       "id": "workflow-triggers",
       "version": "1.0",
       "handlers": [
@@ -248,6 +279,44 @@
       "subPermissions": [
         "workflow.events.collection.get",
         "workflow.events.collection.post"
+      ],
+      "visible": false
+    },
+    {
+      "permissionName": "workflow.nodes.collection.get",
+      "displayName": "Workflow - node - get node collection",
+      "description": "Get node collection"
+    },
+    {
+      "permissionName": "workflow.nodes.item.delete",
+      "displayName": "Workflow - node - delete node item",
+      "description": "Delete node item"
+    },
+    {
+      "permissionName": "workflow.nodes.item.get",
+      "displayName": "Workflow - node - get node item",
+      "description": "Get node item"
+    },
+    {
+      "permissionName": "workflow.nodes.item.post",
+      "displayName": "Workflow - node - post node item",
+      "description": "Create node item"
+    },
+    {
+      "permissionName": "workflow.nodes.item.put",
+      "displayName": "Workflow - node - put node item",
+      "description": "Update node item"
+    },
+    {
+      "permissionName": "workflow.nodes.all",
+      "displayName": "Workflow - node - all permissions",
+      "description": "Entire set of permissions needed to use the workflow triggers",
+      "subPermissions": [
+        "workflow.nodes.collection.get",
+        "workflow.nodes.item.delete",
+        "workflow.nodes.item.get",
+        "workflow.nodes.item.post",
+        "workflow.nodes.item.put"
       ],
       "visible": false
     },
