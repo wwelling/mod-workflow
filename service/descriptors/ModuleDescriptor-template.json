@@ -404,8 +404,7 @@
       "HostConfig": {
         "Memory": 402653184,
         "PortBindings": {
-          "8081/tcp": [ { "HostPort": "%p" } ],
-          "61616/tcp": [ { "HostPort": "61616" } ]
+          "8081/tcp": [ { "HostPort": "%p" } ]
         }
       }
     },
