@@ -30,11 +30,11 @@ public class WorkflowEngineService {
   private static final String WORKFLOW_ENGINE_ACTIVATE_URL_TEMPLATE = "%s/workflow-engine/workflows/activate";
   private static final String WORKFLOW_ENGINE_DEACTIVATE_URL_TEMPLATE = "%s/workflow-engine/workflows/deactivate";
 
-  private static final String PROCESS_DEFINITION_START_URL_TEMPLATE = "%s/process-definition/%s/start";
-  private static final String PROCESS_DEFINITION_GET_URL_TEMPLATE = "%s/process-definition%s";
+  private static final String PROCESS_DEFINITION_START_URL_TEMPLATE = "%s%s/process-definition/%s/start";
+  private static final String PROCESS_DEFINITION_GET_URL_TEMPLATE = "%s%s/process-definition%s";
 
-  private static final String HISTORY_PROCESS_INSTANCE_URL_TEMPLATE = "%s/history/process-instance%s";
-  private static final String HISTORY_INCIDENT_URL_TEMPLATE = "%s/history/incident%s";
+  private static final String HISTORY_PROCESS_INSTANCE_URL_TEMPLATE = "%s%s/history/process-instance%s";
+  private static final String HISTORY_INCIDENT_URL_TEMPLATE = "%s%s/history/incident%s";
 
   private static final String LOG_RESPONSE_BODY = "Response body: {}";
 
@@ -46,6 +46,9 @@ public class WorkflowEngineService {
 
   @Value("${okapi.url}")
   private String okapiUrl;
+
+  @Value("${okapi.workflow-engine.path:/camunda}")
+  private String workflowEnginePath;
 
   @Autowired
   private WorkflowRepo workflowRepo;
@@ -121,7 +124,7 @@ public class WorkflowEngineService {
 
     HttpEntity<JsonNode> contextHttpEntity = new HttpEntity<>(context, headers(tenant, token));
 
-    String url = String.format(PROCESS_DEFINITION_START_URL_TEMPLATE, okapiUrl, definitionId);
+    String url = String.format(PROCESS_DEFINITION_START_URL_TEMPLATE, okapiUrl, workflowEnginePath, definitionId);
     try {
       ResponseEntity<JsonNode> response = exchange(url, HttpMethod.POST, contextHttpEntity, JsonNode.class);
 
@@ -160,7 +163,7 @@ public class WorkflowEngineService {
     HttpEntity<Void> httpEntity = new HttpEntity<>(headers(tenant, token));
 
     String arguments = String.format("?deploymentId=%s&versionTag=%s&maxResults=1", deploymentId, version);
-    String url = String.format(PROCESS_DEFINITION_GET_URL_TEMPLATE, okapiUrl, arguments);
+    String url = String.format(PROCESS_DEFINITION_GET_URL_TEMPLATE, okapiUrl, workflowEnginePath, arguments);
 
     try {
       ResponseEntity<ArrayNode> response = exchange(url, HttpMethod.GET, httpEntity, ArrayNode.class);
@@ -184,7 +187,7 @@ public class WorkflowEngineService {
     HttpEntity<Void> httpEntity = new HttpEntity<>(headers(tenant, token));
 
     String arguments = String.format("?processDefinitionId=%s&sortBy=startTime&sortOrder=asc", processDefinitionId);
-    String url = String.format(HISTORY_PROCESS_INSTANCE_URL_TEMPLATE, okapiUrl, arguments);
+    String url = String.format(HISTORY_PROCESS_INSTANCE_URL_TEMPLATE, okapiUrl, workflowEnginePath, arguments);
 
     try {
       ResponseEntity<ArrayNode> response = exchange(url, HttpMethod.GET, httpEntity, ArrayNode.class);
@@ -207,7 +210,7 @@ public class WorkflowEngineService {
     HttpEntity<Void> httpEntity = new HttpEntity<>(headers(tenant, token));
 
     String arguments = String.format("?processInstanceId=%s&sortBy=createTime&sortOrder=asc", processInstanceId);
-    String url = String.format(HISTORY_INCIDENT_URL_TEMPLATE, okapiUrl, arguments);
+    String url = String.format(HISTORY_INCIDENT_URL_TEMPLATE, okapiUrl, workflowEnginePath, arguments);
 
     try {
       ResponseEntity<ArrayNode> response = exchange(url, HttpMethod.GET, httpEntity, ArrayNode.class);
@@ -274,9 +277,11 @@ public class WorkflowEngineService {
   private HttpHeaders headers(String tenant, String token) {
     HttpHeaders requestHeaders = new HttpHeaders();
     if (tenant != null) {
+      log.info("With tenant {}", tenant);
       requestHeaders.add(tenantHeaderName, tenant);
     }
     if (token != null) {
+      log.info("With token {}", token);
       requestHeaders.add(tokenHeaderName, token);
     }
     requestHeaders.add("Content-Type", "application/json");
