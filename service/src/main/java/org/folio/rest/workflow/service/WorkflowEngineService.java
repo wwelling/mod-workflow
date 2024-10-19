@@ -47,7 +47,7 @@ public class WorkflowEngineService {
   @Value("${okapi.url}")
   private String okapiUrl;
 
-  @Value("${okapi.workflow-engine.path:/camunda}")
+  @Value("${okapi.workflow-engine.path:/rest}")
   private String workflowEnginePath;
 
   @Autowired
