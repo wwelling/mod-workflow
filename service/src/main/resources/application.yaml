@@ -99,6 +99,12 @@ springdoc:
     path: /swagger-ui
   writer-with-default-pretty-printer: true
 
+application:
+  kafka:
+    producer:
+      events:
+        topic: ${ENV:folio}.workflow.events
+
 # use to store uploads shared over kafka
 event:
   uploads:

@@ -4,6 +4,7 @@ import org.folio.spring.messaging.model.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,9 @@ import org.springframework.stereotype.Service;
 public class EventProducer {
 
   private static final Logger logger = LoggerFactory.getLogger(EventProducer.class);
+
+  @Value("${application.kafka.producer.events.topic}")
+  private String topic;
 
   private KafkaTemplate<String, Event> eventTemplate;
 
@@ -21,7 +25,7 @@ public class EventProducer {
 
   public void send(Event event) {
     logger.info("Send []: {}, {}", event.getMethod(), event.getPath());
-    this.eventTemplate.send("workflow.events", event);
+    this.eventTemplate.send(topic, event);
   }
 
 }
