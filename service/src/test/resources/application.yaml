@@ -116,9 +116,6 @@ tenant:
 
 okapi:
   url: ${OKAPI_URL:http://localhost:9130}
-  camunda:
-    base-path: /
-    rest-path: /rest
 
 # https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html
 management:

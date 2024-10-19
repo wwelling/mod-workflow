@@ -27,14 +27,14 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class WorkflowEngineService {
 
-  private static final String WORKFLOW_ENGINE_ACTIVATE_URL_TEMPLATE = "%s%s/workflow-engine/workflows/activate";
-  private static final String WORKFLOW_ENGINE_DEACTIVATE_URL_TEMPLATE = "%s%s/workflow-engine/workflows/deactivate";
+  private static final String WORKFLOW_ENGINE_ACTIVATE_URL_TEMPLATE = "%s/workflow-engine/workflows/activate";
+  private static final String WORKFLOW_ENGINE_DEACTIVATE_URL_TEMPLATE = "%s/workflow-engine/workflows/deactivate";
 
-  private static final String PROCESS_DEFINITION_START_URL_TEMPLATE = "%s%s/process-definition/%s/start";
-  private static final String PROCESS_DEFINITION_GET_URL_TEMPLATE = "%s%s/process-definition%s";
+  private static final String PROCESS_DEFINITION_START_URL_TEMPLATE = "%s/process-definition/%s/start";
+  private static final String PROCESS_DEFINITION_GET_URL_TEMPLATE = "%s/process-definition%s";
 
-  private static final String HISTORY_PROCESS_INSTANCE_URL_TEMPLATE = "%s%s/history/process-instance%s";
-  private static final String HISTORY_INCIDENT_URL_TEMPLATE = "%s%s/history/incident%s";
+  private static final String HISTORY_PROCESS_INSTANCE_URL_TEMPLATE = "%s/history/process-instance%s";
+  private static final String HISTORY_INCIDENT_URL_TEMPLATE = "%s/history/incident%s";
 
   private static final String LOG_RESPONSE_BODY = "Response body: {}";
 
@@ -46,12 +46,6 @@ public class WorkflowEngineService {
 
   @Value("${okapi.url}")
   private String okapiUrl;
-
-  @Value("${okapi.camunda.base-path}")
-  private String basePath;
-
-  @Value("${okapi.camunda.rest-path}")
-  private String restPath;
 
   @Autowired
   private WorkflowRepo workflowRepo;
@@ -127,7 +121,7 @@ public class WorkflowEngineService {
 
     HttpEntity<JsonNode> contextHttpEntity = new HttpEntity<>(context, headers(tenant, token));
 
-    String url = String.format(PROCESS_DEFINITION_START_URL_TEMPLATE, okapiUrl, restPath, definitionId);
+    String url = String.format(PROCESS_DEFINITION_START_URL_TEMPLATE, okapiUrl, definitionId);
     try {
       ResponseEntity<JsonNode> response = exchange(url, HttpMethod.POST, contextHttpEntity, JsonNode.class);
 
@@ -166,7 +160,7 @@ public class WorkflowEngineService {
     HttpEntity<Void> httpEntity = new HttpEntity<>(headers(tenant, token));
 
     String arguments = String.format("?deploymentId=%s&versionTag=%s&maxResults=1", deploymentId, version);
-    String url = String.format(PROCESS_DEFINITION_GET_URL_TEMPLATE, okapiUrl, restPath, arguments);
+    String url = String.format(PROCESS_DEFINITION_GET_URL_TEMPLATE, okapiUrl, arguments);
 
     try {
       ResponseEntity<ArrayNode> response = exchange(url, HttpMethod.GET, httpEntity, ArrayNode.class);
@@ -190,7 +184,7 @@ public class WorkflowEngineService {
     HttpEntity<Void> httpEntity = new HttpEntity<>(headers(tenant, token));
 
     String arguments = String.format("?processDefinitionId=%s&sortBy=startTime&sortOrder=asc", processDefinitionId);
-    String url = String.format(HISTORY_PROCESS_INSTANCE_URL_TEMPLATE, okapiUrl, restPath, arguments);
+    String url = String.format(HISTORY_PROCESS_INSTANCE_URL_TEMPLATE, okapiUrl, arguments);
 
     try {
       ResponseEntity<ArrayNode> response = exchange(url, HttpMethod.GET, httpEntity, ArrayNode.class);
@@ -213,7 +207,7 @@ public class WorkflowEngineService {
     HttpEntity<Void> httpEntity = new HttpEntity<>(headers(tenant, token));
 
     String arguments = String.format("?processInstanceId=%s&sortBy=createTime&sortOrder=asc", processInstanceId);
-    String url = String.format(HISTORY_INCIDENT_URL_TEMPLATE, okapiUrl, restPath, arguments);
+    String url = String.format(HISTORY_INCIDENT_URL_TEMPLATE, okapiUrl, arguments);
 
     try {
       ResponseEntity<ArrayNode> response = exchange(url, HttpMethod.GET, httpEntity, ArrayNode.class);
@@ -250,10 +244,13 @@ public class WorkflowEngineService {
       throws WorkflowEngineServiceException {
 
     HttpEntity<WorkflowDto> entity = new HttpEntity<>(workflow, headers(tenant, token));
-    String url = String.format(requestPath, okapiUrl, basePath);
+    HttpMethod method = HttpMethod.POST;
+    String url = String.format(requestPath, okapiUrl);
+
+    log.info("Send Okapi request for mod-camunda {} {}", method, url);
 
     try {
-      ResponseEntity<Workflow> response = exchange(url, HttpMethod.POST, entity, Workflow.class);
+      ResponseEntity<Workflow> response = exchange(url, method, entity, Workflow.class);
 
       if (response.getStatusCode() == HttpStatus.OK) {
         Workflow responseWorkflow = response.getBody();
@@ -267,9 +264,10 @@ public class WorkflowEngineService {
         }
       }
     } catch (Exception e) {
+      log.error("Failed to send workflow request: {}!", e.getMessage(), e);
       throw new WorkflowEngineServiceException(String.format("Failed to send workflow request: %s!", e.getMessage()), e);
     }
-
+    log.error("Unable to get updated workflow from workflow engine!");
     throw new WorkflowEngineServiceException("Unable to get updated workflow from workflow engine!");
   }
 

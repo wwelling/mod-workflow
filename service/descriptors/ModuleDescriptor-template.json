@@ -497,8 +497,6 @@
       { "name": "KAFKA_SSL_KEYSTORE_PASSWORD", "value": "" },
       { "name": "KAFKA_SSL_TRUSTSTORE_LOCATION", "value": "" },
       { "name": "KAFKA_SSL_TRUSTSTORE_PASSWORD", "value": "" },
-      { "name": "OKAPI_CAMUNDA_BASEPATH", "value": "/", "description": "The context path, or base path of Mod-Camunda." },
-      { "name": "OKAPI_CAMUNDA_RESTPATH", "value": "/rest", "description": "The path Mod-Camunda uses for REST requests." },
       { "name": "OKAPI_URL", "value": "http://10.0.2.15:9130", "description": "The URL to the OKAPI service." },
       { "name": "SERVER_PORT", "value": "8081", "description": "The port to listen on that must match the PortBindings." },
       { "name": "SERVER_SERVLET_CONTEXTPATH", "value": "/", "description": "The context path, or base path, to host at." },
