@@ -284,6 +284,7 @@ public class WorkflowEngineService {
   }
 
   private <T> ResponseEntity<T> exchange(String url, HttpMethod method, HttpEntity<?> request, Class<T> responseType) {
+    log.info("Exchange for {} {} {}", responseType.getSimpleName(), method, url);
     return this.restTemplate.exchange(url, method, request, responseType, (Object[]) new String[0]);
   }
 
