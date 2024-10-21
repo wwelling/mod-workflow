@@ -250,7 +250,7 @@ public class WorkflowEngineService {
     HttpMethod method = HttpMethod.POST;
     String url = String.format(requestPath, okapiUrl);
 
-    log.info("Send Okapi workflow engine request {} {}", method, url);
+    log.debug("Send Okapi workflow engine request {} {}", method, url);
 
     try {
       ResponseEntity<Workflow> response = exchange(url, method, entity, Workflow.class);
