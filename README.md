@@ -35,6 +35,48 @@ docker build -t [docker repo]/folio/mod-workflow:[version] .
 docker push [docker repo]/folio/mod-workflow:[version]
 ```
 
+### Environment variables:
+
+| Name                           |       Default value       | Description                                                                                                                                                |
+|:-------------------------------|:-------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| JAVA_OPTIONS                   | -XX:MaxRAMPercentage=75.0 | Java options                                                                                                                                               |
+| DB_HOST                        |         postgres          | Postgres hostname                                                                                                                                          |
+| DB_PORT                        |           5432            | Postgres port                                                                                                                                              |
+| DB_USERNAME                    |        folio_admin        | Postgres username                                                                                                                                          |
+| DB_PASSWORD                    |             -             | Postgres username password                                                                                                                                 |
+| DB_DATABASE                    |       okapi_modules       | Postgres database name                                                                                                                                     |
+| DB_QUERYTIMEOUT                |           60000           | Database query timeout.                                                                                                                                    |
+| DB_CHARSET                     |           UTF-8           | Database charset.                                                                                                                                          |
+| DB_MAXPOOLSIZE                 |             5             | Database max pool size.                                                                                                                                    |
+| KAFKA_HOST                     |           kafka           | Kafka broker hostname                                                                                                                                      |
+| KAFKA_PORT                     |           9092            | Kafka broker port                                                                                                                                          |
+| KAFKA_SECURITY_PROTOCOL        |         PLAINTEXT         | Kafka security protocol used to communicate with brokers (SSL or PLAINTEXT)                                                                                |
+| KAFKA_SSL_KEYSTORE_LOCATION    |             -             | The location of the Kafka key store file. This is optional for client and can be used for two-way authentication for client.                               |
+| KAFKA_SSL_KEYSTORE_PASSWORD    |             -             | The store password for the Kafka key store file. This is optional for client and only needed if 'ssl.keystore.location' is configured.                     |
+| KAFKA_SSL_TRUSTSTORE_LOCATION  |             -             | The location of the Kafka trust store file.                                                                                                                |
+| KAFKA_SSL_TRUSTSTORE_PASSWORD  |             -             | The password for the Kafka trust store file. If a password is not set, trust store file configured will still be used, but integrity checking is disabled. |
+| OKAPI_URL                      |     http://okapi:9130     | OKAPI URL used to login system user, required                                                                                                              |
+| SERVER_PORT                    |           8081            |                                                                                                               |
+| SERVER_SERVLET_CONTEXTPATH     |             /             |                                                                                                               |
+| SPRING_FLYWAY_ENABLED          |           false           |                                                                                                               |
+| SPRING_JPA_HIBERNATE_DDLAUTO   |           update          |                                                                                                               |
+| TENANT_DEFAULTTENANT           |           diku            |                                                                                                               |
+| TENANT_FORCETENANT             |           false           |                                                                                                               |
+| TENANT_INITIALIZEDEFAULTTENANT |           true            |                                                                                                               |
+| TENANT_RECREATEDEFAULTTENANT   |           false           |                                                                                                               |
+| ENV                            |           folio           | Logical name of the deployment, must be set if Kafka/Elasticsearch are shared for environments, `a-z (any case)`, `0-9`, `-`, `_` symbols only allowed     |
+
+### Required Permissions
+Institutional users should be granted the following permissions in order to use this remote storage API:
+- `remote-storage.all`
+- `camunda.history.all`
+- `camunda.message.all`
+- `camunda.process.all`
+- `camunda.process-definition.all`
+- `camunda.decision-definition.all`
+- `camunda.task.all`
+- `camunda.workflow-engine.workflows.all`
+
 ### Issue tracker
 
 See project [FOLIO](https://issues.folio.org/browse/FOLIO)
