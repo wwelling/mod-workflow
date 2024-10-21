@@ -67,7 +67,7 @@ docker push [docker repo]/folio/mod-workflow:[version]
 
 
 ### Required Permissions
-Institutional users should be granted the following permissions in order to use this remote storage API:
+Institutional users should be granted the following permissions in order to use this workflow API:
 - `workflow.actions.all`
 - `workflow.events.all`
 - `workflow.nodes.all`
