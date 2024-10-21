@@ -56,26 +56,25 @@ docker push [docker repo]/folio/mod-workflow:[version]
 | KAFKA_SSL_TRUSTSTORE_LOCATION  |             -             | The location of the Kafka trust store file.                                                                                                                |
 | KAFKA_SSL_TRUSTSTORE_PASSWORD  |             -             | The password for the Kafka trust store file. If a password is not set, trust store file configured will still be used, but integrity checking is disabled. |
 | OKAPI_URL                      |     http://okapi:9130     | OKAPI URL used to login system user, required                                                                                                              |
-| SERVER_PORT                    |           8081            |                                                                                                               |
-| SERVER_SERVLET_CONTEXTPATH     |             /             |                                                                                                               |
-| SPRING_FLYWAY_ENABLED          |           false           |                                                                                                               |
-| SPRING_JPA_HIBERNATE_DDLAUTO   |           update          |                                                                                                               |
-| TENANT_DEFAULTTENANT           |           diku            |                                                                                                               |
-| TENANT_FORCETENANT             |           false           |                                                                                                               |
-| TENANT_INITIALIZEDEFAULTTENANT |           true            |                                                                                                               |
-| TENANT_RECREATEDEFAULTTENANT   |           false           |                                                                                                               |
-| ENV                            |           folio           | Logical name of the deployment, must be set if Kafka/Elasticsearch are shared for environments, `a-z (any case)`, `0-9`, `-`, `_` symbols only allowed     |
+| SERVER_PORT                    |           8081            | The port to listen on that must match the PortBindings.                                                                                                              |
+| SERVER_SERVLET_CONTEXTPATH     |             /             | The context path, or base path, to host at.                                                                                                              |
+| SPRING_FLYWAY_ENABLED          |           false           | Database migration support via Spring Flyway.                                                                                                              |
+| SPRING_JPA_HIBERNATE_DDLAUTO   |           update          | Auto-configure database on startup.                                                                                                              |
+| TENANT_DEFAULTTENANT           |           diku            | The name of the default tenant to use.                                                                                                              |
+| TENANT_FORCETENANT             |           false           | Forcibly add or overwrite the tenant name using the default tenant.                                                                                                              |
+| TENANT_INITIALIZEDEFAULTTENANT |           true            | Perform initial auto-creation of tenant in the DB (schema, tables, etc..).                                                                                                              |
+| TENANT_RECREATEDEFAULTTENANT   |           false           | When TENANT_INITIALIZEDEFAULTTENANT is true and the DB already exists, then drop and re-create.                                                                                                              |
+
 
 ### Required Permissions
 Institutional users should be granted the following permissions in order to use this remote storage API:
-- `remote-storage.all`
-- `camunda.history.all`
-- `camunda.message.all`
-- `camunda.process.all`
-- `camunda.process-definition.all`
-- `camunda.decision-definition.all`
-- `camunda.task.all`
-- `camunda.workflow-engine.workflows.all`
+- `workflow.actions.all`
+- `workflow.events.all`
+- `workflow.nodes.all`
+- `workflow.nodes.item.post`
+- `workflow.triggers.all`
+- `workflow.tasks.all`
+- `workflow.workflows.all`
 
 ### Issue tracker
 
