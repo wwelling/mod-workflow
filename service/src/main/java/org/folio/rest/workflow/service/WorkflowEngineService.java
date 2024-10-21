@@ -277,11 +277,11 @@ public class WorkflowEngineService {
   private HttpHeaders headers(String tenant, String token) {
     HttpHeaders requestHeaders = new HttpHeaders();
     if (tenant != null) {
-      log.info("With tenant {}", tenant);
+      log.debug("With tenant {}", tenant);
       requestHeaders.add(tenantHeaderName, tenant);
     }
     if (token != null) {
-      log.info("With token {}", token);
+      log.debug("With token {}", token);
       requestHeaders.add(tokenHeaderName, token);
     }
     requestHeaders.add("Content-Type", "application/json");
@@ -289,7 +289,7 @@ public class WorkflowEngineService {
   }
 
   private <T> ResponseEntity<T> exchange(String url, HttpMethod method, HttpEntity<?> request, Class<T> responseType) {
-    log.info("Exchange for {} {} {}", responseType.getSimpleName(), method, url);
+    log.debug("Exchange for {} {} {}", responseType.getSimpleName(), method, url);
     return this.restTemplate.exchange(url, method, request, responseType, (Object[]) new String[0]);
   }
 

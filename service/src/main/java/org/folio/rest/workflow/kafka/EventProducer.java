@@ -24,7 +24,7 @@ public class EventProducer {
   }
 
   public void send(Event event) {
-    logger.info("Send []: {}, {}", event.getMethod(), event.getPath());
+    logger.debug("Send []: {}, {}", event.getMethod(), event.getPath());
     this.eventTemplate.send(topic, event);
   }
 
