@@ -267,7 +267,7 @@ public class WorkflowEngineService {
         }
       }
     } catch (Exception e) {
-      log.error("Failed to send workflow request: {}!", e.getMessage(), e);
+      log.error("Failed to send workflow request: {}!", e.getMessage());
       throw new WorkflowEngineServiceException(String.format("Failed to send workflow request: %s!", e.getMessage()), e);
     }
     log.error("Unable to get updated workflow from workflow engine!");
