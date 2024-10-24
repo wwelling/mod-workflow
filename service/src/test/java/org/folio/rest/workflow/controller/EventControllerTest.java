@@ -19,11 +19,9 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.FileUtils;
-import org.assertj.core.util.Arrays;
 import org.folio.rest.workflow.dto.TriggerDto;
 import org.folio.rest.workflow.enums.HttpMethod;
 import org.folio.rest.workflow.kafka.EventProducer;
-import org.folio.rest.workflow.model.Trigger;
 import org.folio.rest.workflow.model.repo.TriggerRepo;
 import org.folio.spring.tenant.properties.TenantProperties;
 import org.folio.spring.tenant.resolver.TenantHeaderResolver;
