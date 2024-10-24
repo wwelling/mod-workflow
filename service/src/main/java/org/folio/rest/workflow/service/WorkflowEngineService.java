@@ -247,13 +247,12 @@ public class WorkflowEngineService {
       throws WorkflowEngineServiceException {
 
     HttpEntity<WorkflowDto> entity = new HttpEntity<>(workflow, headers(tenant, token));
-    HttpMethod method = HttpMethod.POST;
     String url = String.format(requestPath, okapiUrl);
 
-    log.debug("Send Okapi workflow engine request {} {}", method, url);
+    log.debug("Send Okapi workflow engine request {} {}", HttpMethod.POST, url);
 
     try {
-      ResponseEntity<Workflow> response = exchange(url, method, entity, Workflow.class);
+      ResponseEntity<Workflow> response = exchange(url, HttpMethod.POST, entity, Workflow.class);
 
       if (response.getStatusCode() == HttpStatus.OK) {
         Workflow responseWorkflow = response.getBody();
